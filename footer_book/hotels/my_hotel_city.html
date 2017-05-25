@@ -5,6 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>选择城市</title>
+		<link href="../../css/ui-base.css" rel="stylesheet" />
+		<link href="../../css/ui-box.css" rel="stylesheet" />
 		<link href="../../css/mui/mui.min.css" rel="stylesheet" />
 		<link href="../../css/mui/mui.indexedlist.css" rel="stylesheet" />
 		<script type="text/javascript" src="../../js/setSkin.js"></script>
@@ -23,6 +25,24 @@
 			.header-bg a,
 			.header-bg .mui-title {
 				color: #fff;
+			}
+			
+			.hot-city {
+				margin-right: 23px;
+				margin-bottom: 10px;
+			}
+			
+			.hot-city .li {
+				width: 22%;
+				text-align: center;
+				margin: 1.5%;
+			}
+			
+			.hot-city .li a {
+				border: 1px solid #ddd;
+				display: block;
+				padding: 6px 0;
+				border-radius: 6px;
 			}
 		</style>
 	</head>
@@ -69,14 +89,23 @@
 				<div class="mui-indexed-list-inner">
 					<div class="mui-indexed-list-empty-alert">没有数据</div>
 					<ul class="mui-table-view">
-						<li data-group="A" class="mui-table-view-divider mui-indexed-list-group">A</li>
-						<li data-value="AKU" data-tags="AKeSu" class="mui-table-view-cell mui-indexed-list-item">阿克苏机场</li>
+						<div class="hot-city box box-fw" style="visibility: hidden;">
+							<div class="ub-f1 li" v-for="hot in hotCity">
+								<a>{{hot.cityName}}</a>
+							</div>
+						</div>
+						<template v-for="(key, val) in hotelData">
+							<li v-bind:data-group="val" class="mui-table-view-divider mui-indexed-list-group">{{val}}</li>
+							<template v-for="(item, index) in key">
+								<li v-bind:data-value="item.cityCode" v-bind:data-city="item.cityName" class="city mui-table-view-cell mui-indexed-list-item">{{item.cityName}}</li>
+							</template>
+						</template>
 					</ul>
 				</div>
 			</div>
 		</div>
 		<script src="../../js/mui/mui.min.js"></script>
-		<script src="../../js/mui/mui.indexedlist.js"></script>
+		<script src="../../js/mui/mui.indexedlist2.js"></script>
 		<script src="js/myHotelData.js"></script>
 		<script src="../../js/vue.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
@@ -90,53 +119,179 @@
 				window.indexedList = new mui.IndexedList(list);
 			});
 
-			var app = new Vue({
-				el: "#list",
-				data: {
-					hotelData: myHotelData,
-					charCode: 26
-				}
-			})
+			var hotCityArr = [{
+				"cityCode": "PEK",
+				"cityName": "北京",
+			}, {
+				"cityCode": "SHA",
+				"cityName": "上海",
+			}, {
+				"cityCode": "CAN",
+				"cityName": "广州",
+			}, {
+				"cityCode": "SZX",
+				"cityName": "深圳",
+			}, {
+				"cityCode": "HKG",
+				"cityName": "香港",
+			}, {
+				"cityCode": "MFM",
+				"cityName": "澳门",
+			}, {
+				"cityCode": "CTU",
+				"cityName": "成都",
+			}, {
+				"cityCode": "CKG",
+				"cityName": "重庆",
+			}, {
+				"cityCode": "TSN",
+				"cityName": "天津",
+			}, {
+				"cityCode": "CSX",
+				"cityName": "长沙",
+			}, {
+				"cityCode": "DLC",
+				"cityName": "大连",
+			}, {
+				"cityCode": "SIA",
+				"cityName": "西安",
+			}, {
+				"cityCode": "TAO",
+				"cityName": "青岛",
+			}, {
+				"cityCode": "XMN",
+				"cityName": "厦门",
+			}, {
+				"cityCode": "HGH",
+				"cityName": "杭州",
+			}, {
+				"cityCode": "NKG",
+				"cityName": "南京"
+			}];
 
-			//			var hotelDataList = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-			//          var 
-			var hotelDataList = [];
-			var A = [];
+			var hotelDataList = {
+				'A': [],
+				'B': [],
+				'C': [],
+				'D': [],
+				'E': [],
+				'F': [],
+				'G': [],
+				'H': [],
+				'I': [],
+				'J': [],
+				'K': [],
+				'L': [],
+				'M': [],
+				'N': [],
+				'O': [],
+				'P': [],
+				'Q': [],
+				'R': [],
+				'S': [],
+				'T': [],
+				'U': [],
+				'V': [],
+				'W': [],
+				'X': [],
+				'Y': [],
+				'Z': []
+			};
 			for(var i = 0; i < myHotelData.length; i++) {
 				var letter = myHotelData[i].cityPinYin.charAt(0).toUpperCase();
-				//				console.log(letter);
-
-				//              if(letter == 'A'){
-				//					    
-				//					    hotelDataList.A = A;
-				//					    console.log(hotelDataList)
-				//              }
-
 				switch(letter) {
 					case 'A':
-						A.push(myHotelData[i]);
-						var list = {};
-						list.name = letter;
-						list.city = A;
-						hotelDataList.push(list);
-						console.log(hotelDataList);
+						hotelDataList.A.push(myHotelData[i]);
+						break;
+					case 'B':
+						hotelDataList.B.push(myHotelData[i]);
+						break;
+					case 'C':
+						hotelDataList.C.push(myHotelData[i]);
+						break;
+					case 'D':
+						hotelDataList.D.push(myHotelData[i]);
+						break;
+					case 'E':
+						hotelDataList.E.push(myHotelData[i]);
+						break;
+					case 'F':
+						hotelDataList.F.push(myHotelData[i]);
+						break;
+					case 'G':
+						hotelDataList.G.push(myHotelData[i]);
+						break;
+					case 'H':
+						hotelDataList.H.push(myHotelData[i]);
+						break;
+					case 'I':
+						hotelDataList.I.push(myHotelData[i]);
+						break;
+					case 'J':
+						hotelDataList.J.push(myHotelData[i]);
+						break;
+					case 'K':
+						hotelDataList.K.push(myHotelData[i]);
+						break;
+					case 'L':
+						hotelDataList.L.push(myHotelData[i]);
+						break;
+					case 'M':
+						hotelDataList.M.push(myHotelData[i]);
+						break;
+					case 'N':
+						hotelDataList.N.push(myHotelData[i]);
+						break;
+					case 'O':
+						hotelDataList.O.push(myHotelData[i]);
+						break;
+					case 'P':
+						hotelDataList.P.push(myHotelData[i]);
+						break;
+					case 'Q':
+						hotelDataList.Q.push(myHotelData[i]);
+						break;
+					case 'R':
+						hotelDataList.R.push(myHotelData[i]);
+						break;
+					case 'S':
+						hotelDataList.S.push(myHotelData[i]);
+						break;
+					case 'T':
+						hotelDataList.T.push(myHotelData[i]);
+						break;
+					case 'U':
+						hotelDataList.U.push(myHotelData[i]);
+						break;
+					case 'V':
+						hotelDataList.V.push(myHotelData[i]);
+						break;
+					case 'W':
+						hotelDataList.W.push(myHotelData[i]);
+						break;
+					case 'X':
+						hotelDataList.X.push(myHotelData[i]);
+						break;
+					case 'Y':
+						hotelDataList.Y.push(myHotelData[i]);
+						break;
+					case 'Z':
+						hotelDataList.Z.push(myHotelData[i]);
 						break;
 					default:
 						break;
 				}
 			}
 
-			function unique(arr) {
-				var newArr = [];
-				for(var i = 0, len = arr.length; i < len; i++) {
-					if(newArr.indexOf(arr[i]) == -1) {
-						newArr.push(arr[i]);
-					}
+			console.log(hotelDataList);
+
+			var app = new Vue({
+				el: "#list",
+				data: {
+					hotelData: hotelDataList,
+					hotCity: hotCityArr
 				}
-				return newArr;
-			}
-			
-			console.log(unique(hotelDataList));
+			})
 		</script>
 	</body>
 

@@ -176,3 +176,19 @@ select:focus {
 [v-cloak] {
   display: none;
 }
+.box{
+    display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+    display: -moz-box; /* 老版本语法: Firefox (buggy) */
+    display: -ms-flexbox; /* 混合版本语法: IE 10 */
+    display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+    display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
+}
+.box-fw{
+	word-break: break-all;
+	-moz-box-lines: multiple; /*Firefox*/
+    -webkit-box-lines: multiple; /*Safari,Opera,Chrome*/
+    box-lines: multiple;
+	-ms-flex-wrap: wrap;
+	-webkit-flex-wrap:wrap ;
+	flex-wrap: wrap;
+}
