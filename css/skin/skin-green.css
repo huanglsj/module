@@ -1,0 +1,54 @@
+.header-bg {
+    background-color: #287C57 !important;
+}
+.my-footer {
+	background: initial;
+	background-color: #38B87F;
+}
+.three-list .shipping li.active {
+	background-color: #3DC78A;
+}
+.three-list .tr .icon {
+	background-image: url("/module/footer_book/flights/img-green/plane.png");
+}
+.train-t-head .date-select {
+	color: #38b87f;
+}
+.plane-msg{
+    color: #38b87f;
+}
+.tab-indexed{
+	background-color: #287C57;
+}
+.sc-text-active {
+	color: #38b87f !important;
+}
+.mui-indexed-list-bar.active a.active {
+	color: #65A134;
+}
+.screen i.active {
+	color: #2C8C85;
+}
+.plane-list-result .tails .blue,
+.plane-list-result li .info > div:nth-of-type(2) {
+	color: #57BFB8;
+}
+.plane-list-header .cur-day {
+	color: #9AC3C1;
+}
+.Order_data,
+.fenge{
+	background-color: #287C57;
+}
+.Order_data_noe{
+	background-color: inherit;
+}
+.payment{
+	background-color: #38B87F;
+}
+#orderId{
+    color:#38b87f;
+}
+.plane-ticket-con .list .bc-head {
+	background-color: #63F6B4;
+}

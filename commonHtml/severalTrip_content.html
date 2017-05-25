@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="../css/fonts/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/ui-box.css">
+        <link rel="stylesheet" href="../css/ui-base.css">
+        <link rel="stylesheet" href="../css/ui-color.css">
+        <link rel="stylesheet" href="../css/appcan.icon.css">
+        <link rel="stylesheet" href="../css/appcan.control.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    </head>
+    <body class="um-vp bc-bg" style="background-color:#f4f4f4;" ontouchstart>
+        <div id="trips" v-cloak>
+            <div class="trip" v-for="item in items">
+                <div class="date">{{item.date}}</div>
+                <div class="path">
+                    <div class="station">
+                        <span class="stationName">{{item.from}}</span>
+                    </div>
+                    <div class="station">
+                        <span class="stationName">{{item.to}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="../js/appcan.js"></script>
+    <script src="../js/appcan.control.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    </body>
+    <script>
+        var app;
+        appcan.ready(function() {
+            app = new Vue({
+                el:"#trips",
+                data:{
+                    items:[]
+                }
+            })
+            if(isDefine(appcan.locStorage.getVal("severalTrip"))){
+                var severalTrip = JSON.parse(appcan.locStorage.getVal("severalTrip"));
+                appcan.locStorage.remove("severalTrip");
+                for(var i = 0;i<severalTrip.length;i++){
+                    app.items.push({
+                        date:NYR(severalTrip[i].itiner_begin,2),
+                        from:severalTrip[i].itiner_from,
+                        to:severalTrip[i].itiner_to,
+                    });
+                }
+            }
+            else{
+                $("body").html("<div class='noinfo'>该行程没有多程信息</div>")
+            }
+        });
+    </script>
+</html>

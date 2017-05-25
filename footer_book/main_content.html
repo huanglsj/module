@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../css/ui-box.css">
+		<link rel="stylesheet" href="../css/ui-base.css">
+		<link rel="stylesheet" href="../css/mymedia.css">
+		<link rel="stylesheet" href="new/css/main.css">
+	</head>
+
+	<body class="um-vp bc-bg" ontouchstart>
+		<div class="booking ub ub-ver up">
+			<div class="booking-head">
+				<img src="new/css/myImg/banner.png" class="banner">
+			</div>
+			<div class="booking-con ub-f1" id="book">
+				<div class="c-logo ub-img" id="logo" @click="showMenu()"></div>
+				<transition name="move">
+					<div class="up dh" v-show="show">
+						<div class="list plane" id="plane">
+							<img src="new/css/myImg/reservation_plane.png">
+							<span>机票预订</span>
+						</div>
+						<div class="list hotel" id="hotel">
+							<img src="new/css/myImg/reservation_hotel.png">
+							<span>酒店预订</span>
+						</div>
+						<div class="list train" id="train">
+							<img src="new/css/myImg/reservation_ticket.png">
+							<span>火车票预订</span>
+						</div>
+						<div class="list taxi" id="taxi">
+							<img src="new/css/myImg/reservation_rental.png" class="grayImg">
+							<span>租车服务</span>
+						</div>
+						<div class="list catering" id="catering">
+							<img src="new/css/myImg/reservation_VIP.png" class="grayImg">
+							<span>贵宾服务</span>
+						</div>
+					</div>
+				</transition>
+				<div class="text" id="text">
+					<p>航行家陪您左右</p>
+					<p>打开更加精彩哦</p>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/appcan.js"></script>
+	<script src="../js/appcan.control.js"></script>
+	<script src="../js/vue.min.js"></script>
+	<script>
+		appcan.ready(function() {
+		    var userRoles = appcan.locStorage.getVal("userRoles");
+			appcan.button("#plane", "btn-act", function() {
+			    if(userRoles.indexOf("机票")<0 && userRoles!==""){
+			        appcan.window.openToast("您所在的组织机构暂未开通此项服务",2000);
+			    }
+			    else{
+			        appcan.window.open("plane_ticket_search", "flights/plane_ticket_search.html", 0);
+			    }
+			})
+			appcan.button("#hotel", "btn-act", function() {
+			    if(userRoles.indexOf("酒店")<0 && userRoles!==""){
+                    appcan.window.openToast("您所在的组织机构暂未开通此项服务",2000);
+                }
+                else{
+                    appcan.window.open("hotelsearch", "hotels/hotel_search.html", 0);
+                }
+			})
+			appcan.button("#train", "btn-act", function() {
+			    if(userRoles.indexOf("火车")<0 && userRoles!==""){
+                    appcan.window.openToast("您所在的组织机构暂未开通此项服务",2000);
+                }
+                else{
+                    appcan.window.open("train_ticket_search", "trains/train_ticket_search.html", 0);
+                }
+			})
+			appcan.button("#taxi", "btn-act", function() {
+				if(userRoles.indexOf("租车服务")<0 && userRoles!==""){
+                    appcan.window.openToast("您所在的组织机构暂未开通此项服务",2000);
+                }
+                else{
+                    appcan.window.openToast('服务暂未开放……', '2000');
+                }
+
+			})
+			appcan.button("#catering", "btn-act", function() {
+				if(userRoles.indexOf("租车服务")<0 && userRoles!==""){
+                    appcan.window.openToast("您所在的组织机构暂未开通此项服务",2000);
+                }
+                else{
+                    appcan.window.openToast('服务暂未开放……', '2000');
+                }
+			})
+
+			
+		});
+
+		var app = new Vue({
+			el: '#book',
+			data: {
+				show: true
+			},
+			methods: {
+				showMenu: function() {
+					this.show = !this.show;
+					if(!this.show){
+						$("#book .dh").removeClass("active");
+						$("#text").addClass("bounceInDown");
+					}else{
+						$("#book .dh").addClass("active");
+						$("#text").removeClass("bounceInDown");
+					}
+				}
+			},
+			created:function(){
+            }
+
+		});
+		
+		// $("#logo").click();
+	</script>
+
+</html>

@@ -1,0 +1,883 @@
+var myHotelData = [{
+	"cityCode": "TC3",
+	"cityName": "屯昌",
+	"cityPinYin": "TUNCHANG",
+	"cityPYFW": "TC",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "BY3",
+	"cityName": "白银",
+	"cityPinYin": "BAIYIN",
+	"cityPYFW": "BY",
+	"province": "甘肃",
+	"districts": null
+}, {
+	"cityCode": "HX4",
+	"cityName": "海西",
+	"cityPinYin": "HAIXI",
+	"cityPYFW": "HX",
+	"province": "青海",
+	"districts": null
+}, {
+	"cityCode": "BE1",
+	"cityName": "博尔塔拉",
+	"cityPinYin": "BOERTALA",
+	"cityPYFW": "BETL",
+	"province": "新疆",
+	"districts": null
+}, {
+	"cityCode": "AL2",
+	"cityName": "阿拉尔",
+	"cityPinYin": "ALAER",
+	"cityPYFW": "ALE",
+	"province": "新疆",
+	"districts": null
+}, {
+	"cityCode": "QZ2",
+	"cityName": "琼中",
+	"cityPinYin": "QIONGZHONG",
+	"cityPYFW": "QZ",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "CM1",
+	"cityName": "澄迈",
+	"cityPinYin": "CHENGMAI",
+	"cityPYFW": "CM",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "LD1",
+	"cityName": "乐东",
+	"cityPinYin": "LEDONG",
+	"cityPYFW": "LD",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "HB1",
+	"cityName": "海北",
+	"cityPinYin": "HAIBEI",
+	"cityPYFW": "HB",
+	"province": "青海",
+	"districts": null
+}, {
+	"cityCode": "XL3",
+	"cityName": "锡林郭勒盟",
+	"cityPinYin": "XILINGUOLEMENG",
+	"cityPYFW": "XLGLM",
+	"province": "内蒙古",
+	"districts": null
+}, {
+	"cityCode": "QN2",
+	"cityName": "黔南",
+	"cityPinYin": "QIANNAN",
+	"cityPYFW": "QN",
+	"province": "贵州",
+	"districts": null
+}, {
+	"cityCode": "QX8",
+	"cityName": "黔西南",
+	"cityPinYin": "QIANXINAN",
+	"cityPYFW": "QXN",
+	"province": "贵州",
+	"districts": null
+}, {
+	"cityCode": "DH4",
+	"cityName": "德宏",
+	"cityPinYin": "DEHONG",
+	"cityPYFW": "DH",
+	"province": "云南",
+	"districts": null
+}, {
+	"cityCode": "KZ1",
+	"cityName": "克孜勒苏柯尔克孜",
+	"cityPinYin": "KEZILESUKEERKEZI",
+	"cityPYFW": "KZLSKEKZ",
+	"province": "新疆",
+	"districts": null
+}, {
+	"cityCode": "YL6",
+	"cityName": "伊犁",
+	"cityPinYin": "YILI",
+	"cityPYFW": "YL",
+	"province": "新疆",
+	"districts": null
+}, {
+	"cityCode": "QD1",
+	"cityName": "黔东南",
+	"cityPinYin": "QIANDONGNAN",
+	"cityPYFW": "QDN",
+	"province": "贵州",
+	"districts": null
+}, {
+	"cityCode": "HN2",
+	"cityName": "黄南",
+	"cityPinYin": "HUANGNAN",
+	"cityPYFW": "HN",
+	"province": "青海",
+	"districts": null
+}, {
+	"cityCode": "GL2",
+	"cityName": "果洛",
+	"cityPinYin": "GUOLUO",
+	"cityPYFW": "GL",
+	"province": "青海",
+	"districts": null
+}, {
+	"cityCode": "LG1",
+	"cityName": "临高",
+	"cityPinYin": "LINGAO",
+	"cityPYFW": "LG",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "BS3",
+	"cityName": "白沙",
+	"cityPinYin": "BAISHA",
+	"cityPYFW": "BS",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "L4S",
+	"cityName": "凉山",
+	"cityPinYin": "LIANGSHAN",
+	"cityPYFW": "LS",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "WJ3",
+	"cityName": "五家渠",
+	"cityPinYin": "WUJIAQU",
+	"cityPYFW": "WJQ",
+	"province": "新疆",
+	"districts": null
+}, {
+	"cityCode": "BY4",
+	"cityName": "巴音郭楞",
+	"cityPinYin": "BAYINGUOLENG",
+	"cityPYFW": "BYGL",
+	"province": "新疆",
+	"districts": null
+}, {
+	"cityCode": "GN3",
+	"cityName": "甘南",
+	"cityPinYin": "GANNAN",
+	"cityPYFW": "GN",
+	"province": "甘肃",
+	"districts": null
+}, {
+	"cityCode": "Y3S",
+	"cityName": "玉树",
+	"cityPinYin": "YUSHU",
+	"cityPYFW": "YS",
+	"province": "青海",
+	"districts": null
+}, {
+	"cityCode": "X1X",
+	"cityName": "湘西",
+	"cityPinYin": "XIANGXI",
+	"cityPYFW": "XX",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "YB1",
+	"cityName": "延边",
+	"cityPinYin": "YANBIAN",
+	"cityPYFW": "YB",
+	"province": "吉林",
+	"districts": null
+}, {
+	"cityCode": "AL1",
+	"cityName": "阿里",
+	"cityPinYin": "ALI",
+	"cityPYFW": "AL",
+	"province": "西藏",
+	"districts": null
+}, {
+	"cityCode": "GYS",
+	"cityName": "固原",
+	"cityPinYin": "GUYUAN",
+	"cityPYFW": "GY",
+	"province": "宁夏",
+	"districts": null
+}, {
+	"cityCode": "SZS",
+	"cityName": "石嘴山",
+	"cityPinYin": "SHIZUISHAN",
+	"cityPYFW": "SZS",
+	"province": "宁夏",
+	"districts": null
+}, {
+	"cityCode": "LN3",
+	"cityName": "陇南",
+	"cityPinYin": "LONGNAN",
+	"cityPYFW": "LN",
+	"province": "甘肃",
+	"districts": null
+}, {
+	"cityCode": "DF1",
+	"cityName": "东方",
+	"cityPinYin": "DONGFANG",
+	"cityPYFW": "DF",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "CJ2",
+	"cityName": "昌江",
+	"cityPinYin": "CHANGJIANG",
+	"cityPYFW": "CJ",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "XA1",
+	"cityName": "兴安盟",
+	"cityPinYin": "XINGANMENG",
+	"cityPYFW": "XAM",
+	"province": "内蒙古",
+	"districts": null
+}, {
+	"cityCode": "CSX",
+	"cityName": "长沙",
+	"cityPinYin": "CHANGSHA",
+	"cityPYFW": "ZS",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "CIH",
+	"cityName": "长治",
+	"cityPinYin": "CHANGZHI",
+	"cityPYFW": "ZZ",
+	"province": "山西",
+	"districts": null
+}, {
+	"cityCode": "CGD",
+	"cityName": "常德",
+	"cityPinYin": "CHANGDE",
+	"cityPYFW": "CD",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "CZX",
+	"cityName": "常州",
+	"cityPinYin": "CHANGZHOU",
+	"cityPYFW": "CZ",
+	"province": "江苏",
+	"districts": null
+}, {
+	"cityCode": "CHG",
+	"cityName": "朝阳",
+	"cityPinYin": "CHAOYANG",
+	"cityPYFW": "CY",
+	"province": "辽宁",
+	"districts": null
+}, {
+	"cityCode": "CZH",
+	"cityName": "潮州",
+	"cityPinYin": "CHAOZHOU",
+	"cityPYFW": "CZ",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "CEZ",
+	"cityName": "郴州",
+	"cityPinYin": "CHENZHOU",
+	"cityPYFW": "CZ",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "CTU",
+	"cityName": "成都",
+	"cityPinYin": "CHENGDOU",
+	"cityPYFW": "CD",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "CHD",
+	"cityName": "承德",
+	"cityPinYin": "CHENGDE",
+	"cityPYFW": "CD",
+	"province": "河北",
+	"districts": null
+}, {
+	"cityCode": "CZU",
+	"cityName": "池州",
+	"cityPinYin": "CHIZHOU",
+	"cityPYFW": "CZ",
+	"province": "安徽",
+	"districts": null
+}, {
+	"cityCode": "CIF",
+	"cityName": "赤峰",
+	"cityPinYin": "CHIFENG",
+	"cityPYFW": "CF",
+	"province": "内蒙古",
+	"districts": null
+}, {
+	"cityCode": "CUZ",
+	"cityName": "滁州",
+	"cityPinYin": "CHUZHOU",
+	"cityPYFW": "CZ",
+	"province": "安徽",
+	"districts": null
+}, {
+	"cityCode": "CHX",
+	"cityName": "楚雄",
+	"cityPinYin": "CHUXIONG",
+	"cityPYFW": "CX",
+	"province": "云南",
+	"districts": null
+}, {
+	"cityCode": "DZH",
+	"cityName": "达州",
+	"cityPinYin": "DAZHOU",
+	"cityPYFW": "DZ",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "DLU",
+	"cityName": "大理",
+	"cityPinYin": "DALI",
+	"cityPYFW": "DL",
+	"province": "云南",
+	"districts": null
+}, {
+	"cityCode": "DLC",
+	"cityName": "大连",
+	"cityPinYin": "DALIAN",
+	"cityPYFW": "DL",
+	"province": "辽宁",
+	"districts": null
+}, {
+	"cityCode": "DAQ",
+	"cityName": "大庆",
+	"cityPinYin": "DAQING",
+	"cityPYFW": "DQ",
+	"province": "黑龙江",
+	"districts": null
+}, {
+	"cityCode": "DAT",
+	"cityName": "大同",
+	"cityPinYin": "DATONG",
+	"cityPYFW": "DT",
+	"province": "山西",
+	"districts": null
+}, {
+	"cityCode": "DAX",
+	"cityName": "大兴安岭",
+	"cityPinYin": "DAXINGANLING",
+	"cityPYFW": "DXAL",
+	"province": "黑龙江",
+	"districts": null
+}, {
+	"cityCode": "DDG",
+	"cityName": "丹东",
+	"cityPinYin": "DANDONG",
+	"cityPYFW": "DD",
+	"province": "辽宁",
+	"districts": null
+}, {
+	"cityCode": "DAZ",
+	"cityName": "儋州",
+	"cityPinYin": "DANZHOU",
+	"cityPYFW": "DZ",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "DEY",
+	"cityName": "德阳",
+	"cityPinYin": "DEYANG",
+	"cityPYFW": "DY",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "DZO",
+	"cityName": "德州",
+	"cityPinYin": "DEZHOU",
+	"cityPYFW": "DZ",
+	"province": "山东",
+	"districts": null
+}, {
+	"cityCode": "DIG",
+	"cityName": "迪庆",
+	"cityPinYin": "DIQING",
+	"cityPYFW": "DQ",
+	"province": "云南",
+	"districts": null
+}, {
+	"cityCode": "DIX",
+	"cityName": "定西",
+	"cityPinYin": "DINGXI",
+	"cityPYFW": "DX",
+	"province": "甘肃",
+	"districts": null
+}, {
+	"cityCode": "DGM",
+	"cityName": "东莞",
+	"cityPinYin": "DONGGUAN",
+	"cityPYFW": "DG",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "DOY",
+	"cityName": "东营",
+	"cityPinYin": "DONGYING",
+	"cityPYFW": "DY",
+	"province": "山东",
+	"districts": null
+}, {
+	"cityCode": "ERD",
+	"cityName": "鄂尔多斯",
+	"cityPinYin": "EERDUOSI",
+	"cityPYFW": "EEDS",
+	"province": "内蒙古",
+	"districts": null
+}, {
+	"cityCode": "EZH",
+	"cityName": "鄂州",
+	"cityPinYin": "EZHOU",
+	"cityPYFW": "EZ",
+	"province": "湖北",
+	"districts": null
+}, {
+	"cityCode": "ENH",
+	"cityName": "恩施",
+	"cityPinYin": "ENSHI",
+	"cityPYFW": "ES",
+	"province": "湖北",
+	"districts": null
+}, {
+	"cityCode": "FAC",
+	"cityName": "防城港",
+	"cityPinYin": "FANGCHENGGANG",
+	"cityPYFW": "FCG",
+	"province": "广西",
+	"districts": null
+}, {
+	"cityCode": "FUO",
+	"cityName": "佛山",
+	"cityPinYin": "FOSHAN",
+	"cityPYFW": "FS",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "FOC",
+	"cityName": "福州",
+	"cityPinYin": "FUZHOU",
+	"cityPYFW": "FZ",
+	"province": "福建",
+	"districts": null
+}, {
+	"cityCode": "FUS",
+	"cityName": "抚顺",
+	"cityPinYin": "FUSHUN",
+	"cityPYFW": "FS",
+	"province": "辽宁",
+	"districts": null
+}, {
+	"cityCode": "FUZ",
+	"cityName": "抚州",
+	"cityPinYin": "FUZHOU",
+	"cityPYFW": "FZ",
+	"province": "江西",
+	"districts": null
+}, {
+	"cityCode": "FUX",
+	"cityName": "阜新",
+	"cityPinYin": "FUXIN",
+	"cityPYFW": "FX",
+	"province": "辽宁",
+	"districts": null
+}, {
+	"cityCode": "FUG",
+	"cityName": "阜阳",
+	"cityPinYin": "FUYANG",
+	"cityPYFW": "FY",
+	"province": "安徽",
+	"districts": null
+}, {
+	"cityCode": "GAZ",
+	"cityName": "甘孜",
+	"cityPinYin": "GANZI",
+	"cityPYFW": "GZ",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "GZH",
+	"cityName": "赣州",
+	"cityPinYin": "GANZHOU",
+	"cityPYFW": "GZ",
+	"province": "江西",
+	"districts": null
+}, {
+	"cityCode": "GUN",
+	"cityName": "广安",
+	"cityPinYin": "GUANGAN",
+	"cityPYFW": "GA",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "CZS",
+	"cityName": "崇左",
+	"cityPinYin": "CHONGZUO",
+	"cityPYFW": "CZ",
+	"province": "广西",
+	"districts": null
+}, {
+	"cityCode": "YAJ",
+	"cityName": "阳江",
+	"cityPinYin": "YANGJIANG",
+	"cityPYFW": "YJ",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "YAQ",
+	"cityName": "阳泉",
+	"cityPinYin": "YANGQUAN",
+	"cityPYFW": "YQ",
+	"province": "山西",
+	"districts": null
+}, {
+	"cityCode": "YCH",
+	"cityName": "伊春",
+	"cityPinYin": "YICHUN",
+	"cityPYFW": "YC",
+	"province": "黑龙江",
+	"districts": null
+}, {
+	"cityCode": "YBP",
+	"cityName": "宜宾",
+	"cityPinYin": "YIBIN",
+	"cityPYFW": "YB",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "YIH",
+	"cityName": "宜昌",
+	"cityPinYin": "YICHANG",
+	"cityPYFW": "YC",
+	"province": "湖北",
+	"districts": null
+}, {
+	"cityCode": "YIC",
+	"cityName": "宜春",
+	"cityPinYin": "YICHUN",
+	"cityPYFW": "YC",
+	"province": "江西",
+	"districts": null
+}, {
+	"cityCode": "YIY",
+	"cityName": "益阳",
+	"cityPinYin": "YIYANG",
+	"cityPYFW": "YY",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "INC",
+	"cityName": "银川",
+	"cityPinYin": "YINCHUAN",
+	"cityPYFW": "YC",
+	"province": "宁夏",
+	"districts": null
+}, {
+	"cityCode": "YIT",
+	"cityName": "鹰潭",
+	"cityPinYin": "YINGTAN",
+	"cityPYFW": "YT",
+	"province": "江西",
+	"districts": null
+}, {
+	"cityCode": "YIK",
+	"cityName": "营口",
+	"cityPinYin": "YINGKOU",
+	"cityPYFW": "YK",
+	"province": "辽宁",
+	"districts": null
+}, {
+	"cityCode": "YOZ",
+	"cityName": "永州",
+	"cityPinYin": "YONGZHOU",
+	"cityPYFW": "YZ",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "UYN",
+	"cityName": "榆林",
+	"cityPinYin": "YULIN",
+	"cityPYFW": "YL",
+	"province": "陕西",
+	"districts": null
+}, {
+	"cityCode": "YUL",
+	"cityName": "玉林",
+	"cityPinYin": "YULIN",
+	"cityPYFW": "YL",
+	"province": "广西",
+	"districts": null
+}, {
+	"cityCode": "YUX",
+	"cityName": "玉溪",
+	"cityPinYin": "YUXI",
+	"cityPYFW": "YX",
+	"province": "云南",
+	"districts": null
+}, {
+	"cityCode": "YUY",
+	"cityName": "岳阳",
+	"cityPinYin": "YUEYANG",
+	"cityPYFW": "YY",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "YNF",
+	"cityName": "云浮",
+	"cityPinYin": "YUNFU",
+	"cityPYFW": "YF",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "YUC",
+	"cityName": "运城",
+	"cityPinYin": "YUNCHENG",
+	"cityPYFW": "YC",
+	"province": "山西",
+	"districts": null
+}, {
+	"cityCode": "ZZG",
+	"cityName": "枣庄",
+	"cityPinYin": "ZAOZHUANG",
+	"cityPYFW": "ZZ",
+	"province": "山东",
+	"districts": null
+}, {
+	"cityCode": "ZHA",
+	"cityName": "湛江",
+	"cityPinYin": "ZHANJIANG",
+	"cityPYFW": "ZJ",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "DYG",
+	"cityName": "张家界",
+	"cityPinYin": "ZHANGJIAJIE",
+	"cityPYFW": "ZJJ",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "ZJK",
+	"cityName": "张家口",
+	"cityPinYin": "ZHANGJIAKOU",
+	"cityPYFW": "ZJK",
+	"province": "河北",
+	"districts": null
+}, {
+	"cityCode": "ZHY",
+	"cityName": "张掖",
+	"cityPinYin": "ZHANGYE",
+	"cityPYFW": "ZY",
+	"province": "甘肃",
+	"districts": null
+}, {
+	"cityCode": "ZHZ",
+	"cityName": "漳州",
+	"cityPinYin": "ZHANGZHOU",
+	"cityPYFW": "ZZ",
+	"province": "福建",
+	"districts": null
+}, {
+	"cityCode": "ZAT",
+	"cityName": "昭通",
+	"cityPinYin": "ZHAOTONG",
+	"cityPYFW": "ZT",
+	"province": "云南",
+	"districts": null
+}, {
+	"cityCode": "ZHQ",
+	"cityName": "肇庆",
+	"cityPinYin": "ZHAOQING",
+	"cityPYFW": "ZQ",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "ZJA",
+	"cityName": "镇江",
+	"cityPinYin": "ZHENJIANG",
+	"cityPYFW": "ZJ",
+	"province": "江苏",
+	"districts": null
+}, {
+	"cityCode": "CGO",
+	"cityName": "郑州",
+	"cityPinYin": "ZHENGZHOU",
+	"cityPYFW": "ZZ",
+	"province": "河南",
+	"districts": null
+}, {
+	"cityCode": "ZIS",
+	"cityName": "中山",
+	"cityPinYin": "ZHONGSHAN",
+	"cityPYFW": "ZS",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "CKG",
+	"cityName": "重庆",
+	"cityPinYin": "CHONGQING",
+	"cityPYFW": "CQ",
+	"province": "重庆",
+	"districts": null
+}, {
+	"cityCode": "HSN",
+	"cityName": "舟山",
+	"cityPinYin": "ZHOUSHAN",
+	"cityPYFW": "ZS",
+	"province": "浙江",
+	"districts": null
+}, {
+	"cityCode": "ZHK",
+	"cityName": "周口",
+	"cityPinYin": "ZHOUKOU",
+	"cityPYFW": "ZK",
+	"province": "河南",
+	"districts": null
+}, {
+	"cityCode": "ZHO",
+	"cityName": "株洲",
+	"cityPinYin": "ZHUZHOU",
+	"cityPYFW": "ZZ",
+	"province": "湖南",
+	"districts": null
+}, {
+	"cityCode": "BUT",
+	"cityName": "保亭",
+	"cityPinYin": "BAOTING",
+	"cityPYFW": "BT",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "ZUH",
+	"cityName": "珠海",
+	"cityPinYin": "ZHUHAI",
+	"cityPYFW": "ZH",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "ZHM",
+	"cityName": "驻马店",
+	"cityPinYin": "ZHUMADIAN",
+	"cityPYFW": "ZMD",
+	"province": "河南",
+	"districts": null
+}, {
+	"cityCode": "ZIY",
+	"cityName": "资阳",
+	"cityPinYin": "ZIYANG",
+	"cityPYFW": "ZY",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "ZIB",
+	"cityName": "淄博",
+	"cityPinYin": "ZIBO",
+	"cityPYFW": "ZB",
+	"province": "山东",
+	"districts": null
+}, {
+	"cityCode": "ZIG",
+	"cityName": "自贡",
+	"cityPinYin": "ZIGONG",
+	"cityPYFW": "ZG",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "ZYI",
+	"cityName": "遵义",
+	"cityPinYin": "ZUNYI",
+	"cityPYFW": "ZY",
+	"province": "贵州",
+	"districts": null
+}, {
+	"cityCode": "BYZ",
+	"cityName": "巴彦淖尔",
+	"cityPinYin": "BAYANNAOER",
+	"cityPYFW": "BYNE",
+	"province": "内蒙古",
+	"districts": null
+}, {
+	"cityCode": "WZS",
+	"cityName": "吴忠",
+	"cityPinYin": "WUZHONG",
+	"cityPYFW": "WZ",
+	"province": "宁夏",
+	"districts": null
+}, {
+	"cityCode": "ZWS",
+	"cityName": "中卫",
+	"cityPinYin": "ZHONGWEI",
+	"cityPYFW": "ZW",
+	"province": "宁夏",
+	"districts": null
+}, {
+	"cityCode": "LSX",
+	"cityName": "陵水",
+	"cityPinYin": "LINGSHUIXIAN",
+	"cityPYFW": "LSX",
+	"province": "海南",
+	"districts": null
+}, {
+	"cityCode": "GUY",
+	"cityName": "广元",
+	"cityPinYin": "GUANGYUAN",
+	"cityPYFW": "GY",
+	"province": "四川",
+	"districts": null
+}, {
+	"cityCode": "CAN",
+	"cityName": "广州",
+	"cityPinYin": "GUANGZHOU",
+	"cityPYFW": "GZ",
+	"province": "广东",
+	"districts": null
+}, {
+	"cityCode": "GUG",
+	"cityName": "贵港",
+	"cityPinYin": "GUIGANG",
+	"cityPYFW": "GG",
+	"province": "广西",
+	"districts": null
+}, {
+	"cityCode": "KWE",
+	"cityName": "贵阳",
+	"cityPinYin": "GUIYANG",
+	"cityPYFW": "GY",
+	"province": "贵州",
+	"districts": null
+}, {
+	"cityCode": "KWL",
+	"cityName": "桂林",
+	"cityPinYin": "GUILIN",
+	"cityPYFW": "GL",
+	"province": "广西",
+	"districts": null
+}, {
+	"cityCode": "HRB",
+	"cityName": "哈尔滨",
+	"cityPinYin": "HAERBIN",
+	"cityPYFW": "HEB",
+	"province": "黑龙江",
+	"districts": null
+}, {
+	"cityCode": "HMI",
+	"cityName": "哈密",
+	"cityPinYin": "HAMI",
+	"cityPYFW": "HM",
+	"province": "新疆",
+	"districts": null
+}, {
+	"cityCode": "HDG",
+	"cityName": "海东",
+	"cityPinYin": "HAIDONG",
+	"cityPYFW": "HD",
+	"province": '青海',
+	"districts": null
+}]

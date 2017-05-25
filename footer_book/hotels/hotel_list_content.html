@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/ui-base.css">
+		<link rel="stylesheet" href="../../css/ui-color.css">
+		<link rel="stylesheet" href="../../css/appcan.icon.css">
+		<link rel="stylesheet" href="../../css/appcan.control.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="css/hotel_list.css">
+		<script src="../../js/appcan.js"></script>
+		<script src="../../js/appcan.control.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/vue.js"></script>
+	</head>
+
+	<body class="um-vp bc-bg" ontouchstart>
+	    <div id="header">
+            <div class="uh bc-text-head ub header-bg" id="title">
+                <div class="nav-btn back" id="nav-left">
+                    <div class="ub-img user-icon-goback umw1-5 umh4"></div>
+                </div>
+                <h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">酒店列表</h1>
+                <div class="nav-btn nav-bt icon-act" id="nav-right">
+                    <div class="ub-img user-icon-phone umw1-5 umh4"></div>
+                </div>
+            </div>
+            <div class="list-header ub ub-ac" id="subTitle">
+                <img src="img/hotel_img.png" class="ub ub-ac hotel-img">
+                <span class="ub ub-ac list-font">酒店</span>
+            </div>
+        </div>
+		<div id="hotelList" v-cloak>
+			<div class="hotel_show" v-for="item in items" v-on:click="hotelDetail(item.hotelCode)">
+				<div style="width:100%;" class="swipe">
+					<div class="swipe-wrap">
+						<img class="ub ub-img7 umar-at1" v-bind:src="item.pictureUrl" />
+						<div class="hotel-price ub ub-ver ub-ac">
+							<div class="ub ub-ac">最低价</div>
+							<img class="ub ub-ac line-img" src="img/line.png" />
+							<div class="ub ub-ac">￥ {{item.minRate}}</div>
+						</div>
+					</div>
+					<!--这块DIV不参与滑动放在MySwipe的DIV模块外面-->
+					<div class="hotel-name">{{item.hotelName}}</div>
+					<div class="ub ub-ac address">{{item.address}}</div>
+				</div>
+			</div>
+		</div>
+		<div id="msgError" style="margin:1.5em 0;text-align: center;color:#4679ff;font-weight: bold;display:none"></div>
+	</body>
+	<script>
+		var page = 1;
+		var pageSize = 5;
+		var cityCode;
+		var bgnDate;
+		var endDate;
+		var keyWord;
+		var lPrice;
+		var hPrice;
+		var xingji;
+		var app;
+		appcan.ready(function() {
+		    $("#hotelList,#msgError").offset({
+		        top:$("#title").height()+$("#subTitle").height(),
+		    })
+			app = new Vue({
+				el: '#hotelList',
+				data: {
+					items: []
+				},
+				methods: {
+					edit: function(item) {},
+					hotelDetail: function(id) {
+						/*if(attr.minPrice == appcan.getLocVal("minHotelPrice") ){
+						  appcan.setLocVal("isMinHotelPrice",'true');
+						}
+						else{
+						  appcan.setLocVal("isMinHotelPrice",'false');
+						}*/
+						appcan.locStorage.setVal("hotelCode", id);
+						appcan.window.open("hotel_details", "hotel_details.html", 2);
+					}
+				}
+			});
+			
+			appcan.button("#nav-left", "btn-act", function() {
+                appcan.window.evaluateScript({
+                    name:"hotellist",
+                    scriptContent:"appcan.window.close(1)"
+                })
+            })
+            appcan.button("#nav-right", "btn-act", function() {
+                uexCall.dial("02086132900");
+            });
+			cityCode = appcan.locStorage.getVal("cityCode");
+			bgnDate = appcan.locStorage.getVal("inday");
+			endDate = appcan.locStorage.getVal("outday");
+			keyWord = appcan.locStorage.getVal("keyWord");
+			lPrice = appcan.locStorage.getVal("priceMin");
+			hPrice = appcan.locStorage.getVal("priceMax");
+			xingji = appcan.locStorage.getVal("xingji");
+
+			queryHotelsList(page, 0);
+			uexWindow.setBounce(1);
+			initBounce(mes, mes2);
+		});
+
+		function mes() {
+		    page = 1;
+			queryHotelsList(page, 0);
+		}
+
+		function mes2() {
+		    page++;
+			queryHotelsList(page, 1);
+		}
+
+		function initBounce(funcTop, funcBottom) {
+			uexWindow.setBounce("1");
+			if(!funcTop && !funcBottom) {
+				uexWindow.showBounceView("0", "rgba(255,255,255,0)", "0");
+				uexWindow.showBounceView("1", "rgba(255,255,255,0)", "0");
+				return;
+			}
+			var top = 0,
+				btm = 1;
+			uexWindow.onBounceStateChange = function(type, state) {
+
+				if(type == top && state == 2) { //顶部弹动
+					funcTop();
+					uexWindow.resetBounceView("0");
+				}
+				if(type == btm && state == 2) { //底部弹动
+					funcBottom();
+					uexWindow.resetBounceView("1");
+				}
+
+			}
+			if(funcTop) {
+				uexWindow.setBounceParams('0', "{'pullToReloadText':'下拉刷新','releaseToReloadText':'释放刷新','loadingText':'正在刷新，请稍候'}");
+				uexWindow.showBounceView(top, "rgba(255,255,255,0)", 1);
+				uexWindow.notifyBounceEvent(top, 1);
+			}
+			if(funcBottom) {
+				uexWindow.setBounceParams('1', "{'pullToReloadText':'加载更多','releaseToReloadText':'加载更多','loadingText':'加载中，请稍候'}");
+				uexWindow.showBounceView(btm, "rgba(255,255,255,0)", 1); //设置弹动位置及效果([1:显示内容;0:不显示])
+				uexWindow.notifyBounceEvent(btm, 1); //注册接收弹动事件([0:不接收onBounceStateChange方法回调;1:接收])
+			}
+		}
+
+		function queryHotelsList(page, type) {
+		    addMask('../../img/loading.gif', "酒店查询中，请稍后");
+			appcan.request.ajax({
+				url: httpHost + 'hotelController.do?queryHotelsList',
+                timeout:20000, 
+				beforeSend: addHeader,
+				data: {
+					cityCode: cityCode,
+					bgnDate: bgnDate,
+					endDate: endDate,
+					keyWord: keyWord,
+					lPrice: lPrice,
+					hPrice: hPrice,
+					page: page,
+					pageSize: pageSize,
+					rank: xingji
+				},
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					removeMask();					
+					if(data.success) {
+						if(data.obj.t.respPageInfo.totalPageNum >= page) {						
+							$("#msgError").hide();
+							var arrData = data.obj.t.roomStays;
+							if(type) {
+							    // page++;
+								for(var obj in arrData) {
+									var attr = arrData[obj].basicProperty,
+										minPrice = parseInt(attr.minRate, 10);
+									var pictureUrl;
+									if((attr.images) && (attr.images.length > 0)) {
+                                        for(var i=0;i<attr.images.length;i++){
+                                            if(attr.images[i].category=='WJ' && attr.images[i].type=="B"){
+                                                pictureUrl = attr.images[i].url;
+                                                break;
+                                            }
+                                        }
+                                    } else {
+										pictureUrl = 'img/noHotalImg.png';
+									}
+									var myItem = {
+										pictureUrl: pictureUrl,
+										minRate: minPrice,
+										hotelName: attr.hotelName,
+										address: attr.address,
+										hotelCode: attr.hotelCode
+									};
+									app.items.push(myItem);
+								}
+							}else{
+							    for(var obj in arrData) {
+							        var attr = arrData[obj].basicProperty,
+                                        minPrice = parseInt(attr.minRate, 10);
+                                    var pictureUrl;
+                                    if((attr.images) && (attr.images.length > 0)) {
+                                        for(var i=0;i<attr.images.length;i++){
+                                            if(attr.images[i].category=='WJ' && attr.images[i].type=="B"){
+                                                pictureUrl = attr.images[i].url;
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        pictureUrl = 'img/noHotalImg.png';
+                                    }
+                                    arrData[obj].pictureUrl = pictureUrl;
+                                    arrData[obj].minRate = minPrice;
+                                    arrData[obj].hotelName = attr.hotelName;
+                                    arrData[obj].address = attr.address;
+                                    arrData[obj].hotelCode = attr.hotelCode;
+							    }
+							    app.items = arrData;
+							}
+
+						} else {
+							$("#msgError").show();
+							$("#msgError").text('没有更多的酒店了');
+						}
+					} else {
+						if(data.msg == "用户未登录") {
+							reLogin(queryHotelsList);
+						} else {
+							$("#msgError").show();
+							$("#msgError").text(data.msg);
+						}
+					}
+				},
+				error: function(err) {
+					removeMask();
+					appcan.window.openToast("网络请求异常，请检查网络是否正常。", 3000);
+				}
+			});
+		}
+	</script>
+
+</html>

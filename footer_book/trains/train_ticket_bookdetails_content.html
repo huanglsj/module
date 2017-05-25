@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/ui-base.css">
+		<link rel="stylesheet" href="../../css/ui-color.css">
+		<link rel="stylesheet" href="../../css/appcan.icon.css">
+		<link rel="stylesheet" href="../../css/appcan.control.css">
+		<link rel="stylesheet" type="text/css" href="../../css/main.css" />
+		<link rel="stylesheet" type="text/css" href="train_ticket_bookdetails/css/main.css" />
+
+		<style>
+			input {
+				outline: none;
+				border: 0;
+				width: 100%;
+				height: 2.5em;
+			}
+			
+			.user {
+				display: -webkit-box;
+				-webkit-box-orient: horizontal;
+				width: 100%;
+				margin-bottom: .5rem;
+			}
+			
+			#PassengerList .user .uw-25 .t-gra {
+				padding: 0.5em 0.2em;
+				margin-right: 0.5em;
+			}
+		</style>
+	</head>
+
+	<body class="um-vp sc-bg-active" ontouchstart>
+		<div class="header-bg sc-text-hint ub ub-ver">
+			<div class="header-bg sc-text-hint ub ub-ver ">
+				<div id="show" class="ub ub-ac train-book-head">
+					<div class="ub ub-ver ub-ae ub-f1 t-left">
+						<div class="small">始发站</div>
+						<div id="frTrain" class="float-r user-ulev1 big big-txt ut-s"></div>
+						<div class="small">出发时间</div>
+						<div class="float-r user-ulev1 ub">
+							<div id="stTime" class="biged"></div>
+							<div class="small s-left" id="sDate">
+								<div class="t-date"></div>
+								<div class="t-week"></div>
+							</div>
+						</div>
+					</div>
+					<div class="train-b-center t-center ub ub-ver" id="stopInfo">
+						<div class="ub-img res-stopImg" id="trainCode"></div>
+						<div class="ulev-1 center uinn-at2">经停信息</div>
+					</div>
+					<div class="uinn-l1 ub ub-ver ub-f1 t-right">
+						<div class="small">终点站</div>
+						<div id="toTrain" class="user-ulev1 big big-txt ut-s"></div>
+						<div class="small">到站时间</div>
+						<div class="user-ulev1 ub">
+							<div id="arTime" class="biged"></div>
+							<div class="small s-left" id="aDate">
+								<div class="t-date"></div>
+								<div class="t-week"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="uinn ub ub-ac">
+				<div id="airlines_name" class="ulev-1 ub-f1 ubr umar-26"></div>
+				<div id="food" class="ulev-1 ub-f1  ubr umar-l3"></div>
+				<div id="flightType" class="ulev-1 ub-f1  umar-l3"></div>
+			</div>
+		</div>
+
+		<div class="train-o">
+			<div class="ub ub-ac train-o-list">
+				<div class="uinn-a9 name">套餐总价</div>
+				<div class="ub-f1 money" id="oneTicketPrice"></div>
+				<input type="hidden" id="priceHidden" />
+			</div>
+			<div class="train-o-list train-o-listed">
+				<ul class="train-o-ul" id="trainUlList"></ul>
+				<input id="personNum" type="hidden" value="0" />
+				<div class="train-o-add" id="addOthers">添加同行人</div>
+			</div>
+
+			<div class="ub ub-ac train-o-list">
+				<div class="uinn-a9">联系人电话：</div>
+				<div class=""><input id="contactMobile" class="ulev-1 train-o-text" type="text" placeholder="请输入电话联系方式" /></div>
+				<div id="selContact" class="res-phone ub-img ub-f1 umwh-ex ub-pe"></div>
+			</div>
+
+			<div class="c-wh train-o-code">
+				<div class="o-code-img">
+					<img id="imgid_randCode" />
+					<div class="rand-code-click" id="randClick">
+						<div class="ub rand-list">
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="1" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="2" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="3" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="4" ></div>
+                            </label>
+						</div>
+						<div class="ub rand-list">
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="5" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="6" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="7" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="8" ></div>
+                            </label>
+						</div>
+					</div>
+				</div>
+				<div class="o-code-info ub ub-pe">
+					<div class="code-text">
+						<input id="ipid_randcode" placeholder="请输入验证码" class="o-text ub ub-f1" />
+					</div>
+					<div id="id_msgtip" class="ub o-btn">刷新验证码</div>
+				</div>
+			</div>
+
+			<!-- <div class="share"></div> -->
+
+			<!-- 添加同行人 -->
+			<div class="add-others" id="addOthersCon" style="z-index: 2">
+				<ul class="add-others-ul" id="addOthersUl"></ul>
+			</div>
+
+			<!-- 添加同行人明细 -->
+			<div class="train-other-ul" style="z-index: 2">
+				<div class="head ub">
+					<div class="total">总价</div>
+					<div class="ub ub-f1 ub-pe money" id="otherDetailsPrice"></div>
+				</div>
+				<div class="train-other-par">
+					<ul class="train-other-con" id="otherDetailsList"></ul>
+				</div>
+			</div>
+	</body>
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/appcan.js"></script>
+	<script src="../../js/appcan.control.js"></script>
+	<script src="../../js/appcan.listview.js"></script>
+	<script src="../../js/common.js"></script>
+	<script>
+		var count = 0;
+		var lineDetail;
+		var flightDetail;
+		var seatDetail;
+
+		var from_station_no;
+		var seat_types;
+		var to_station_no;
+		var station_train_code;
+		var from_station_name;
+		var to_station_name;
+		var start_time;
+		var arrive_time;
+		var train_date;
+		var train_no;
+		var seatItem;
+		var data;
+		var location_code;
+		appcan.ready(function() {
+			checkSubmit(getRandCodeTwo);
+			from_station_no = appcan.locStorage.getVal("from_station_no");
+			seat_types = appcan.locStorage.getVal("seat_types");
+			to_station_no = appcan.locStorage.getVal("to_station_no")
+			station_train_code = appcan.locStorage.getVal("station_train_code");
+			from_station_name = appcan.locStorage.getVal("from_station_name");
+			to_station_name = appcan.locStorage.getVal("to_station_name");
+			start_time = appcan.locStorage.getVal("start_time");
+			arrive_time = appcan.locStorage.getVal("arrive_time");
+			train_date = appcan.locStorage.getVal("train_date");
+			train_no = appcan.locStorage.getVal("train_no");
+			yp_info = appcan.locStorage.getVal("yp_info");
+			secretStr = appcan.locStorage.getVal("secretStr");
+			location_code = appcan.locStorage.getVal("location_code");
+			seatItem = appcan.locStorage.getVal("seatItem");
+			seatItem = eval('(' + seatItem + ')');
+			$("#frTrain").html(appcan.locStorage.getVal("from_station_name"));
+			$("#toTrain").html(appcan.locStorage.getVal("to_station_name"));
+			$("#trainCode").html(appcan.locStorage.getVal("station_train_code"));
+			$("#stTime").html(appcan.locStorage.getVal("start_time"));
+			$("#arTime").html(appcan.locStorage.getVal("arrive_time"));
+			$("#sDate .t-date").text(NYR(appcan.locStorage.getVal("start_train_date"), 2));
+			$("#sDate .t-week").text(NYR(appcan.locStorage.getVal("start_train_date"), 3));
+			$("#aDate .t-date").text(NYR(appcan.locStorage.getVal("arrive_train_date"), 2));
+			$("#aDate .t-week").text(NYR(appcan.locStorage.getVal("arrive_train_date"), 3));
+			$(".f-white").html(appcan.locStorage.getVal("train_date"));
+			console.log(seatItem)
+			if(seatItem) {
+				$("#oneTicketPrice").html(seatItem.price);
+				$("#otherDetailsPrice").html(seatItem.price);
+				$("#priceHidden").val((seatItem.price).substring(1, seatItem.price.length));
+			}
+
+			$("#contactMobile").val(appcan.locStorage.getVal("userMobile"));
+			data = appcan.locStorage.getVal("result_datas");
+			data = eval('(' + data + ')');
+
+			var passengers = data.passengers;
+
+			//获取同行人列表
+			if(passengers) {
+				var html = '';
+				for(var i = 0; i < passengers.length; i++) {
+					html += '<li data-id="' + passengers[i].index_id + '" data-sex="' + passengers[i].sex_name + '" data-mobile="' + passengers[i].mobile_no + '">';
+					html += '<label class="ub ub-ac">';
+					html += '<div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" ></div>';
+					html += '<div>';
+					html += '<div class="name">' + passengers[i].passenger_name + '</div>';
+					html += '<div class="no">' + passengers[i].passenger_id_no + '</div>'
+				}
+				$("#addOthersUl").html(html);
+				thanFour();
+			}
+
+			appcan.button("#stopInfo", "btn-act", function() {
+				appcan.window.open("stop_info", "stop_info.html", 2);
+			})
+
+		});
+
+		appcan.button("#selContact", "btn-act", function() {
+			uexContact.open();
+			uexContact.cbOpen = function(opCode, dataType, data) {
+				switch(dataType) {
+					case 0: //返回文字
+						alert("uex.cText");
+						break;
+					case 1: //返回JSON
+						var obj = JSON.parse(data);
+						var num = obj.num.split("-");
+						var tel = '';
+						if(num) {
+							for(var i = 0; i < num.length; i++) {
+								tel += num[i];
+							}
+						}
+						$('#contactMobile').val(tel);
+						break;
+					case 2: //返回数字
+						alert("uex.cInt");
+						break;
+					default:
+						alert("error");
+				}
+			}
+		})
+
+		appcan.button("#id_msgtip", "btn-act", function() {
+			getRandCodeTwo();
+		});
+
+		function buildAboutPassengersParams(names, seatType) {
+			var tmp_data = appcan.locStorage.getVal("result_datas");
+			tmp_data = eval('(' + tmp_data + ')');
+			var tmp_passengers = tmp_data.passengers;
+			var pms = {};
+			var ips = $(names);
+			var str = new String();
+			var str_1 = new String();
+			for(var i = 0; i < ips.length; i++) {
+				var ip = ips[i];
+				var index = $(ip).data("id");
+				var item = tmp_passengers[index];
+				str += (item.passenger_name + "," + 1 + "," + item.passenger_id_no + ",1_");
+				str_1 += (seatType + ",0,1," + item.passenger_name + ",1," + item.passenger_id_no + "," + item.mobile_no + ",N_");
+			}
+			pms.oldPassenger = str;
+			pms.passenger = str_1.substring(0, str_1.length - 1);
+			return pms;
+		}
+
+		function submitOrder(reason) {
+			closeShare();
+			closeShareCon();
+			var num = parseInt($("#personNum").val());
+			if(num == 0) {
+			    appcan.window.openToast('请至少选择一位乘车人！', 2000);  
+				return;
+			}
+			var regEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
+				//邮箱
+				regName = /^[a-z0-9_-]{3,16}$/,
+				//用户名
+				regMobile = /^0?1[3|4|5|8][0-9]\d{8}$/,
+				//手机
+				regTel = /^0[\d]{2,3}-[\d]{7,8}$/,
+				//固定电话
+				regIdCard = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/;
+			var mobile = $("#contactMobile").val();
+			var mflag = regMobile.test(mobile);
+			if(mobile == "") {
+			    appcan.window.openToast('请输入联系人电话！', 2000);
+				return;
+			}
+			if(!mflag) {
+			    appcan.window.openToast('联系人电话有误！', 2000);
+				return;
+			}
+
+			var result_datas = appcan.locStorage.getVal("result_datas");
+			var seatItem = appcan.locStorage.getVal("seatItem");
+			result_datas = eval('(' + result_datas + ')');
+			seatItem = eval('(' + seatItem + ')');
+			var token = result_datas.token;
+			var leftTicket = result_datas.leftTicketStr;
+			var key_check_isChange = result_datas.key_check_isChange;
+			var randcode = $("#ipid_randcode").val();
+
+			if(!randcode) {
+                appcan.window.openToast('请输入验证码！', 2000);
+				return;
+			}
+
+			var from_station_telecode = appcan.locStorage.getVal("from_station_telecode");
+			var to_station_telecode = appcan.locStorage.getVal("to_station_telecode");
+			var start_train_date = appcan.locStorage.getVal("start_train_date");
+			var station_train_code = appcan.locStorage.getVal("station_train_code");
+			var train_no = appcan.locStorage.getVal("train_no");
+			var mySeatType = seatItem.seatType;
+			var noSeat = '';
+			if(!mySeatType) {
+				mySeatType = 1;
+				noSeat = 'wz';
+			}
+			var passengersParams = buildAboutPassengersParams("#trainUlList li", mySeatType);
+			var isMinPrice = appcan.locStorage.getVal("minPrice");
+
+			var params = {	
+			    "params['id']":appcan.locStorage.getVal("userCode"),
+			    "params['mobile']": $("#contactMobile").val(),		    
+			    "params['location_code']": location_code,
+			    "params['noSeat']": noSeat,
+				"params['token']": token,
+				"params['randcode']": randcode,
+				"params['oldPassenger']": passengersParams.oldPassenger,
+				"params['passenger']": passengersParams.passenger,
+				"params['fromStationCode']": from_station_telecode,
+				"params['leftTicket']": leftTicket,
+				"params['seatType']": mySeatType,
+				"params['trainCode']": station_train_code,
+				"params['toStationTelecode']": to_station_telecode,
+				"params['train_date']": start_train_date,
+				"params['train_no']": train_no,
+				"params['key_check_isChange']": key_check_isChange,
+				"params['itineraryId']": appcan.locStorage.getVal("train_applyId"),
+				"params['isMinPrice']": isMinPrice,
+				"params['reason']": reason == undefined ? '' : reason,
+				"params['bookType']": "train",
+				"params['date']": start_train_date,
+				"params['isMinTrainTime']": true,
+				"params['change']": true,
+				"params['refund']": true,
+				"params['stop']": false,
+				"params['from_station_name']": appcan.locStorage.getVal("from_station_name"),
+				"params['to_station_name']": appcan.locStorage.getVal("to_station_name"),
+				"params['start_time']": appcan.locStorage.getVal("start_time"),
+				"params['arrive_time']": appcan.locStorage.getVal("arrive_time"),
+				"params['station_train_code']": appcan.locStorage.getVal("station_train_code")
+			};
+
+			var orderFlag = true;
+			if(orderFlag) {
+			    addMask('../../img/loading.gif', '订单提交中，请稍后');
+				appcan.request.ajax({
+					url: httpHost + "trainController.do?submitOrder",
+					beforeSend: addHeader,
+					timeout: 20000,
+					data: params,
+					type: 'post',
+					dataType: 'json',
+					success: function(data) {
+					    removeMask();
+						if(data.success) {
+							orderFlag = false;
+							appcan.locStorage.setVal("trainOrderDetailPhone", $("#contactMobile").val());
+							appcan.locStorage.setVal("trainOrderDetailPrice", $("#oneTicketPrice").html());
+							appcan.locStorage.setVal("trainOrderDetail", data.obj);
+							appcan.window.open("trainOrderDetail", 'orderDetail.html');
+						} else if(!data.success && data.isRuleCheckResult) {
+							orderFlag = true;
+							getRandCodeTwo();
+							ticketReason(data.msg, submitOrder);
+						} else {
+							orderFlag = true;
+							var msg = data.msg
+							if(data.msg == "用户未登录") {
+								reLogin(submitOrder(reason));
+							} else if("非法的席别，请重新选择！".indexOf(msg) != -1 || msg.indexOf("扣票失败") != -1 || msg.indexOf("排队失败") != -1) {
+								// appcan.window.openToast({
+									// msg: msg,
+									// duration: 10000,
+									// position: 5,
+									// type: 0
+								// });
+								// appcan.window.open("train_ticket_booked", "train_ticket_booked.html", 0);
+								// appcan.window.close({
+									// aniId: 17,
+									// animDuration: 0
+								// });
+								
+								appcan.window.confirm({
+                                    title: '提示',
+                                    content: msg,
+                                    buttons: ['确认'],
+                                    callback: function(err, data, dataType, optId) {
+                                        if(data==0){
+                                            getRandCodeTwo();
+                                            var pages = ["train_ticket_bookdetails","login_12306","train_ticket_booked","trainOrderDetail"];
+                                            for(var i = 0;i<pages.length;i++){
+                                                appcan.window.evaluateScript({
+                                                name:pages[i],
+                                                scriptContent:"appcan.window.close(-1)"
+                                                });
+                                            }
+                                            appcan.window.open("train_ticket_searchresult", "train_ticket_searchresult.html", 0);
+                                        }
+                                    }
+                                });
+								
+							} else {
+							    appcan.window.openToast(msg, 2000);
+								getRandCodeTwo();
+							}
+							
+						}
+					},
+					error:function(XMLHttpRequest, textStatus, errorThrown) {
+					    removeMask();
+                        console.log(textStatus);
+                    }
+				});
+			} else {
+			    removeMask();
+				appcan.window.alert({
+					title: "提醒",
+					content: "订单已经提交成功，请到12306官网查看"
+				});
+			}
+
+		}
+
+		//验证码刷新
+		function getRandCodeTwo() {
+			addMask("../../img/loading.gif", "加载中...");
+			var params = {
+				"params['module']": "passenger"
+			}
+			$("#id_msgtip").attr("disable", "disable");
+			appcan.request.ajax({
+				url: httpHost + 'trainController.do?getRandCode',
+				type: 'POST',
+				beforeSend: addHeader,
+				data: params,
+				dataType: 'json',
+				success: function(data) {
+					if(data.success) {
+						removeMask();
+						outRandVal();
+						var img = $("#imgid_randCode");
+						img.attr("src", httpHost + "randCode/" + data.obj.randcodeImg + "?rnd=" + Math.random());
+						$("#id_msgtip").removeAttr("disable");
+					} else {
+						if(data.msg == "用户未登录") {
+							reLogin(getRandCodeTwo);
+						} else {
+							appcan.window.openToast(data.msg, 2000);
+						}
+					}
+
+				},
+				error: function(e, err) {
+					self.lock = false;
+					appcan.window.closeToast();
+				}
+
+			});
+		}
+
+		function cancelBook() {
+			var data = eval('(' + appcan.getLocVal("result_datas") + ')');
+
+			appcan.request.ajax({
+				url: httpHost + 'cancelBook.action',
+				data: {
+					'params.token': data.token
+				},
+				beforeSend: addHeader,
+				success: function(data) {},
+				error: function(error, msg, err) {},
+			})
+		}
+
+		//关闭添加同行人遮罩层
+		function closeShare() {
+			$('html').css({
+				"overflow": "auto"
+			});
+			$('body').css({
+				"overflow": "auto"
+			});
+			$(".share").hide();
+			$("#addOthersCon").slideUp();
+		}
+
+		//关闭明细遮罩层
+		function closeShareCon() {
+			$('html').css({
+				"overflow": "auto"
+			});
+			$('body').css({
+				"overflow": "auto"
+			});
+			$(".share").hide();
+			$(".train-other-ul").slideUp();
+		}
+
+		//展示明细遮罩层
+		function showOtherDetail() {
+			closeShare();
+			$('html').css({
+				"overflow": "hidden"
+			});
+			$('body').css({
+				"overflow": "hidden"
+			});
+			$("body").append("<div class='share' style='display:block'></div>");
+			$(".train-other-ul").slideDown();
+		}
+
+		//展示同行人遮罩层  
+		$(document).on("tap", "#addOthers", function() {
+				showOthersList()
+			})
+			// appcan.button("#addOthers", "btn-act", function() {
+			// showOthersList()
+			// });
+		function showOthersList() {
+			$('html').css({
+				"overflow": "hidden"
+			});
+			$('body').css({
+				"overflow": "hidden"
+			});
+			$("body").append("<div class='share' style='display:block'></div>");
+			$("#addOthersCon").slideDown();
+		}
+
+		//遮罩层关闭
+		$(document).on("tap", ".share", function() {
+				closeShare();
+				closeShareCon();
+			})
+			// $(".share").click(function() {
+			//             
+			// })
+
+		//添加同行人
+		$(document).on("click", "#addOthersUl li", function() {
+			var self = $(this);
+			addOthers(self);
+		});
+
+		//添加同行人函数
+		function addOthers(obj) {
+			if(obj.find("input")[0].checked) {
+
+				seatItem = appcan.locStorage.getVal("seatItem");
+				seatItem = eval('(' + seatItem + ')');
+
+				var html = '';
+				html += '<li class="ub ub-ac" data-id="' + obj.data("id") + '" data-sex="' + obj.data("sex") + '" data-mobile="' + obj.data("mobile") + '">';
+				html += '<div class="icon-img" onclick="delOther(this)"></div>';
+				html += '<div class="o-con">';
+				html += '<div>' + obj.find(".name").text() + '</div>';
+				html += '<div>' + obj.find(".no").text() + '</div>';
+				html += '</div>';
+				html += '</li>';
+				$("#trainUlList").append(html);
+
+				var detailsHtml = '';
+				detailsHtml += '<li class="ub ub-ac" data-id="' + obj.data("id") + '" data-sex="' + obj.data("sex") + '" data-mobile="' + obj.data("mobile") + '">';
+				detailsHtml += '<div class="ub ub-f1">' + obj.find(".name").text() + '</div>';
+				detailsHtml += '<div class="ub ub-f1 ub-pc">' + seatItem.name + '</div>';
+				detailsHtml += '<div class="ub ub-f1 ub-pe">' + seatItem.price + '</div>';
+				detailsHtml += '</li>';
+
+				$("#otherDetailsList").append(detailsHtml);
+
+				ticketPrice();
+				thanFour();
+			} else {
+				$("#trainUlList li").each(function() {
+					if($(this).data("id") == obj.data("id")) {
+						$(this).remove();
+					}
+				});
+
+				$("#otherDetailsList li").each(function() {
+					if($(this).data("id") == obj.data("id")) {
+						$(this).remove();
+					}
+				})
+				ticketPrice();
+				thanFour();
+			}
+		}
+
+		//删除同行人
+		function delOther(obj) {
+			//		    $(document).on("click", "#trainUlList li .icon-img", function() {
+			var self = $(obj);
+			self.parent().remove();
+
+			$("#otherDetailsList li").each(function() {
+				if($(this).data("id") == self.parent().data("id")) {
+					$(this).remove();
+					ticketPrice();
+					thanFour();
+				}
+			});
+
+			$("#addOthersUl li").each(function() {
+				if($(this).data("id") == self.parent().data("id")) {
+					$(this).find("input")[0].checked = false;
+				}
+			});
+			//      });
+		}
+
+		//根据同行人计算价格
+		function ticketPrice() {
+			var len = $("#trainUlList li").length;
+			var price = $("#priceHidden").val() * len;
+			if(len > 0) {
+				$("#oneTicketPrice").html("￥" + price.toFixed(1));
+				$("#otherDetailsPrice").html("￥" + price.toFixed(1));
+				appcan.window.evaluateScript({
+					name: 'train_ticket_bookdetails',
+					scriptContent: ' totalPrice("' + price.toFixed(1) + '","' + len + '")'
+				});
+				$("#personNum").val(len);
+
+			} else {
+				$("#oneTicketPrice").html("￥" + $("#priceHidden").val());
+				$("#otherDetailsPrice").html("￥" + $("#priceHidden").val());
+				appcan.window.evaluateScript({
+					name: 'train_ticket_bookdetails',
+					scriptContent: ' totalPrice("' + $("#priceHidden").val() + '","' + len + '")'
+				});
+				$("#personNum").val(len);
+			}
+
+		}
+
+		//判断同行人是否超过4个人的交互
+		function thanFour() {
+			var len = $("#addOthersUl li").length;
+			var addLen = $("#trainUlList li").length;
+			if(len > 4) {
+				$(".add-others").css("height", "12em");
+			} else {
+				$(".add-others").css("height", "auto");
+			}
+
+			if(addLen > 4) {
+				$(".train-other-par").css("height", "8em");
+			} else {
+				$(".train-other-par").css("height", "auto");
+			}
+		}
+
+		//验证码
+		$("#randClick label").click(function() {
+			getRandVal();
+
+		})
+
+		//选中
+		function getRandVal() {
+			var arr = []
+			$("#randClick label input[type=checkbox]:checked").each(function(k, v) {
+				var val = $(this).val();
+				arr[k] = val;
+				$("#ipid_randcode").val(arr);
+			})
+		}
+		//去掉选中
+		function outRandVal() {
+			$("#randClick label input").each(function(k, v) {
+				$(this).prop("checked", false);
+			})
+		}
+	</script>
+
+</html>

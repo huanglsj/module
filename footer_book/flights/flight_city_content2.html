@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+        <link rel="stylesheet" href="../../css/ui-box.css">
+        <link rel="stylesheet" href="../../css/ui-base.css">
+        <link rel="stylesheet" href="../../css/ui-color.css">
+        <link rel="stylesheet" href="../../css/appcan.icon.css">
+        <link rel="stylesheet" href="../../css/appcan.control.css">
+        <link rel="stylesheet" href="flight_city_content/css/main.css">
+    </head>
+    <style>
+        .result{
+          padding:.3rem;
+          border-bottom: 1px solid;
+        }
+    </style>
+    <body class="um-vp bc-bg" ontouchstart>
+      <div style="width: 100%;height: 100%;background-color:#EEE;filter: alpha(opacity=50);opacity: 0.5;position: fixed;z-index: 100;top: 0; display:none" id="barrier"></div>
+        <div class="umar-a" id="cityarea">
+            <div class="uinn ubb bc-border" id="history">
+                
+            </div>
+            <div class="uinn ubb bc-border">
+                <div class="ulev-app2">
+                    热门
+                </div>
+                <div class="ub umar-a">
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="HKG">
+                      香港
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="SEL">
+                      首尔
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="MFM">
+                    澳门
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="TYO">
+                    东京
+                    </div>
+                </div>
+                <div class="ub umar-a">
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="TPE">
+                     台北
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="BKK">
+                      曼谷
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="OSA">
+                    大阪
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="SGN">
+                     胡志明市
+                    </div>
+                </div>
+                <div class="ub umar-a">
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="MNL">
+                      马尼拉
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="NGO">
+                      名古屋
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="LON">
+                    伦敦
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="KUL">
+                    吉隆坡
+                    </div>
+                </div>
+                <div class="ub umar-a">
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="PUS">
+                      釜山
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="SYD">
+                      悉尼
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="FRA">
+                    法兰克福
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="YVR">
+                     温哥华
+                    </div>
+                </div>
+                <div class="ub umar-a">
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="PAR">
+                      巴黎
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="NYC">
+                     纽约
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="LAX">
+                    洛杉矶
+                    </div>
+                    <div class="city uba bc-border ub-f1 uinn-d umar-2 ub ub-ac ub-pc min-w5 ulev-1" data-city="HNL">
+                     夏威夷·火奴鲁鲁
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="list"></div>
+    </body>
+    <script src="../../js/appcan.js"></script>
+    <script src="../../js/appcan.control.js"></script>
+    <script src="../../js/appcan.listview.js"></script>
+    <script src="js/guojiCity.js"></script>
+    <script src="../../js/common.js"></script>
+    </body>
+     <script>
+    var cityArr=[];
+    cityArr["type"] = "flight";
+    cityArr["data"] = arrData;
+    window.uexOnload=function(){
+       var arr = {
+             '亚洲':'',
+             '欧洲':'',
+             '非洲':'',
+             '美洲':'',
+             '大洋洲':''
+            }
+            var str = '';
+       for (var i in arrData) {     
+                var temp =arrData[i];                       
+                for(var j in temp)
+                {                
+                  arr[i]+='<div class="city ulev-1 uinn bc-bg b-gra" data-pinyinname="'+temp[j].data.substring(0,temp[j].data.indexOf("|"))+'" data-city='+temp[j].data.substr(temp[j].data.indexOf("(")+1,3) +'>' + temp[j].display + '</div>';
+                }
+            }
+            for (var i in arr) {
+                var aa = arr[i];
+                     str += ('<div id="' + i + '" class=" uinn sc-bg-active ubb bc-border bc-text">' + i + '</div>' + aa);             
+            }
+            $('#list').html(str);      
+            getHistoryCity();
+            bindCityCode(); 
+    } 
+
+
+    function bindButton(){
+          $(".city").unbind("click");
+          appcan.button(".city","btn-act",function(){
+                  var city =$(this).text().trim();
+                  var cityNode=$(this).attr("data-city").trim();
+                  var historyCity = appcan.locStorage.getVal(cityArr["type"]+"historyCity");
+                  historyCity = eval(historyCity);
+                  if(historyCity.length<5){
+                    for(var i =0;i<historyCity.length;i++){
+                      if(city == historyCity[i].city){
+                        historyCity.splice(i,1);
+                        historyCity.unshift({
+                          city:city,
+                          cityCode:cityNode
+                        });
+                        i--;
+                        break;
+                      }
+                    }
+                    if(i === historyCity.length){
+                      historyCity.unshift({
+                        city:city,
+                        cityCode:cityNode
+                      });
+                    }
+                    
+                  }
+                  else if (historyCity.length === 5){
+                    for(var i =0;i<historyCity.length;i++){
+                      if(city == historyCity[i].city){
+                        historyCity.splice(i,1);
+                        historyCity.unshift({
+                          city:city,
+                          cityCode:cityNode
+                        });
+                        i--;
+                        break;
+                      }
+                    }
+                    if(i === historyCity.length){
+                      historyCity.pop();
+                      historyCity.unshift({
+                        city:city,
+                        cityCode:cityNode
+                      });
+                    }
+                  }
+                  else if (historyCity.length > 5){
+                    historyCity.splice(0,historyCity.length,{
+                      city:city,
+                      cityCode:cityNode
+                    });
+                  }
+                  if(city != appcan.locStorage.getVal("currentCity")){
+                    appcan.locStorage.setVal(cityArr["type"]+"historyCity",historyCity);
+                  }
+                  console.log(appcan.locStorage.getVal(cityArr["type"]+"historyCity"));
+                  if(appcan.locStorage.getVal("fromcity")=="true"){
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'plane_ticket_search',
+                      scriptContent:'setSingleFrom("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setSingleFrom("'+city+','+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'apply_show_wtj',
+                      scriptContent:'setSingleFrom("'+city+','+cityNode+'")'
+                    });
+                  }
+                  else if (appcan.locStorage.getVal("tocity") == "true"){
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'plane_ticket_search',
+                      scriptContent:'setSingleTO("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setSingleTO("'+city+','+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'apply_show_wtj',
+                      scriptContent:'setSingleTO("'+city+','+cityNode+'")'
+                    });
+                  }
+                  
+                  applyCity(city,cityNode);
+          });
+        }
+        
+        function applyCity(city,cityNode){
+            //单程出发城市
+            if(appcan.locStorage.getVal("openFromCityOne")=="true"){
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setOneFrom("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+            }
+            //单程到达城市
+            if(appcan.locStorage.getVal("openToCityOne")=="true"){
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setOneTo("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+            }
+            
+            //往返出发城市
+            if(appcan.locStorage.getVal("openFromCityTwo")=="true"){
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setTwoFrom("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+            }
+            
+            //往返到达城市
+            if(appcan.locStorage.getVal("openToCityTwo")=="true"){
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setTwoTo("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+            }  
+            
+            //多程
+            if(appcan.locStorage.getVal("openFromCityAdd")=="true"){
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setAddFrom("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+            }
+            if(appcan.locStorage.getVal("openToCityAdd")=="true"){
+                    appcan.window.evaluateScript({
+                      name:'apply',
+                      scriptContent:'setAddTo("'+city+","+cityNode+'")'
+                    });
+                    appcan.window.evaluateScript({
+                      name:'flight_city',
+                      scriptContent:'appcan.window.close(-1)'
+                    });
+            }     
+        }
+
+        var pinyinSearch = function(text){
+          if(text===''){
+            $("#barrier").html('');
+            return;
+          }
+          text = text.toUpperCase();
+          var textLength = text.length;
+          var elements = $(".city[data-pinyinName]");
+          var elementsLength = elements.length;
+          var counti=0,countj=0,cursor=-1,flag=true,result=[],i=0,str='';
+
+          for(;counti<elementsLength;counti++){
+            if(elements[counti].getAttribute("data-pinyinName").toUpperCase().indexOf(text)==0){
+              result.push({
+                cityCode:$(".city[data-pinyinName]")[counti].getAttribute("data-city"),
+                cityName:$(".city[data-pinyinName]")[counti].innerHTML
+              })
+            }
+          }
+          if(result.length == 0){
+            counti=0;
+          }
+          else{
+            for(;i<result.length;i++){
+              str+='<div class="city result" data-city="'+result[i].cityCode+'">'+result[i].cityName+'</div>';
+            }
+            $("#barrier").html(str);
+            $("#barrier").css("opacity",1);
+            return;
+          }
+
+          for(;counti<elementsLength;counti++){
+            if(elements[counti].getAttribute("data-pinyinName").toUpperCase() == text.toUpperCase()){
+              result.push({
+                cityCode:elements[counti].getAttribute("data-city"),
+                cityName:elements[counti].innerHTML
+              });
+              break;
+            }
+            else{
+              for(;countj<textLength;countj++){
+                if(elements[counti].getAttribute("data-pinyinName").toUpperCase().indexOf(text.charAt(countj).toUpperCase()) > cursor){
+                  cursor = elements[counti].getAttribute("data-pinyinName").toUpperCase().indexOf(text.charAt(countj).toUpperCase());
+                }
+                else{
+                  flag=false;
+                  break;
+                }
+              }
+              cursor = -1;
+              countj = 0;
+              if(flag === true){
+                result.push({
+                  cityCode:elements[counti].getAttribute("data-city"),
+                  cityName:elements[counti].innerHTML
+                });
+              }
+              flag=true;
+            }
+          }
+          for(i = 0;i<result.length;i++){
+            str+='<div class="city result" data-city="'+result[i].cityCode+'">'+result[i].cityName+'</div>';
+          }
+          $("#barrier").html(str);
+          $("#barrier").css("opacity",1);
+        }
+
+        var othersSearch = function(text){
+          if(text == ''){
+            $("#barrier").html('');
+            return;
+          }
+          var counti=0,str='';
+          var textLength = text.length;
+          var elements = $(".city[data-pinyinName]");
+          var elementsLength = elements.length;
+          for(;counti<elementsLength;counti++){
+            if(elements[counti].innerHTML.indexOf(text) > -1 ){
+              str+='<div class="city result" data-city="'+elements[counti].getAttribute("data-city")+'">'+elements[counti].innerHTML+'</div>';
+            }
+          }
+          $("#barrier").html(str);
+          $("#barrier").css('opacity',1);
+        }
+
+    </script>
+</html>

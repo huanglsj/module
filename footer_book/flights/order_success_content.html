@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/ui-base.css">
+		<link rel="stylesheet" href="../../css/ui-color.css">
+		<link rel="stylesheet" href="../../css/appcan.icon.css">
+		<link rel="stylesheet" href="../../css/appcan.control.css">
+		<link rel="stylesheet" href="../../css/main.css" />
+		<link rel="stylesheet" href="order_success_content/main.css"></link>
+		<style>
+			.bgset {
+				font-size: 16px !important;
+				opacity: 1;
+				filter: Alpha(opacity=1);
+			}
+			
+			.loading-box {
+				padding: 16px 32px;
+			}
+			
+			.loading-pic {
+				width: 64px;
+				height: 64px;
+			}
+			
+			.loading-text p {
+				color: #3A5A98;
+			}
+			
+			#header {
+				position: initial;
+			}
+			
+			.longlist{overflow-y:auto;-webkit-overflow-scrolling:touch}
+			.cancelBtn{font-size:1.25em;width:100%;padding:0.5em 0;color:#fff;background-color:#72A1FD;text-align:center;}
+		</style>
+        <script type="text/javascript" src="../../js/setSkin.js"></script>
+	</head>
+
+	<body class="um-vp user-bc-bg bg-white ub-con ub ub-ver" ontouchstart style="font-size:16px;background-color:#f4f8f9">
+		<div id="header" class="uh bc-text-head ub bc-head header-bg">
+			<div class="nav-btn" id="nav-left">
+                <div class="ub-img user-icon-goback umw1-5 umh4"></div>
+			</div>
+            <h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">机票订单</h1>
+			<div class="nav-btn nav-bt" id="nav-right">
+				<div class="ub-img iocn-more umw2 umh4"></div>
+			</div>
+		</div>
+		
+		<div class="ub-f1 longlist">
+			<!--订单信息-->
+			<div class="order-detail section">
+				<div class="od-hotel">成功预订机票</div>
+			</div>
+			
+			<div class="order-detail ub ub-ver">
+				<div class="ub" style="border-top: #eae9ee 1px solid;background-color:#fff;">
+					<div style="color:#f7c252;font-size:1.2em;">单程票</div>
+				</div>
+				
+				<!--订单信息-->
+				<div class="section">
+					<div id="orderId" style="margin-top: 0;">
+						<span>订单号：</span>
+						<span id="orderNumber"></span>
+					</div>
+					<div>
+						<span>订单总价：￥</span>
+						<span id="price"></span>
+					</div>
+				</div>
+				
+				<!-- 列车信息  -->
+				<div class="section" style="display:flex;display:-webkit-flex;padding-right:0;">
+					<div style="display:flex;display:-webkit-flex;flex-direction:row;margin:0 auto;">
+						<div style="font-weight:bold;display:flex;display:-webkit-flex;flex-direction:column;align-items:flex-end;">
+							<div id="fTrain">广州</div>
+							<div id="sTime" style="padding-top:10px">06：25</div>
+						</div>
+						<div style="font-size:0.8em;display:flex;display:-webkit-flex;flex-direction:column;align-items:center;margin:0 0.6rem;">
+							<div id="sDate">2016-03-06</div>
+							<div id="trainIcon" style="background-image: url('order_success_content/img/planeIcon.png');background-size:100% 100%;width:1rem;height:1rem;"></div>
+							<div id="trainCode">g2212</div>
+						</div>
+						<div style="font-weight:bold;display:flex;display:-webkit-flex;flex-direction:column;align-items:flex-start;">
+							<div id="tTrain">北京</div>
+							<div id="aTime" style="padding-top:10px">06：25</div>
+						</div>
+					</div>
+				</div>
+		
+				<!-- 入住人信息  -->
+				<div class="section guest-detail">
+					<div class="gd-room">
+						<span class="gd-room-title">机票数量</span>
+						<span class="gd-room-count">
+							<span id="ticketCount">1</span>张
+						</span>
+					</div>
+					<div class="gd-guestslist">
+						<div style="min-width:2.6rem">乘客</div>
+						<div id="guests" v-cloak>
+							<div class="guest" v-for="g in guests">{{g.name}}({{g.cardNo}})</div>
+						</div>
+					</div>
+					<div class="gd-phone">
+						<span class="gd-phone-title">联系电话</span>
+						<span class="gd-phone-number">
+		                     <input readonly="readonly" type="text" id="contactPhone" value="" />
+		                 </span>
+						<img src="order_success_content/img/phone_c.png" />
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		
+		<!-- 取消按钮 -->
+		<div id="cancelBtn" class="cancelBtn my-footer">
+			取消订单
+		</div>
+		
+		<script src="../../js/appcan.js"></script>
+		<script src="../../js/appcan.control.js"></script>
+		<script src="../../js/common.js"></script>
+		<script src="../../js/vue.js"></script>
+		<script>
+			var app;
+			$(function() {
+				app = new Vue({
+					el: "#guests",
+					data: {
+						guests: [],
+					},
+				});
+				
+				appcan.button("#nav-left", "btn-act", function() {
+					window.history.back();
+				});
+
+				appcan.button("#cancelBtn", "btn-act", function() {
+					ajaxRequest({
+						url: httpHost + "flightController.do?cancelFlight",
+						data: {
+							PNR: flightOrderDetail.PNR,
+						},
+						type: "POST",
+						//beforeSend: addHeader,
+						success: function(data) {
+							var dataJson = JSON.parse(data);
+							if(dataJson.success) {
+								alert('订单取消成功！');
+								window.history.replaceState(null, null, 'plane_ticket_search_content.html');
+		                    	location.reload();
+							}
+						},
+						error: function(err, errMsg, error) {
+							console.log(err, errMsg);
+						}
+					}, "../../img/loading.gif");
+				});
+
+				//订单ID
+				/*var planeOrder = appcan.getLocVal("planeOrder");
+				planeOrder = eval( '(' + planeOrder + ')' );
+				console.log(planeOrder);
+				if(planeOrder.obj){
+				    $("#orderNumber").text(planeOrder.obj.resID);
+				}*/
+
+				//提交的订单信息
+				var flightOrderDetail = JSON.parse(appcan.locStorage.getVal("flightOrderDetail"));
+				console.log(flightOrderDetail);
+				app.guests = flightOrderDetail.passengers;
+				$("#price").text(flightOrderDetail.price);
+				$("#contactPhone").val(flightOrderDetail.phone);
+				$("#fTrain").text(flightOrderDetail.departStation);
+				$("#tTrain").text(flightOrderDetail.arriveStation);
+				$("#sTime").text(flightOrderDetail.departTime);
+				$("#aTime").text(flightOrderDetail.arriveTime);
+				$("#sDate").text(flightOrderDetail.date);
+				// $("#trainCode").text(flightOrderDetail.flightNo);
+				$("#ticketCount").text(flightOrderDetail.passengers.length);
+			});
+		</script>
+	</body>
+
+</html>

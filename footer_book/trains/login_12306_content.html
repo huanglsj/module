@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/ui-base.css">
+		<link rel="stylesheet" href="../../css/ui-color.css">
+		<link rel="stylesheet" href="../../css/appcan.icon.css">
+		<link rel="stylesheet" href="../../css/appcan.control.css">
+		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" href="login_12306_content/css/main.css">
+	</head>
+
+	<body class="um-vp bc-bg" ontouchstart>
+		<div class="ub ub-ver uinn-a3 ub-fv">
+			<div class="ub ub-ver uinn uinn-at1">
+				<div class="umar-a uba uc-a1 bc-border c-wh c-wh">
+					<div class="ub ub-ac umh5 bc-border ">
+						<div class=" uinput ub ub-f1">
+							<div class="uinn fa fa-user sc-text"></div>
+							<input placeholder="手机/邮箱/12306用户名" id="userName" type="text" class="ub-f1">
+						</div>
+					</div>
+				</div>
+				<div class="umar-a uba uc-a1 bc-border c-wh">
+					<div class="ub ub-ac umh5 bc-border ">
+						<div class=" uinput ub ub-f1">
+							<div class="uinn fa fa-lock sc-text"></div>
+							<input placeholder="12306账户密码" id="pass" type="password" class="umw4 ub-f1">
+						</div>
+					</div>
+				</div>
+				<div class="b-gra index-umar-a uc-a1 c-wh rand-code-con">
+					<img id="id_img_randcode" />
+					<div class="rand-code-click" id="randClick">
+						<div class="ub rand-list">
+							<label>
+					            <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="1" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="2" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="3" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="4" ></div>
+                            </label>
+						</div>
+						<div class="ub rand-list">
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="5" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="6" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="7" ></div>
+                            </label>
+							<label>
+                                <div class="checkbox umar-r"><input type="checkbox" class="uabs ub-con" value="8" ></div>
+                            </label>
+						</div>
+					</div>
+				</div>
+				<div class="train-code">
+					<div class="code-text">
+						<input id="randcode" class="ub ub-f1 train-code-text" placeholder="请输入验证码" />					
+					</div>
+					<div id="btnid_changeCode" class="ub-f1 ub ub-pc train-code-btn">刷新验证码</div>
+				</div>
+				<div class="ub ub-ver index-umar-a">
+					<div class="uinn-at1">
+						<div class="btn ub ub-ac bc-text-head ub-pc bc-btn uc-a1 header-bg" id="submit">
+							登录12306
+						</div>
+					</div>
+				</div>
+				<button type="submit" class="uinvisible"></button>
+			</div>
+
+		</div>
+	</body>
+	<script src="../../js/appcan.js"></script>
+	<script src="../../js/appcan.control.js"></script>
+	<script src="../../js/layer/layer.js"></script>
+	<script src="../../js/common.js"></script>
+	<script>
+		function getRandCode() {
+		    addMask("../../img/loading.gif", "加载中...");
+			$("#btnid_changeCode").attr("disable", "disable");
+			appcan.request.ajax({
+				url: httpHost + 'trainController.do?getRandCode',
+				type: 'POST',
+				beforeSend: addHeader,
+				data: {
+					"params['module']": "login"
+				},
+				dataType: 'json',
+				success: function(data) {
+					if(data.success) {
+					    removeMask();
+					    outRandVal();
+						dataImg = data;
+						var img = $("#id_img_randcode");
+						img.attr("src", httpHost + "randCode/" + dataImg.obj.randcodeImg + "?rnd=" + Math.random());
+						$("#btnid_changeCode").removeAttr("disable");
+					}else{
+					    if(data.msg=="用户未登录"){
+                          reLogin(getRandCode);
+                        }else{
+                          appcan.window.openToast(data.msg, 2000);  
+                        }
+					}
+				},
+				error: function(e, err) {
+					self.lock = false;
+					appcan.window.closeToast();
+				}
+
+			});
+		}
+		appcan.ready(function() {
+			// $("#btnid_changeCode").attr("disable", "disable");
+			checkSubmit(getRandCode);
+			appcan.button("#btnid_changeCode", "btn-act", function() {
+				getRandCode();
+			});
+
+			appcan.button("#submit", "btn-act", function() {
+				if(($('#userName').val()) == '') {
+				    appcan.window.openToast('请输入用户名', 2000);
+					return;
+				}
+				if(($('#pass').val()) == '') {
+				    appcan.window.openToast('请输入账户密码', 2000);
+					return;
+				}
+				if(($('#randcode').val()) == '') {
+				    appcan.window.openToast('请输入验证码', 2000);
+					return;
+				}
+				addMask("../../img/loading.gif", "登录中,请稍后");
+				checkSubmit(login12306);
+			})
+		});
+
+		$("#randClick label").click(function() {
+			getRandVal();
+
+		})
+        function login12306(){
+            var seat_Item = appcan.locStorage.getVal("seatItem");
+            console.log(seat_Item);
+            var seatItem = eval("(" + seat_Item + ")");
+            var data_paramsOld = appcan.locStorage.getVal("data_params");
+            data_paramsOld = eval("(" + data_paramsOld + ")");
+            var username = $("#userName").val();
+            var pass = $("#pass").val();
+            var randcode = $("#randcode").val();
+            var data_params = {
+                "params['from_station_city']": appcan.locStorage.getVal("from_station_city"),
+                "params['to_station_city']": appcan.locStorage.getVal("to_station_city"), //查询的到达城市
+                "params['userName']": username,
+                "params['pass']": pass,
+                "params['randcode']": randcode,
+                "params['train_date']": data_paramsOld.params.train_date,
+                "params['secretStr']": data_paramsOld.params.secretStr,
+                "params['query_from_station_name']": data_paramsOld.params.query_from_station_name,
+                "params['query_to_station_name']": data_paramsOld.params.query_to_station_name
+            };
+            appcan.request.ajax({
+                url: httpHost + 'trainController.do?login12306',
+                type: 'POST',
+                beforeSend: addHeader,
+                timeout: 10000,
+                data: data_params,
+                success: function(data) {
+                    var myData = eval("(" + data + ")");
+                    console.log(myData);
+                    if(myData.success) {
+                        //appcan.locStorage.setVal("key_check_isChange",key_check_isChange);
+                        appcan.locStorage.setVal("result_datas", myData.obj);
+                        appcan.window.open("train_ticket_bookdetails", "train_ticket_bookdetails.html", 2);
+
+                    } else {
+                        if(myData.msg=="用户未登录"){
+                          reLogin(login12306);
+                        }else{
+                          if((myData.msg).indexOf("过期") >= 0) {
+                            appcan.window.publish("backTrainSearch", "111");
+                          }else if((myData.msg).indexOf("未处理的订单") >= 0) {
+                               appcan.window.openToast(myData.msg, 3000);
+                            // var trainOrderDetail=appcan.locStorage.getVal("trainOrderDetail");
+                            // if(trainOrderDetail){//如果已经在本地预订了车票
+                                // appcan.window.confirm({
+                                        // title: '提示',
+                                        // content: msg,
+                                        // buttons: ['确认'],
+                                        // callback: function(err, data, dataType, optId) {
+                                            // if(data==0){
+                                               // appcan.window.open("orderDetail","orderDetail.html",2);
+                                            // }
+                                        // }
+                                    // });
+//                                 
+                            // }
+                          }else{
+                              appcan.window.openToast(myData.msg, 2000);
+                              getRandCode();
+                          }
+                        }
+                    }
+                    removeMask();
+                },
+                error: function(e, err) {
+                    self.lock = false;
+                    appcan.window.closeToast();
+                    removeMask();
+                }
+            });
+        }
+		function getRandVal() {
+			var arr = []
+			$("#randClick label input[type=checkbox]:checked").each(function(k, v) {
+				var val = $(this).val();
+				arr[k] = val;
+				$("#randcode").val(arr);
+			})
+		}
+		
+		//去掉选中
+        function outRandVal(){
+            $("#randClick label input").each(function(k, v) {
+                $(this).prop("checked",false);
+            })
+        }
+	</script>
+
+</html>

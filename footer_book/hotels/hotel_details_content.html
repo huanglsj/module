@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+        <link rel="stylesheet" href="../../css/ui-box.css">
+        <link rel="stylesheet" href="../../css/ui-base.css">
+        <link rel="stylesheet" href="../../css/ui-color.css">
+        <link rel="stylesheet" href="../../css/appcan.icon.css">
+        <link rel="stylesheet" href="../../css/appcan.control.css">
+        <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
+        <link rel="stylesheet" href="css/hotel_details.css">
+    </head>
+	<body>
+	    <div id="header" class="uh bc-text-head ub header-bg">
+                <div class="nav-btn back" id="nav-left">
+                    <div class="ub-img user-icon-goback umw1-5 umh4"></div>
+                </div>
+                <h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">酒店详情</h1>
+                <div class="nav-btn nav-bt icon-act" id="nav-right">
+                    <div class="ub-img user-icon-phone umw1-5 umh4"></div>
+                </div>
+        </div>
+	    <div class="content" id="hotelDetail" style="display: none;">
+	        <div class="hotel_pic">
+	            <div id='slider' class='slider'></div>
+	            <div class="hotel_pic_left" id="hotelName"></div>
+	            <div class="hotel_pic_right">20张</div>
+	        </div>
+	        <div class="detailed_address">
+	            <div class="address_details" id="hotelAddress"></div>
+	            <div class="address_query" v-on:click="hotelIn()">地图&nbsp;&nbsp;<span class="right_back">></span></div>
+	            <!--<div class='address_distance'>啊实打实大实打距离该酒店18公里</div>-->
+	        </div>
+	        <div class="hotel_details">
+	            <div>
+	                <span id="shortDesc"></span>
+	                <span id="hotelTel"></span>
+	            </div>
+	            <div v-on:click="hotelIn()">详情&nbsp;&nbsp;<span class="right_back">></span></div>
+	            <!--<div>
+	                <img src="img/wifi.png" />
+	                <img src="img/restaurant.png" />
+	                <img src="img/KTV.png" />
+	                <img src="img/swimming_pool.png" />
+	                <img src="img/P.png" />
+                    <img src="img/gym.png" />
+                    <img src="img/spa.png" />
+                    <img src="img/hotspring.png" />
+                    <img src="img/tennis.png" />
+                    <img src="img/golf.png" />
+                    <img src="img/meeting.png" />
+	            </div>-->
+	        </div>
+	        <div class="Check_in_time">
+	            <span id="bgnDate">03月03日</span>&nbsp;-&nbsp;<span id="endDate">03月04日</span>
+	            <span class="sum_time">共<span id="day"></span>晚&nbsp;&nbsp;<span class="right_back">></span></span>
+	        </div>
+	        <ul class="room_information_ul">
+	            <li v-for="item in items">
+	                <div class="room_information ub ub-pc">
+	                    <div class="ub-f1">
+	                        <img src="img/executive.png">
+                        </div> 
+                        <div class="room_introduce ub ub-f2 ub-ver">
+                            <div class="ub">{{item.roomTypeName}}</div> 
+                        <div class="ub">{{item.ratePlanName}}</div> 
+                        <div class="ub">{{item.roomTypeDesc}}</div>
+                        </div> 
+                        <div class="drop_down_an ub ub-f1 ub-pe ub-ac" v-bind:data-rateplanCode="item.rateplanCode" v-bind:data-roomPrice="item.roomPrice" v-bind:data-totalPrice="item.totalPrice" v-bind:data-planName="item.ratePlanName">
+                            <div class="price ub-ac">￥<span>{{item.roomPrice}}</span></div> 
+                            <div class="order" v-bind:id="item.roomIndex" v-bind:data-supplierCode="item.vendorCode" v-bind:data-roomCode="item.roomTypeCode" v-bind:data-roomName="item.roomTypeName" v-on:click="checkSubmit(hotelOrder(item.roomIndex))">预订</div>
+                        </div>
+                    </div>
+                </li>
+	        </ul>
+	    </div>
+	</body>
+	<script src="../../js/appcan.js"></script>
+  <script src="../../js/appcan.control.js"></script>
+  <script src="../../js/common.js"></script>
+  <script src="../../js/appcan.slider.js"></script>
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/vue.js"></script>
+	<script>
+	  var hotelCode;
+      var bgnDate;
+      var endDate,app;
+      appcan.ready(function() {
+          $(".content").offset({
+              top:$("#header").height(),
+          })
+        appcan.window.disableBounce();
+        app = new Vue({
+          el: '#hotelDetail',
+          data: {items: []},
+          methods: {
+            edit: function (item) {
+            },
+            hotelIn:function(){
+              appcan.window.open("hotel_introduction","hotel_introduction.html",2);
+            },
+            hotelOrder:function(id){
+              if(appcan.locStorage.getVal("applys")==="true" && (!appcan.locStorage.getVal("expId") || appcan.locStorage.getVal("expId") === 'undefined')){
+                  appcan.window.openToast("请您先选择出差申请再预订",3000);
+              }else{
+                  appcan.locStorage.setVal("roomIndex",id);
+                  var divID = "#"+id;
+                  appcan.locStorage.setVal("totalReduce","0");
+                  appcan.locStorage.setVal("totalRefund","0");
+                  appcan.locStorage.setVal("supplierCode",$(divID).attr("data-supplierCode"));
+                  appcan.locStorage.setVal("roomCode",$(divID).attr("data-roomCode"));
+                  appcan.locStorage.setVal("roomName",$(divID).attr("data-roomName"));
+                  appcan.locStorage.setVal("rateplanCode",$(divID).parent().attr("data-rateplanCode"));
+                  appcan.locStorage.setVal("roomPrice",$(divID).parent().attr("data-roomPrice"));
+                  appcan.locStorage.setVal("totalPrice",$(divID).parent().attr("data-totalPrice"));
+                  appcan.locStorage.setVal("planName",$(divID).parent().attr("data-planName"));
+                  appcan.window.open("hotel_show","hotel_show.html",2);
+                }
+            }
+          }
+        });
+        appcan.button("#nav-right", "btn-act", function() {
+            var hotelTel = appcan.locStorage.getVal("hotelTel");
+            uexCall.dial(hotelTel);
+        });
+        appcan.button("#nav-left", "btn-act", function() {
+            appcan.window.evaluateScript({
+                name:"hotel_details",
+                scriptContent:"appcan.window.close(1)"
+            })
+        })
+        addMask('../../img/loading.gif',"加载中，请稍后");
+        hotelCode=appcan.locStorage.getVal("hotelCode");
+        bgnDate=appcan.locStorage.getVal("inday");
+        endDate=appcan.locStorage.getVal("outday");
+        //显示日期
+        $("#bgnDate").html(NYR(bgnDate,2));
+        $("#endDate").html(NYR(endDate,2));
+        findHotel();
+      });
+      function findHotel(){
+          appcan.request.ajax({
+          url : httpHost+'hotelController.do?findHotel',
+          beforeSend:addHeader,
+          data : {
+            hotelCode:hotelCode,
+            bgnDate:bgnDate,
+            endDate:endDate
+          },
+          type : "POST",
+          dataType:"json",
+          success : function(data) {
+            console.log(data);
+            removeMask();                   
+            if (data.success) {
+              $('#hotelDetail').show();
+              var hotelDetail = data.obj.basicProperty;
+              var roomDetail = data.obj.roomRates;
+              appcan.locStorage.setVal("hotelDetail",hotelDetail);
+              appcan.locStorage.setVal("roomDetail",roomDetail);
+              appcan.locStorage.setVal("hotelAddr",hotelDetail.address);
+              appcan.locStorage.setVal("hotelCode",hotelDetail.hotelCode);
+              appcan.locStorage.setVal("hotelName",hotelDetail.hotelName);
+              //显示酒店信息
+              $("#hotelAddress").html(hotelDetail.address);
+              $("#shortDesc").html(hotelDetail.shortDesc);
+              var hotelTel = hotelDetail.tel?hotelDetail.tel:"无";
+              if(hotelTel=="无"){
+                $("#hotelTel").html("暂无联系电话");
+              }else{
+                $("#hotelTel").html(hotelDetail.tel);
+              }
+              appcan.locStorage.setVal("hotelTel",hotelTel);
+              $("#hotelName").text(hotelDetail.hotelName);
+              $("#day").text(roomDetail[0].rates.length);
+              var picArr = [];//展示图片数组
+              var imgArr = new Array();
+              for(var i=0;i<hotelDetail.images.length;i++){
+                  if(hotelDetail.images[i].type == "W" || hotelDetail.images[i].type == "L"){
+                    imgArr.push(hotelDetail.images[i]);
+                  }
+              }
+              if(imgArr.length > 0){
+                //生成随机数
+                var randomNum = Math.random();
+                randomNum = parseInt( 5 * (randomNum + 1) );
+                if(randomNum > imgArr.length){
+                  randomNum = imgArr.length;
+                }
+                $(".hotel_pic .hotel_pic_right").html(randomNum + "张");
+                for(var i=0;i<randomNum;i++){
+                  var imgObj = {};//图片对象
+                  imgObj["img"] = imgArr[i].URL;
+                  picArr[i] = imgObj;
+                }
+              }else{
+                picArr[0] = {"img":"hotel_details_content/css/myImg/noHotalImg.png"};
+                $(".hotel_pic .hotel_pic_right").hide();
+              }
+              goodsImg(picArr);//绑定图片 
+              //酒店设施
+              //if(hotelDetail.freeWIFI=="")//展示设施WIFI
+              //$(".wifi").css("display","none");
+              for(var obj in roomDetail){
+                var pr=0,ar=0;
+                var days=0;
+                $.each(roomDetail[obj].rates,function(index,item) {
+                  pr +=parseFloat(roomDetail[obj].rates[index].amountPrice);
+                  ar +=parseFloat(roomDetail[obj].rates[index].diaplayPrice);
+                  days++;
+                });
+                roomDetail[obj]["totalPrice"]=pr;
+                roomDetail[obj]["roomPrice"]=(pr/days).toFixed(2);
+
+                app.items.push({
+                  roomIndex: obj,
+                  roomTypeName: roomDetail[obj].roomTypeName,
+                  ratePlanName: roomDetail[obj].ratePlanName,
+                  roomTypeDesc: roomDetail[obj].roomTypeDesc,
+                  roomPrice: roomDetail[obj].roomPrice,
+                  totalPrice: roomDetail[obj].totalPrice,
+                  vendorCode: roomDetail[obj].vendorCode,
+                  roomTypeCode: roomDetail[obj].roomTypeCode,
+                  ratePlanCode: roomDetail[obj].ratePlanCode
+                });
+              }
+            }else{
+                if(data.msg=="用户未登录"){
+                reLogin(findHotel);
+              }else{
+                  var html = "<div style='margin-top:2em;text-align:center;color:#4679ff;font-size: 1rem;font-weight: bold;'>该酒店暂时无法预订，请选择其他酒店。</div>";
+                $('body').html(html);
+              }
+            }
+        },
+          error : function(err) {
+            removeMask();
+            appcan.window.openToast("网络请求异常，请检查网络是否正常。",3000);
+          }
+        });
+      }
+      //商品详情图片轮播
+        function goodsImg(images) {
+            var slider = appcan.slider({
+                selector : '#slider',
+            aspectRatio : 9 / 16,
+            hasLabel : false,
+            index : 0,
+            canDown:false,
+        });
+        slider.set(images);
+        slider.on("clickItem", function(index, data) {
+                console.log(index, data);
+        
+            })
+        }
+	</script>
+</html>

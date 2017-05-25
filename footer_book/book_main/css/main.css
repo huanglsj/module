@@ -1,0 +1,218 @@
+.header-bg{
+    background-color: #3a5a98 ;
+}
+#book_header .header-text{
+    color: #fff;
+    font-size: 0.55rem;
+    padding-top: 0.51rem;
+}
+.font-1{
+    font-size: 1rem;
+    color:#4679ff;
+    padding-top: 0.6rem;
+    padding-bottom: 0.4rem;
+}
+.uw-order1{
+	width:60.3%;
+}
+.uinn-order1{
+	padding:0.3em 0;
+}
+.goodsImg1{
+	background-image:url('myImg/img1.png');
+}
+.umar-r-order{
+	margin-right:1em;
+}
+.umar-r-order2{
+	margin-right:2.6em;
+}
+.ulev-order{
+	font-size:0.625em;
+}
+.b-gra-order{
+	border-color:#6e6e6e;
+}
+.b-org-order{
+	border-color:#f78c3e;
+}
+.t-org-order{
+	color:#f78c3e;
+}
+.c-gra3{
+	background-color:#dadada;
+}
+.search{
+	background-image:url('myImg/search.png');
+}
+.umar-ar4{
+	margin-right:0.3125em;
+}
+.uh-app1{
+	height:3.125em;
+}
+.uw-app2{
+	width:3.125em;
+}
+.uh-app2{
+	height:2.2em;
+}
+.umar-at1{
+    margin-top:0.625em;
+}
+.uinn-a7{
+    padding:0 0.625em;
+}
+.uinn-a11{
+    padding:0.625em 0;
+}
+.mar-ar1{
+    margin-right:0.625em;
+    padding-bottom: 2em;
+    padding-top: 1em;
+}
+.uinn-a1{
+    padding:0.625em;
+}
+.osearch{
+    border:none;
+}
+.osearch input{
+    padding: 0;
+}
+.osearch input:focus{
+    border:none;
+    outline:none;
+}
+.wh-all{
+    width:100%;
+    height: 100%;
+}
+.user-bc-bg {
+    background-image: url(myImg/newbg.jpg);
+    background-size: 100%;
+}
+.ulev-2 {
+    font-size: 1.2em !important;
+}
+.user-ubb {
+    border-bottom: 1px solid #4679ff;
+}
+.user-uinn {
+    padding-bottom: 1.5em !important;
+    padding-top: 1.5em !important;
+    margin: 0;
+}
+.user-uinn1 {
+    padding-bottom: 2em !important;
+    padding-top: 2.5em !important;
+    margin: 0;
+}
+
+.user-mar-ar1 {
+margin-right: 0.625em;
+padding-bottom: 0.5em;
+padding-top: 0.2em;
+}
+
+.umwh-ex {
+min-width: 2em;
+min-height: 2em;
+}
+.res-restaurant {
+background-image: url(myImg/restaurant.png);
+}
+.res-vip {
+background-image: url(myImg/vip.png);
+}
+.res-train-tickets {
+background-image: url(myImg/train_tickets.png);
+}
+.res-plane-ticket {
+background-image: url(myImg/plane_ticket.png);
+}
+.res-hotel {
+background-image: url(myImg/hotel.png);
+}
+.res-didi {
+background-image: url(myImg/dd.png);
+}
+.car_rental {
+background-image: url(myImg/car_rental.png);
+}
+.user-dialogue {
+margin: 0px;
+border: 0px;
+width: 100%;
+height: 100%;
+-webkit-appearance: none;
+line-height: 2em;
+background: none;
+text-decoration: none;
+font-size: 1em;
+display: block;
+outline:none;
+}
+.user-blue {
+background-color: #fff;
+}
+.uwh-abn{
+    width:3.5625em;
+    height:1.75em;
+}
+.appcanBtn{
+    background-image:url('myImg/appcanBtn.png');
+}
+.umar-l-ele{
+    margin-left:0.8em;
+}
+.tab_l .item {
+padding: 0.6em 0;
+border-left: 0px solid #ffffff;
+}
+.ubb-pic{
+    border-right:2px solid #fff;
+}
+.t-blu2{
+    color:#0670b7;
+}
+.uinn-a15{
+    padding:0.52em 0;
+}
+.bc-bg {
+background-color: #fff !important;
+}
+.user-sc-bg-active{
+    background-color: #fff !important;
+    
+}
+
+.tab_l{
+    border: 1px solid #ffffff;
+    -webkit-border-radius: 0.3em;
+   border-radius: 0.3em;
+
+}
+
+.tab_i .focus, .tab_l .focus, .slider .focus {
+height: 2em !important;
+}
+.tab_l .focus{
+    border: 1px solid #fff;
+    border-top-left-radius:0.3em;
+    border-bottom-left-radius:0.3em;
+}
+#nav .sc-text-tab{
+    color: #ffffff;
+}
+
+.sc-text-active {
+color: #fff !important;
+}
+.sc-bg-active {
+background-color: #f2f2f2 !important;
+}
+.new_uinn {
+padding: 0em 0.5em 1em 0.5em;
+margin: 0;
+}

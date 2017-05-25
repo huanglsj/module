@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+        <link rel="stylesheet" href="../../css/ui-box.css">
+        <link rel="stylesheet" href="../../css/ui-base.css">
+        <link rel="stylesheet" href="../../css/ui-color.css">
+        <link rel="stylesheet" href="../../css/appcan.icon.css">
+        <link rel="stylesheet" href="../../css/appcan.control.css">
+        <link rel="stylesheet" href="../../css/main.css"/>
+        <link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+        <link rel="stylesheet" href="orderDetail/css/main.css" />
+    </head>
+    <style type="text/css">
+        .bgset{
+            font-size:16px !important;
+            opacity:1;
+            filter:Alpha(opacity=1);
+        }
+        .loading-box{
+            padding:16px 32px;
+        }
+        .loading-pic{
+            width:64px;
+            height:64px;
+        }
+        .loading-text p{
+            color:#3A5A98;
+        }
+    </style>
+    <body class="um-vp user-bc-bg bg-white" ontouchstart style="font-size:16px;background-color: rgb(244, 248, 249);">
+        
+        <!--订单信息-->
+        <div class="order-detail section">
+            <div style="width:7.694rem;">
+                <div class="od-hotel">已成功预订火车票</div>
+                <div id="orderId">
+                    订单号：<span id="orderNumber"></span>
+                </div>
+            </div>
+            <div style="width:3.006rem;">
+                订单总价： <span id="price">158</span>
+            </div>
+        </div>
+        
+        <!-- 列车信息  -->
+        <div class="hotel-detail section" style="display:flex;display:-webkit-flex">
+            <div style="display:flex;display:-webkit-flex;flex-direction:row;margin:0 auto;">
+                <div style="font-weight:bold;display:flex;display:-webkit-flex;flex-direction:column;align-items:flex-end;margin-right:0.75rem;">
+                    <div id="fTrain">
+                        广州
+                    </div>
+                    <div id="sTime" style="padding-top:10px">
+                        06：25
+                    </div>
+                </div>
+                <div style="font-size:0.8em;display:flex;display:-webkit-flex;flex-direction:column;align-items:center;margin-right:0.75rem;">
+                   <div id="sDate">2016-03-06</div>
+                   <div id="trainIcon" style="background-image: url('orderDetail/img/trainIcon.png');background-size:100% 100%;width:1rem;height:1rem;">
+                       
+                   </div>
+                   <div id="trainCode">
+                       g2212
+                   </div>
+                </div>
+                <div style="font-weight:bold;display:flex;display:-webkit-flex;flex-direction:column;align-items:flex-start;margin-right:0.75rem;">
+                    <div id="tTrain">
+                        北京
+                    </div>
+                    <div id="aTime" style="padding-top:10px">
+                        06：25
+                    </div>
+                </div>
+            </div>
+            <img style="postion:absolute;right:0;width:2rem;height:100%" src="orderDetail/img/train_12306.png" alt="">
+        </div>
+        
+        <!-- 乘车人信息  -->
+        <div class="section guest-detail">
+            <div class="gd-room">
+                <span class="gd-room-title">火车票数</span><span class="gd-room-count"><span id="ticketCount"></span>张</span>
+            </div>
+            <div class="gd-guestslist">
+                <div style="min-width:2.6rem">
+                    乘车人
+                </div>
+                <div id="guests" v-cloak>
+                    <div class="guest" v-for="guest in guests">
+                        {{guest.name}}({{guest.seat}})
+                    </div>
+                </div>
+            </div>
+            <div class="gd-phone">
+                 <span class="gd-phone-title">
+                                                             联系电话
+                 </span>
+                 <span class="gd-phone-number">
+                     <input disabled="disabled" type="text" id="contactPhone" value="" />
+                 </span>
+                 <img src="orderDetail/img/phone_c.png" />
+            </div>
+        </div>
+        <!-- 提醒 -->
+        <div class="section" style="margin-top:1.5em">
+            <span class="gd-room-title">
+                提醒
+            </span>
+            <span class="gd-room-count" style="font-size:1em">
+               请在<span style="color:red;">45分钟</span>内到12306网站付款 
+            </span>
+        </div>
+        
+        <!-- 取消预订 -->
+        <div class="" style="width:100%;dispaly:flex;display:-webkit-flex;position:fixed;bottom:0;left:0;min-height:0.8rem;border-top:0.02rem solid #DCDFE8">
+            <div style="text-align:center;flex:1;padding:0.4rem 0;color:#fff;background-color:#6c9dfd" id="cancelBtn">
+                取消订单
+            </div>
+        </div>
+        
+        <script src="../../js/appcan.js"></script>
+        <script src="../../js/appcan.control.js"></script>
+        <script src="../../js/common.js"></script>
+        <script src="../../js/vue.js"></script>
+        <script>
+            var app = new Vue({
+                el:"#guests",
+                data:{
+                    guests:[],
+                }
+            })
+            appcan.ready(function() {
+                setFontSize();
+                $("#contactPhone").val(appcan.locStorage.getVal("trainOrderDetailPhone"));
+                $("#price").text(appcan.locStorage.getVal("trainOrderDetailPrice"));
+                var trainOrderDetail=appcan.locStorage.getVal("trainOrderDetail");
+                if(isDefine(trainOrderDetail))
+                {
+                    var obj=eval('('+trainOrderDetail+')');
+                    console.log(obj);
+                    var orderId = obj.sequence_no;
+                    appcan.locStorage.setVal("orderId",orderId);
+                    $("#orderId").html(orderId);
+                    $("#fTrain").html(obj.from_station_name);
+                    $("#sTime").html(obj.start_time);
+                    $("#sDate").html(obj.train_date);
+                    $("#tTrain").html(obj.to_station_name);
+                    $("#aTime").html(obj.arrive_time);
+                    $("#trainCode").html(obj.station_train_code);
+                    $("#ticketCount").text(obj.passengers.length);
+                    $("#seatType").text(obj.passengers[0].seat_type_name);
+                    for(var i = 0;i<obj.passengers.length;i++){
+                        app.guests.push({
+                            "name":obj.passengers[i].passenger_name,
+                            "seat":obj.passengers[i].coach_name +'车厢'+ obj.passengers[i].seat_name,
+                        })
+                    }
+                }
+                appcan.button("#backBtn", "btn-act", function() {
+                  var pages = ["train_ticket_bookdetails","login_12306","train_ticket_booked","train_ticket_searchresult","trainOrderDetail"];
+                  for(var i = 0;i<pages.length;i++){
+                    appcan.window.evaluateScript({
+                      name:pages[i],
+                      scriptContent:"appcan.window.close(-1)"
+                    });
+                  }
+                })
+                appcan.button("#cancelBtn", "btn-act", function() {
+                    addMask("../../img/loading.gif","loading...");
+                    var orderId = appcan.locStorage.getVal("orderId")
+                    appcan.request.ajax({
+                        url : httpHost+'trainController.do?cancelBook',
+                        type : 'POST',
+                        data :{"params['orderId']":orderId},
+                        beforeSend:addHeader,
+                        success : function(data) {
+                            removeMask();
+                            objson = eval('(' + data + ')');
+                            appcan.window.closeToast();
+                            if(objson.success){
+                            //appcan.window.openToast('取消订单成功！', 1500, 5);
+                                appcan.window.alert({
+                                    title:'提示',
+                                    content:'取消订单成功。请点击确定返回主页面',
+                                    buttons:'确定',
+                                    callback:function(err,data,dataType,optId){
+                                    var pages = ["train_ticket_bookdetails","login_12306","train_ticket_booked","train_ticket_searchresult","trainOrderDetail"];
+                                    for(var i = 0;i<pages.length;i++){
+                                        appcan.window.evaluateScript({
+                                        name:pages[i],
+                                        scriptContent:"appcan.window.close(-1)"
+                                        });
+                                    }
+                                    setTimeout('appcan.window.close(-1)',500);
+                                    }
+                                });
+                            }else{
+                                appcan.window.openToast(objson.msg,2000);
+                            }
+                        },
+                        error:function(err,msg,error){
+                        removeMask();
+                        appcan.window.closeToast();
+                        appcan.window.openToast(msg,2000);
+                        console.log(err,msg,error);
+                        }
+                    });
+                }); 
+            });
+        </script>
+    </body>
+</html> 

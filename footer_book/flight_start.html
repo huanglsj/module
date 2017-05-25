@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+    <head>
+        <title></title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" href="../css/ui-box.css">
+        <link rel="stylesheet" href="../css/ui-base.css">
+        <link rel="stylesheet" href="../css/ui-color.css">
+        <link rel="stylesheet" href="../css/appcan.icon.css">
+        <link rel="stylesheet" href="../css/appcan.control.css">
+    </head>
+    <body class="" ontouchstart>
+        <script src="../js/appcan.js"></script>
+        <script src="../js/appcan.control.js"></script>
+		<script src="../js/common.js"></script>
+        <script>
+            $(function(){
+//              appcan.window.open("flight","flight.html",2);
+//              if(appcan.locStorage.getVal("sessionId")){
+//                  appcan.window.close(-1);
+//                  return;
+//              }
+
+                appcan.request.ajax({
+                        url : httpHost + 'apploginController.do?applogin',
+                        type : 'POST',
+                        data :
+                        {
+                            "userName":"88448115",
+                            "passWord":"888888",
+                            "macAddress":"0.0.0.0",
+                            "deviceType":""
+                        },
+                        success : function(objson,status,requestCode,response,xhr) {
+                            console.log(objson,status,requestCode,response,xhr);
+                            var serverId="";
+//                          if(typeof response == "object"){
+//                              for(var i = 0;i<response.responseHeaders["set-cookie"].length;i++){
+//                                  if(response.responseHeaders["set-cookie"][i].indexOf("SERVERID")>-1){
+//                                      serverId = response.responseHeaders["set-cookie"][i].split(";")[0];
+//                                  }
+//                              }
+//                          }
+//                          else{
+//                              response = JSON.parse(response);
+//                              try{
+//                                  var cookies = response.responseHeaders["Set-Cookie"].split(";");
+//                                  for(var i=0;i<cookies.length;i++) {
+//                                      if(cookies[i].indexOf("SERVERID") > -1) {
+//                                          serverId = cookies[i].substring(cookies[i].indexOf("=")-8,cookies[i].length-1);
+//                                      }
+//                                  }
+//                              }
+//                              catch(e){
+//                                  console.log(e);
+//                              }
+//                          }
+							
+                            //resp = eval('(' + objson + ')');
+                            resp = objson;
+                            if(resp.success){
+                                appcan.locStorage.setVal("serverId",serverId);
+                                appcan.locStorage.setVal("upwd","888888");
+                                appcan.locStorage.setVal("sessionId",resp.obj.sessionId);//SessionId
+                                appcan.locStorage.setVal("userName",resp.obj.uname);//姓名
+                                appcan.locStorage.setVal("userCode",resp.obj.ucode);//用户名
+                                appcan.locStorage.setVal("userNum",resp.obj.userNum);//身份证号
+                                appcan.locStorage.setVal("userMobile",resp.obj.mobile);//电话
+                                appcan.locStorage.setVal("isChecker",resp.obj.isChecker);//是否管理员
+                                appcan.locStorage.setVal("userRoles",resp.obj.userRoles);//用户权限配置
+                                
+                            }
+                            else
+                            {
+                                //global_error(resp.msg);
+                                //appcan.window.close(-1);
+                            }
+                            
+                            //setTimeout(function(){
+                            	window.location.href = 'flights/plane_ticket_search_content.html';
+                            	
+                            //}, 1000);
+							
+                        },
+                        error : function(e, err) {
+                            //appcan.window.close(-1);
+                        }
+                });
+            })
+        </script>
+    </body>
+</html>

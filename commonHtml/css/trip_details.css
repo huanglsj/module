@@ -1,0 +1,167 @@
+#header {
+	color:#fff;	
+}
+#ScrollContent {
+	padding:2.69em 0em 0em 0em;
+}
+.uinn-at4{
+    padding: 2.69em 0.5em 0em !important;
+}
+.uinn-4a {
+    padding-top: 2.69em !important;
+}
+.uinn-a4{
+    padding:2.69em .5em 0 !important;
+}
+.trip-head{
+    background-color: #3a5a98;
+    color: #fff;
+    font-size: 0.7em;
+    padding: 1.5em 0;
+}
+.trip-head .tr .left,.trip-head .tr .right{
+    width: 38%;
+    overflow: hidden;
+}
+.trip-head .tr .center{
+    width: 24%;
+    min-width: 2em;
+}
+.trip-head .tr .left{
+    text-align: right;
+}
+.trip-head .tr-address{
+    padding: 0.6em 0;
+}
+.trip-head .tr .icon{
+    background-image: url(../img/back.png);
+    width: 2em;
+    height: 2em;
+}
+.trip-head .tr .big{
+    font-size: 1.8em;
+    font-weight: bold;
+}
+.trip-head .tr .month{
+    font-size: 1.8em;
+    font-weight: bold;
+}
+.trip-head .tr-date{
+    padding-top: 0.6em;
+}
+.trip-head .tr-date .left .week{
+    text-align: left;
+    padding-left: 0.2em;
+}
+.trip-head .tr-date .right .week{
+    padding-left: 0.1em;
+}
+.trip-list li{
+    margin: 1em 0;
+    background-color: #fff;
+    font-size: 1em;
+    padding: 1em 0;
+    position: relative;
+    color: #53647E;
+}
+.trip-list li:before{
+    position: absolute;
+    width: 2px;
+    top: -1em;
+    bottom: -1em;
+    background-color: #ddd;
+    content: '';
+    left: 1.45em;
+}
+.trip-list .head{
+    position: relative
+}
+.trip-list .head:before{
+    position: absolute;
+    content: '';
+    width: 0.6em;
+    height: 0.6em;
+    background-color: #ddd;
+    border-radius: 50%;
+    left: 1.2em;
+    top: 0.8em;
+}
+.trip-list .head .type{
+    width: 55%;
+    padding-left: 2.5em;
+    font-weight: bold;
+}
+.trip-list .head .type-img{
+    width: 2.2em;
+    height: 2.2em;
+    margin-right: 0.2em;
+}
+.trip-list .plane .left,.trip-list .plane .right{
+    width: 38%;
+}
+.trip-list .plane .left{
+    text-align: right;
+}
+.trip-list .plane .center{
+    width: 24%;
+    min-width: 2em;
+}
+.trip-list .plane .logo{
+    font-size: 0.7em;
+}
+.trip-list .plane .logo-img{
+    width: 1em;
+    height: 1em;
+}
+.trip-list .plane .arrow{
+    width: 1.4em;
+    height: 1.4em;
+}
+.trip-list .plane .tr:nth-of-type(1),.trip-list .plane .tr:nth-of-type(2){
+    font-weight: bold;
+}
+.trip-list .plane .tr:nth-of-type(3),.trip-list .plane .tr:nth-of-type(5){
+    font-size: 0.8em;
+}
+.trip-list .plane .green{
+    width: 1.4em;
+    height: 1.4em;
+}
+.trip-list .plane .end{
+    width: 0.6em;
+    height: 0.6em;
+}
+.trip-list .plane .line{
+    height: 1.4em;
+    padding: 0.4em;
+}
+.trip-list .plane .line .center{
+    height: 1px;
+    background-color: #ddd;
+    margin: 0 0.2em;
+}
+.trip-list .plane .tr:nth-of-type(5){
+    margin: 0 2.5em;
+    padding-bottom: 0.8em;
+    border-bottom: 1px solid #ddd;
+    color: #6E6C6C;
+}
+.trip-list .plane .left-p{
+    padding-left: 2.4em;
+}
+.trip-list .other{
+    padding-left: 4.9em;
+    padding-right: 1em;
+}
+.trip-list .other .gps{
+    width: 1em;
+    height: 1em;
+}
+.trip-list .other .tr{
+    border-bottom: 1px solid #ddd;
+    padding: 0.6em 0;
+    font-weight: bold;
+}
+.trip-list .other .tr .name{
+    font-weight: 300;
+}

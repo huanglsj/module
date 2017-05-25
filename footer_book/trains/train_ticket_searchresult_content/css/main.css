@@ -1,0 +1,239 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+ul,li{
+   padding: 0;
+    margin: 0; 
+    list-style: none;
+}
+.b-gra3{
+    border-color:#d8d8d8;
+}
+.uinn-a6{
+    padding:1em 0.65em 0 0.65em;
+}
+.uinn-b
+{
+    padding-bottom: 3%;
+}
+.umar-r1{
+    margin-right: 0.8em !important;
+}
+.umar-l1{
+    margin-left: 0.8em !important;
+}
+.t-gra4{
+    color:orange;
+}
+.tx-gray
+{
+    color:gray;
+}
+.uinn-a1{
+    padding:0.125em;
+}
+.uinn-a7{
+    padding:0 0.625em;
+}
+.c-wh
+{
+    background-color:#FFF;
+}
+.umar-at1{
+    margin-top:0.625em;
+}
+.uinn-at1{
+    padding-top:1em;
+}
+.res-choose
+{
+    background-image:url(image/choose.png); 
+}
+.res-chufa
+{
+    background-image:url(image/chufa.png); 
+}
+.res-haoshi
+{
+    background-image:url(image/haoshi.png); 
+}
+.res-youpiao
+{
+    background-image:url(image/youpiao.png); 
+}
+.res-shijian
+{
+     background-image:url(image/shijian.png); 
+}
+.res-shijianzou
+{
+     background-image:url(image/shijianzou.png); 
+     margin-top:0.8em;
+     height:2.2em;
+}
+.toPic{
+    background-size: contain;
+    background-image: url(image/to1.png);
+    width:3.3rem;
+    height:0.8rem;
+    margin: auto 0.5rem;
+    background-repeat: no-repeat;
+}
+.user-b-gra3 {
+border-color: #d8d8d8;
+background: #ffffff;
+margin: 0.8em;
+}
+.font-1{
+    font-size: 1.1em;
+}
+.train-money{
+    padding-bottom: 0em !important;
+}
+.top-1{
+    top:-0.1em;
+}
+.user-umar-l1 {
+margin-left: 1.2em;
+}
+.user-umar-r1 {
+margin-right: 1.2em;
+}
+.header-bg {
+background-color: #3a5a98 !important;
+color: #fff;
+}
+.loading-box{
+    padding: 0.5rem 0.8rem;
+    font-size: 0.6rem;
+}
+.loading-pic{
+    width:2rem;
+    height:2rem;
+}
+.train-t-head{
+    padding: 0.6em 0;
+    font-size: 1em;
+    color: #fff;
+}
+.train-t-head.active{
+    position: relative;
+}
+.train-t-head.active:before{
+    position: absolute;
+    content: '';
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    background-color: #fff;
+    opacity: 0;
+}
+.train-t-head .train-t-prev{
+    padding-left: 0.6em;
+}
+.train-t-head .train-t-next{
+    padding-right: 0.6em;
+}
+.train-t-head .arrow{
+    padding: 0 0.6em;
+}
+.train-t-head .date-select{
+    background-color: #fff;
+    border-radius: 0.5rem;
+    color: #3a5a98;
+    padding: 0.2rem 0.4rem;
+}
+.train-t-head .date-select .fa{
+    font-size: 1.5em;
+}
+.train-t-head  .icon-date{
+    background-size: 100%;
+    background-image: url(image/date.png);
+    width:1.2em;
+    height:1.2em;
+}
+.train-t-head .date-text{
+    padding: 0 0.2rem;
+    min-width: 6em;
+    text-align: center;
+}
+.train-ticket-ul{
+    font-size: 0.5rem;
+}
+.train-ticket-ul li{
+    margin: 0.38rem 0;
+    background-color: #fff;
+    border-bottom: 1px solid #eae9ee;
+    border-top: 1px solid #eae9ee;
+    padding: 0.3rem 0.48rem;
+    color: #B0B9C5;
+}
+.train-ticket-ul li:active{
+    background-color: #eee;
+}
+.train-ticket-ul .train-ticket-h {
+     border-bottom: 1px solid #eae9ee;
+     padding-bottom: 0.3rem;
+}
+.train-ticket-ul .train-ticket-h .top{
+    margin-top: 0.2rem;
+}
+.train-ticket-ul .train-ticket-h .td{
+    width: 25%;
+    text-align: center;
+}
+.train-ticket-ul .train-ticket-h .td:nth-of-type(1){
+    width:20%;
+}
+.train-ticket-ul .train-ticket-h .td:nth-of-type(3){
+    width:30%;
+}
+.train-ticket-ul .train-ticket-h .td:first-child{
+    text-align: left;
+}
+.train-ticket-ul .deep{
+    color: #3C69A5; 
+    font-weight: bold;
+    font-size: 0.6rem;
+}
+.train-ticket-ul .yellow{
+    color: #FC9D44; 
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+.train-ticket-ul .small{
+    font-size: 0.45rem;
+    padding-top: 0.1rem;
+}
+.train-ticket-ul .green{
+    color: #65C1AA; 
+}
+.train-ticket-ul .train-ticket-f{
+    padding-top: 0.3rem;
+}
+.train-ticket-ul .train-ticket-f .td{
+    width: 33.33%;
+}
+.train-ticket-p .td{
+    width: 25%;
+}
+.train-ticket-ul .icon{
+    background-size: contain;
+    background-image: url(image/to1.png);
+    background-repeat: no-repeat;
+    width: 2rem;
+    height:0.5rem;
+    margin: auto 0.5rem;
+    text-align: left;
+    padding-bottom: 0.15rem;
+    background-position: bottom;
+}
+
+
+#msgError{
+    font-size: 0.6rem;
+    text-align: center;
+}

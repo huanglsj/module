@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/ui-base.css">
+		<link rel="stylesheet" href="../../css/ui-color.css">
+		<link rel="stylesheet" href="../../css/appcan.icon.css">
+		<link rel="stylesheet" href="../../css/appcan.control.css">
+		<link rel="stylesheet" href="../../css/main.css" />
+		<link rel="stylesheet" href="../../css/mobiscroll.min.css">
+		<link rel="stylesheet" href="../../css/mymedia.css">
+		<link rel="stylesheet" href="css/plane.css">
+        <script type="text/javascript" src="../../js/setSkin.js"></script>
+        <style type="text/css">
+			.longlist{overflow-y:auto;-webkit-overflow-scrolling:touch}
+			#submitBtn{position:initial;}
+        </style>
+	</head>
+
+	<body class="um-vp" ontouchstart>
+		<div class="up ub ub-ver plane-ticket-body" tabindex="0">
+		    <div id="header" class="uh bc-text-head ub header-bg" style="position: initial;">
+                <div class="nav-btn back" id="nav-left">
+                    <div class="ub-img user-icon-goback umw1-5 umh4"></div>
+                </div>
+                <h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">机票查询</h1>
+                <div class="nav-btn nav-bt icon-act" id="phone">
+                    <a class="ub-img user-icon-phone umw1-5 umh4 ub ub-ac" href="tel:02086132900"></a>
+                </div>
+            </div>
+			<!--content开始-->
+			<div id="content" class="ub-f1 tx-l longlist">
+				<div class="plane-ticket-con">
+					<div class="list first-head ub ub-ac none" id="applys">
+						<div class="ub ub-f1 ub-ac">
+							<ul class="select-ul" id="selectUl">
+								<li data-val="无" data-id="0" data-begin="0" data-end="0">无</li>
+							</ul>
+							<div id="myText" class="text" style="display: none"></div>
+						</div>
+						<i class="fa fa-angle-right"></i>
+					</div>
+					<div class="list first-back ub ub-ac">
+                        <div class="ub ub-f1 ub-ac">是否往返</div>
+                        <div id="return" class="switch uba bc-border switch-mini" data-checked="false">
+                            <div class="switch-btn sc-bg-active"></div>
+                        </div>
+                    </div>
+					<div class="list three-list">
+						<div class="tr ub">
+							<div class="address ub ub-ver ub-f1" id="openFromCity">
+								<div class="name">始发地</div>
+								<div class="con" id="from_city">广州</div>
+							</div>
+							<div class="icon" id="planeIcon"></div>
+							<div class="address ub ub-ver ub-f1 ub-ae" id="openToCity">
+								<div class="name">目的地</div>
+								<div class="con" id="to_city">北京</div>
+							</div>
+						</div>
+						<div class="tr ub">
+							<div class="ub ub-f1 ub-ver start-date" id="startDate">
+								<div class="name">出发日期</div>
+								<div class="con">
+									<span class="date air_date"></span>
+									<span class="week tx_red"></span>
+									<input type="hidden" id="startDateHidden" />
+								</div>
+							</div>
+							<div class="end-date" id="endDate">
+								<div class="ub ub-f1 ub-ver ub-ae">
+									<div class="name">返回日期</div>
+									<div class="con">
+										<span class="date air_date"></span>
+										<span class="week tx_red"></span>
+										<input type="hidden" id="endDateHidden" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tr">
+							<div class="name">舱位</div>
+							<ul class="shipping ub" id="shipping">
+								<li data-val="无" class="active">不限</li>
+								<li data-val="Y,B,H,K,L,M,N,Q,T,X,U,E,W,R,O,S,Z,V,G">经济舱</li>
+								<li data-val="C,D">公务舱</li>
+								<li data-val="F,A">头等舱</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="submitBtn" class="m-footer">
+				<div class="my-footer ub ub-pc ub-ac">
+					<img src="img/search.png" class="ub ub-ac">
+					<span class="ub ub-ac">查询</span>
+				</div>
+			</div>
+			<!--content结束-->
+		</div>
+
+	</body>
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/appcan.js"></script>
+	<script src="../../js/appcan.control.js"></script>
+	<script src="../../js/appcan.tab.js"></script>
+	<script src="../../js/appcan.listview.js"></script>
+	<script src="../../js/mobiscroll.min.zh.js"></script>
+	<script src="../../js/common.js"></script>
+	<script src="js/airPortCitysMap.js"></script>
+	<script>
+		//flightFromCity 出发城市
+		//flightFromCityNode 出发城市的三字码
+		//fromcity 出发城市列表页是否被点开
+		
+		var dancheng = true;
+		var wangfan = false;
+		var startDateMobiscroll, endDateMobiscroll, selectMobiscroll;
+		var mySelect = {};
+		$(function() {
+		    appcan.locStorage.setVal("historyCity", "[]");
+		    
+		    //设置默认的起止地
+			if(appcan.locStorage.getVal("flightFromCity")) {
+				$("#from_city").html(appcan.locStorage.getVal("flightFromCity"));
+			} else {
+				$("#from_city").html("广州");
+				appcan.locStorage.setVal("flightFromCity", "广州");
+				appcan.locStorage.setVal("flightFromCityNode", "CAN");
+			}
+			if(appcan.locStorage.getVal("flightToCity")) {
+				$("#to_city").html(appcan.locStorage.getVal("flightToCity"));
+			} else {
+				$("#to_city").html("北京");
+				appcan.locStorage.setVal("flightToCity", "北京");
+				appcan.locStorage.setVal("flightToCityNode", "PEK");
+			}
+
+//			appcan.window.subscribe('singlefrom', function(msg) {
+//			    appcan.locStorage.setVal("fromcity", "false");
+//				setFromCity(msg);
+//			});
+//			appcan.window.subscribe('singleTo', function(msg) {
+//			    appcan.locStorage.setVal("tocity", "false");
+//				setToCity(msg);
+//			});
+			
+			//跳转到选择起止地的页面
+			$('#openFromCity').click(function() {
+				appcan.locStorage.setVal('fromcity', 'true');
+				window.location.href = 'flight_city_pick.html';
+			})
+			$('#openToCity').click(function() {
+				appcan.locStorage.setVal("tocity", "true");
+				window.location.href = 'flight_city_pick.html';
+			})
+			
+			//查询按钮
+			appcan.button("#submitBtn", "btn-act", function(){
+				searchPlane();
+			});
+			
+			//header
+			appcan.button("#nav-left", "btn-act", function() {
+                appcan.locStorage.remove("setExpDetails");
+                appcan.locStorage.remove("beginDate");
+                window.history.back();
+            });
+            appcan.button("#phone", "btn-act", function() {
+            });
+            
+			init();
+		});
+
+		function init(sessionId,upwd,userCode,userMobile,userName,userNum,applys) {
+//		    appcan.locStorage.setVal("applys",applys);
+//		    appcan.locStorage.setVal("sessionId",sessionId);
+//		    appcan.locStorage.setVal("upwd",upwd);
+//		    appcan.locStorage.setVal("userCode",userCode);
+//		    appcan.locStorage.setVal("userMobile",userMobile);
+//		    appcan.locStorage.setVal("userName",userName);
+//		    appcan.locStorage.setVal("userNum",userNum);
+			var myDate = new Date();
+			$("#startDate .con .date").text(NYR(myDate, 2));
+			$("#startDate .con .week").text(NYR(myDate, 3));
+			$("#endDate .con .date").text(NYR(myDate, 2));
+			$("#endDate .con .week").text(NYR(myDate, 3));
+			$("#startDateHidden").val(NYR(myDate, 1));
+			$("#endDateHidden").val(NYR(myDate, 1));
+			mySelect = {
+				id: 0,
+				begin: NYR(myDate, 1),
+				end: NYR(myDate, 1)
+			}
+			//开始日期控件绑定
+			startDateMobiscroll = $("#startDate").mobiscroll().calendar({
+				min: myDate,
+				dateFormat: 'yy-mm-dd',
+				onSet: function(val, obj) {
+					val = val.valueText;
+					$("#startDate .con .date").text(NYR(val, 2));
+					$("#startDate .con .week").text(NYR(val, 3));
+					$("#startDateHidden").val(val);
+				}
+			});
+			//结束日期控件绑定
+			endDateMobiscroll = $("#endDate").mobiscroll().calendar({
+				min: myDate,
+				dateFormat: 'yy-mm-dd',
+				onSet: function(val, obj) {
+					val = val.valueText;
+					$("#endDate .con .date").text(NYR(val, 2));
+					$("#endDate .con .week").text(NYR(val, 3));
+					$("#endDateHidden").val(val);
+				}
+			})
+			if(applys){
+			    getApply();
+            }
+		}
+
+		function getApply() {
+			addMask('../../img/loading.gif', 'loading');
+			var str = '<li data-val="无" data-id="0" data-begin="0" data-end="0" >无</li>';
+			appcan.request.ajax({
+				url: httpHost + 'travelApplyController.do?queryForExp',
+				type: 'POST',
+				dataType: 'json',
+				beforeSend: addHeader,
+				success: function(data) {
+					removeMask();
+					objson = data;
+					appcan.window.closeToast();
+					if(objson.success) {
+						for(var i = 0; i < objson.obj.length; i++) {
+							var text = objson.obj[i].reason;
+							var id = objson.obj[i].id;
+							var begin = objson.obj[i].begin;
+							var end = objson.obj[i].end;
+							var from = objson.obj[i].from;
+							var to = objson.obj[i].to;
+							var span = '<span class="s-date">(' + NYR(begin, 1) + '~' + NYR(end, 1) + ')</span>';
+							str += '<li data-val=' + text + (i + 1) + ' data-id=' + id + ' data-begin=' + begin + ' data-end=' + end + ' data-from=' + from + ' data-to=' + to + '>' + text + span + '</li>';
+						}
+						$("#selectUl").html(str);
+						selectMobiscroll = $("#selectUl").mobiscroll().treelist({
+							onSet: function(val, obj) {
+								val = val.valueText;
+								if(val === "无") {
+									init();
+									return;
+								}
+								getSelect(val);
+								$("#selectUl_dummy").val(val.replace(/\d+/g, ''));
+							}
+						});
+						$("#selectUl_dummy").val('无');
+					} else {
+						if(objson.msg == "用户未登录") {
+							reLogin(getApply);
+						} else {
+							selectMobiscroll = $("#selectUl").mobiscroll().treelist();
+							$("#selectUl_dummy").val("无");
+						}
+					}
+					$("#applys").removeClass("none");
+				},
+				error: function(e, err) { removeMask(); }
+			});
+		}
+
+		function getSelect(val) {
+			$('#selectUl li').each(function() {
+				if($(this).data('val') == val) {
+					var self = $(this);
+					for(var key in citysMap) {
+						if(citysMap[key] === self.data("from").replace(/市/g, "")) {
+							$("#from_city").text(self.data("from").replace(/市/g, ""));
+							appcan.locStorage.setVal("flightFromCity", citysMap[key]);
+							appcan.locStorage.setVal("flightFromCityNode", key)
+						} else if(citysMap[key] === self.data("to").replace(/市/g, "")) {
+							$("#to_city").text(self.data("to").replace(/市/g, ""));
+							appcan.locStorage.setVal("flightToCity", citysMap[key]);
+							appcan.locStorage.setVal("flightToCityNode", key);
+						}
+					}
+					mySelect.begin = self.data('begin');
+					mySelect.end = self.data('end');
+					mySelect.id = self.data('id');
+					setStartTime(self);
+				}
+			});
+		}
+
+		function setStartTime(obj) {
+			var str = obj.data("begin");
+			appcan.locStorage.setVal("beginDate", str);
+			var str1 = obj.data("end");
+			if(str == '0' || str1 == '0') {
+				init();
+				return;
+			};
+			var date = new Date(str),
+				date1 = new Date(str1);
+			if(date.getTime() < (new Date()).getTime()) {
+				date = new Date();
+			}
+
+			$("#startDate .con .date").text(NYR(date, 2));
+			$("#startDate .con .week").text(NYR(date, 3));
+			$("#endDate .con .date").text(NYR(date, 2));
+			$("#endDate .con .week").text(NYR(date, 3));
+			$("#startDateHidden").val(NYR(date, 1));
+			$("#endDateHidden").val(NYR(date, 1));
+			startDateMobiscroll = $("#startDate").mobiscroll().calendar({
+				min: date,
+				max: date1,
+				dateFormat: 'yy-mm-dd',
+				onSet: function(val, obj) {
+					val = val.valueText;
+					$("#startDate .con .date").text(NYR(val, 2));
+					$("#startDate .con .week").text(NYR(val, 3));
+					$("#startDateHidden").val(val);
+				}
+			});
+
+			endDateMobiscroll = $("#endDate").mobiscroll().calendar({
+				min: date,
+				max: date1,
+				dateFormat: 'yy-mm-dd',
+				onSet: function(val, obj) {
+					val = val.valueText;
+					$("#endDate .con .date").text(NYR(val, 2));
+					$("#endDate .con .week").text(NYR(val, 3));
+					$("#endDateHidden").val(val);
+				}
+			})
+		}
+
+		function setFromCity(cityName) {
+			var city = cityName.split(",")[0];
+			var cityNode = cityName.split(",")[1];
+			$("#from_city").text(city);
+			appcan.locStorage.setVal("flightFromCity", city);
+			appcan.locStorage.setVal("flightFromCityNode", cityNode);
+		};
+
+		function setToCity(cityName) {
+			var city = cityName.split(",")[0];
+			var cityNode = cityName.split(",")[1];
+			$("#to_city").text(city);
+			appcan.locStorage.setVal("flightToCity", city)
+			appcan.locStorage.setVal("flightToCityNode", cityNode)
+		}
+
+		appcan.switchBtn(".switch", function(obj, value) {
+			if(value) {
+				$("#endDate").show();
+			} else {
+				$("#endDate").hide();
+			}
+		})
+		appcan.button("#shipping li", "btn-act", function() {
+			var self = $(this);
+			if(self.is(":first-child")) {
+				$(this).addClass("active").siblings().removeClass("active");
+			} else {
+				if(self.hasClass("active")) {
+					self.removeClass("active");
+				} else {
+					self.addClass("active");
+				}
+				selectedShipping();
+			}
+		});
+
+		function selectedShipping() {
+			var flag = true;
+			$("#shipping li").not(":first-child").each(function() {
+				if($(this).hasClass("active")) {
+					flag = false;
+				}
+			});
+			if(flag) {
+				$("#shipping li:first-child").addClass("active");
+			} else {
+				$("#shipping li:first-child").removeClass("active");
+			}
+		}
+
+		function closeMobiscroll() {
+			startDateMobiscroll.mobiscroll('hide');
+			endDateMobiscroll.mobiscroll('hide');
+			//selectMobiscroll.mobiscroll('hide');
+		}
+
+		//获取选中舱位的信息
+		function getShipping() {
+			var arr = '';
+			$("#shipping li.active").each(function(k, v) {
+				arr += $(this).data("val") + ',';
+			});console.log(arr);
+			return arr;
+		}
+
+		appcan.button("#planeIcon", "btn-act", function() {
+			var temCity;
+			temCity = $("#from_city").html();
+			$("#from_city").html($("#to_city").html());
+			$("#to_city").html(temCity);
+			var from = {
+				city: appcan.locStorage.getVal("flightFromCity"),
+				node: appcan.locStorage.getVal("flightFromCityNode"),
+			}
+			var to = {
+				city: appcan.locStorage.getVal("flightToCity"),
+				node: appcan.locStorage.getVal("flightToCityNode"),
+			}
+			appcan.locStorage.setVal("flightFromCity", to.city);
+			appcan.locStorage.setVal("flightFromCityNode", to.node);
+			appcan.locStorage.setVal("flightToCity", from.city);
+			appcan.locStorage.setVal("flightToCityNode", from.node);
+		});
+		
+		//begin 出发日期
+		//end 返回日期
+		//airDate 查询航班的日期
+		//flightSiteType 舱位类型
+		//openFlightSearchResult 是否打开了查询航班页面
+		
+		//查询机票
+		function searchPlane() {
+			appcan.locStorage.setVal("begin", mySelect.begin);
+			appcan.locStorage.setVal("end", mySelect.end);
+			appcan.locStorage.setVal("airDate", $("#startDateHidden").val());
+			appcan.locStorage.setVal("flightSiteType", getShipping());
+			appcan.locStorage.setVal("openFlightSearchResult", "true");
+			appcan.locStorage.setVal("itineraryId", mySelect.id);
+			appcan.locStorage.setVal("expId", mySelect.id);
+			//appcan.window.open("plane_ticket_searchresult", "plane_ticket_searchresult.html", 2);
+			window.location.href = 'plane_ticket_searchresult_content.html';
+			closeMobiscroll();
+		}
+	</script>
+
+</html>

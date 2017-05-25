@@ -1,0 +1,274 @@
+.header-bg{
+    background-color: #3a5a98 !important;
+}
+.user-blue-bg{
+    background-color: #4679ff !important;
+}
+.user-white-bg{
+    background-color: #fff !important;
+}
+.user-blueFont{
+    color: #4679ff !important;
+}
+.user-blue{
+    background-color: #4679ff;
+}
+.text-b1{
+    color: #5891ff;
+}
+.text-gray{
+    color: #666 ;
+}
+.tx-blue
+{
+    color: #4679ff ;
+}
+.tx-bababa
+{
+    color: #415A79;
+}
+.user-ulev2{
+    font-size: 0.54rem;
+}
+.user-ulev3{
+    font-size: 0.64rem;
+}
+.user-ulev34{
+    font-size: 0.68rem;
+    line-height: 0.68rem;
+}
+.user-ulev36{
+    font-size: 0.72rem;
+}
+.user-ulev4{
+    font-size: 1rem;
+}
+.user-ulev5{
+    font-size: 1rem;
+}
+.user-ulev6{
+    font-size: 1.2rem;
+}
+.user-ulev9{
+    font-size: 1.92rem;
+}
+.user-lighter-blue {
+    background-color: #73D6FF;
+}
+.user-light-green{
+    background-color: #70D39C;
+}
+.user-orange{
+    background-color: #EEA234;
+}
+.user-light-orange{
+    background-color: #EDC04B;
+}
+.user-dark—green{
+    background-color: #45d0c9;
+}
+.user-icon-search{
+    background-image: url('user_icons/search.png') !important;
+    width: 1.2rem;
+    height: 1.2rem;
+    background-size: 100%;
+}
+.foot-bg{
+    background-color: #72a1fd;
+    color: white;
+}
+.user-icon-date{
+    background-image: url('user_icons/date.png') !important;
+    margin-left: 0.5em;
+}
+.user-icon-goback{
+    background-image: url('user_icons/goback.png') !important;
+}
+.user-icon-goback-h{
+    background-image: url('user_icons/goback_h.png') !important;
+}
+.user-icon-logo-x{
+    background-image: url('user_icons/logo-x.png') !important;
+}
+.user-icon-maker{
+    background-image: url('user_icons/maker.png') !important;
+    margin-left: 0.5em;
+}
+.user-icon-notebook{
+    background-image: url('user_icons/notebook.png') !important;
+    margin-left: 0.5em;
+}
+.user-icon-otherbody{
+    background-image: url('user_icons/otherbody.png') !important;
+    margin-left: 0.5em;
+}
+.user-icon-phone{
+    background-image: url('user_icons/phone.png') !important;
+}
+.user-icon-phone-h{
+    background-image: url('user_icons/phone_h.png') !important;
+}
+.user-icon-up-plane{
+    background-image:url('user_icons/up_plane.png');
+}
+.user-icon-down-plane{
+    background-image:url('user_icons/down_plane.png');
+}
+.user-icon-user-meeting{
+    background-image:url('user_icons/user_meeting.png');
+}
+.user-icon-house{
+    background-image:url('user_icons/house.png');
+}
+.user-icon-taxi{
+    background-image:url('user_icons/taxi.png');
+}
+.user-icon-catering{
+    background-image:url('user_icons/catering.png');
+}
+.user-icon-vip{
+    background-image:url('user_icons/vip.png');
+}
+.user-icon-didi{
+    background-image:url('user_icons/didi.png');
+}
+.user-icon-train{
+    background-image:url('user_icons/train.png');
+}
+.user-icon-arrive{
+    background-image:url('user_icons/arrive.png');
+    margin-left: 0.5em;
+}
+.user-icon-arrive1{
+    background-image: url('user_icons/arrive1.png');
+    margin: auto 0.5em;
+}
+.user-icon-add{
+    background-image:url('user_icons/add.png');
+    margin-left: 0.5em;
+}
+.user-icon-meeting{
+    background-image:url('user_icons/meeting.png');
+}
+.user-icon-addbody{
+    background-image:url('user_icons/addbody.png');
+    margin-left: 0.5em;
+}
+.user-icon-expense{
+    background-image:url('user_icons/expense.png');
+    margin-left: 0.5em;
+}
+.user-icon-total{
+    background-image:url('user_icons/total.png');
+    margin-left: 0.5em;
+}
+.user-icon-summary{
+    background-image:url('user_icons/summary.png');
+    margin-left: 0.5em;
+}
+.user-icon-add2{
+    background-image:url('user_icons/add2.png');
+    margin-left: 0.5em;
+}
+.user-icon-edit{
+    background-image:url('user_icons/edit.png');
+}
+.user-icon-return{
+    background-image:url('user_icons/return.png');
+}
+.user-icon-switching{
+    background-image:url('user_icons/switching_theme.png');
+}
+.user-icon-addto{
+    background-image:url('user_icons/addto.png');
+}
+.user-icon-my{
+    background-image:url('user_icons/my.png');
+}
+.user-icon-nreturn{
+    background-image:url('user_icons/nreturn.png');
+}
+.user-bc-head {
+background-color: #3b5a9a;
+}
+.uw-5{
+    width: 50%;
+}
+.uw-33{
+    width: 33%;
+}
+.ubt {
+border-top: 0px solid !important;
+box-shadow:0 0 7px #8f9090 !important;
+}
+.user-light-blue {
+background-color: #7ddfed;
+}
+.bc-text-head {
+color: #fff;
+}
+.title-c {
+    color: #ffffff;
+}
+/*登录页面*/
+.index-head{background: #3A5A98 !important;}
+.index-bg {
+    background: url('user_icons/login_bg.png') #3A5A98 bottom no-repeat;
+    background-size: 100%;
+}
+.index-btn {
+    background-color: #4e6aa2 !important;
+    margin: 0.6em 0.5em;
+}
+.b-gra {
+    background: #ffffff !important;
+}
+.logo_index {
+background-image: url('user_icons/logo.png');
+}
+.umhw1 {
+min-height: 6em !important;
+min-width: 6em !important;
+}
+.index-umar-a {
+margin: 0.6em 1em;
+}
+.index-btn {
+padding: 0.4em 0.9em;
+min-height: 2.2em;
+font-size: 1em;
+text-align: center;
+}
+.umw1-8 {
+min-width: 1.8em;
+}
+.tx-c-h {
+color: #65707A;
+text-align: center;
+}
+.btn {
+padding: .2em 0.8em !important;
+}
+.sc-text-hint {
+color: #ffffff !important;
+}
+.sound-img{
+  width: 3.725em;
+  height: 3.125em;
+  background-color: #f2f2f2;
+}
+.mgn-left{
+  margin-left: 0.625em;
+}
+.iconfont {
+-webkit-text-stroke-width: 0em !important;
+}
+.none{
+    display:none !important;
+}
+#header,#dateList,.plane-t-head{
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:999;
+}

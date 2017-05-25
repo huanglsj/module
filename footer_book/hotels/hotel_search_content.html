@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/ui-color.css">
+		<link rel="stylesheet" href="../../css/ui-base.css"/>
+		<link rel="stylesheet" href="../../css/appcan.icon.css">
+		<link rel="stylesheet" href="../../css/appcan.control.css">
+		<link rel="stylesheet" href="../../css/mobiscroll.min.css">
+		<link rel="stylesheet" href="../../css/mymedia.css">
+		<link rel="stylesheet" href="../../css/nouislider.min.css">
+		<link rel="stylesheet" href="../../css/main.css">
+        <link rel="stylesheet" href="css/hotel_search.css">
+        <script type="text/javascript" src="../../js/setSkin.js"></script>
+		<style>
+			.noUi-handle {
+				background-color: rgb(247, 194, 85);
+				border-radius: 50%;
+				border: none;
+			}
+			
+			.noUi-horizontal {
+				height: 0.3rem;
+			}
+			
+			.noUi-handle:after,
+			.noUi-handle:before {
+				display: none;
+			}
+			
+			#rangeMin {
+				display: none;
+			}
+			
+			#rangeMax {
+				display: none;
+			}
+			
+			.bgset {
+				font-size: 1rem !important;
+				opacity: 1;
+				filter: Alpha(opacity=1);
+			}
+			
+			.loading-box {
+				padding: 0.5rem 0.8rem;
+				font-size: 0.6rem;
+			}
+			
+			.loading-pic {
+				width: 2rem;
+				height: 2rem;
+			}
+			
+			.loading-text p {
+				color: #3A5A98;
+			}
+			
+			#order {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+			}
+			
+			.mbsc-mobiscroll .mbsc-sc-whl-w {
+				width: 100%;
+			}
+			#header{
+			    font-size:0.5em;
+			}
+		</style>
+	</head>
+
+	<body>
+	    <div id="header" class="uh bc-text-head ub header-bg">
+                <div class="nav-btn back mui-action-back" id="nav-left">
+                    <div class="ub-img user-icon-goback umw1-5 umh4"></div>
+                </div>
+                <h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">酒店查询</h1>
+                <a href="tel:02086132900" class="nav-btn nav-bt icon-act" id="nav-right">
+                    <div class="ub-img user-icon-phone umw1-5 umh4"></div>
+                </a>
+        </div>
+		<div class="Hotel_conten">
+			<div class="cost none" id="cost">
+				<div class="ub ub-ac">
+					<div class="ub ub-f1 ub-ac con">
+						<ul id="reason" selectedindex="0">
+							<li value="无" data-value="0" data-begin="0" data-end="0">无</li>
+						</ul>
+					</div>
+					<i class="fa fa-angle-right"></i>
+				</div>
+			</div>
+			<div class="Stay_city">
+				<div class="ub clearfloat" id="room">
+					<div class="ub name">入住城市</div>
+					<div class="ub ub-f1 ub-ac con li_two" id="roomCity">广州</div>
+					<div class="ub ub-ac" style="padding-right: 0.48rem;" id="map">
+						<img src="img/gps.png" style="width: 1rem;height: 1rem;" class="ub">
+					</div>
+				</div>
+			</div>
+			<div class="Stay_time">
+				<div class="Stay_time_title">
+					<span>入住时间</span>
+					<span>离店时间</span>
+				</div>
+				<div class="ub Stay_time_time">
+					<div class="ub-f2">
+						<p class="address-name" id="startDate"><span class="date"></span><span class="week"></span></p>
+						<input type="hidden" name="startDateHidden" id="startDateHidden" />
+					</div>
+					<div class="ub-f1"><img src="img/direction.png" /></div>
+					<div class="ub-f2 ub ub-pe">
+						<p class="address-name" id="endDate"><span class="date"></span><span class="week"></span></p>
+						<input type="hidden" name="endDateHidden" id="endDateHidden" />
+					</div>
+				</div>
+			</div>
+			<div class="instructions uinput ub ub-f1 uc-a">
+				<input id="keyword" placeholder="关键字/位置/酒店名称/其他" type="text" class="ub-f1">
+			</div>
+			<div class="Amount_range">
+				<div class="Amount_title">价格范围</div>
+				<div class="Amount_effect">
+					<div id="slider"></div>
+				</div>
+				<div class="Amount_price">
+					<span>￥0</span>
+					<span>￥150</span>
+					<span>￥300</span>
+					<span>￥500</span>
+					<span>￥800</span>
+					<span>￥1000</span>
+					<span style="margin-left: 2%;">￥2000</span>
+					<span style="margin-left: 2%;">不限</span>
+				</div>
+			</div>
+			<div class="place_choose">
+				<div>星级(可多选)</div>
+				<div class="place_choose_options" id="xingji">
+					<div class="place_choose_ok">不限</div>
+					<div class="place_choose_on" data-id="2">快捷连锁</div>
+					<div class="place_choose_on" data-id="3">三星/舒适</div>
+					<div class="place_choose_on" data-id="4">四星/高档</div>
+					<div class="place_choose_on" data-id="5">五星/豪华</div>
+				</div>
+			</div>
+		</div>
+		<div id="order" class="m-footer my-footer">
+			<div class="hotel-footer ub ub-pc ub-ac my-footer">
+				<img src="img/search.png" class="ub ub-ac">
+				<span class="ub ub-ac">查询</span>
+			</div>
+		</div>
+		<!-- 价格范围-->
+		<div id="rangeMin" class="ulev-1"></div>
+		<div id="rangeMax" class="ulev-1"></div>
+	</body>
+	<script src="../../js/nouislider.min.js"></script>
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/mui/mui.min.js"></script>
+	<script src="../../js/appcan.js"></script>
+	<script src="../../js/appcan.control.js"></script>
+	<script src="../../js/mobiscroll.min.zh.js"></script>
+	<script src="../../js/common.js"></script>
+	<script src="js/hotelCitys.js"></script>
+	<script src="js/my_hotel_search.js"></script>
+	<script>
+//		appcan.ready(function() {
+		    $(".Hotel_conten").offset({
+		        top:$("#header").height()+15,
+		    })
+			appcan.button("#order", "btn-act", function() {
+				submit();
+			})
+//			appcan.button("#nav-left", "btn-act", function() {
+//                  appcan.window.evaluateScript({
+//                      name:"hotelsearch",
+//                      scriptContent:"appcan.window.close(1)"
+//                  })
+//                  appcan.locStorage.remove("setExpDetails");
+//                  appcan.locStorage.remove("beginDate");     
+//          })
+//          appcan.button("#nav-right", "btn-act", function() {
+//              uexCall.dial("02086132900");
+//          });
+//		})
+		//双向滑动价格插件nouislider
+		var slider = document.getElementById('slider');
+		noUiSlider.create(slider, {
+			start: [15, 40],
+			connect: true,
+			range: {
+				'min': 0,
+				'max': 100
+			}
+		});
+		var snapValues = [
+			document.getElementById('rangeMin'),
+			document.getElementById('rangeMax')
+		];
+		slider.noUiSlider.on('update', function(values, handle) {
+			snapValues[handle].innerHTML = Math.round(values[handle]);
+		});
+		//价格
+		function cost_query() {
+			var money_min = document.getElementById('rangeMin').innerHTML;
+			var money_max = document.getElementById('rangeMax').innerHTML;
+			var money_mins = "";
+			var money_maxs = "";
+			if(money_min < 15) {
+				money_mins = "0";
+			}
+			if(money_min >= 15) {
+				money_mins = "150";
+			}
+			if(money_min >= 29) {
+				money_mins = "300";
+			}
+			if(money_min >= 40) {
+				money_mins = "500";
+			}
+			if(money_min >= 53) {
+				money_mins = "800";
+			}
+			if(money_min >= 67) {
+				money_mins = "1000";
+			}
+			if(money_min >= 81) {
+				money_mins = "2000";
+			}
+
+			if(money_max < 15) {
+				money_maxs = "0";
+			}
+			if(money_max >= 15) {
+				money_maxs = "150";
+			}
+			if(money_max >= 29) {
+				money_maxs = "300";
+			}
+			if(money_max >= 40) {
+				money_maxs = "500";
+			}
+			if(money_max >= 53) {
+				money_maxs = "800";
+			}
+			if(money_max >= 67) {
+				money_maxs = "1000";
+			}
+			if(money_max >= 81) {
+				money_maxs = "2000";
+			}
+			if(money_max >= 89) {
+				money_maxs = "1000000";
+			}
+			appcan.locStorage.setVal("priceMin", money_mins);
+			appcan.locStorage.setVal("priceMax", money_maxs);
+		}
+		//输入关键字  
+		appcan.button("#keyword", "btn-act", function() {
+			var isArd = "true"; //定义是否为安卓系统的变量
+			window.uexOnload = function(type) {
+				var bodyheight = $("body").height(); //获取整个页面高度
+				//判断当前系统是安卓还是苹果系统
+				uexDevice.cbGetInfo = function(opId, dataType, data) {
+					if(data) {
+						var device = JSON.parse(data);
+						var os = device.os;
+						//如果为安卓系统footer加载浮动窗口，如果为苹果系统不加载footer窗口
+						if(os.indexOf("Android") > -1) {
+							localStorage.setItem("IsAndroid", "ture"); //将系统的版本存入到本地存储中，方便浮动窗口页面获取数据做判断。                           
+							//h=bodyheight-$$("header").offsetHeight-$$("footers").offsetHeight;//计算出content窗口的高度
+							zy_con("content", "hotel_search_content.html", 0, bodyheight);
+						} else {
+							isArd = "false";
+							localStorage.setItem("IsAndroid", "false");
+						}
+					}
+				};
+				uexDevice.getInfo('1');
+			}
+		});
+
+		appcan.button("#map", "btn-act", function() {
+			var expId, xingji = "";
+			var inday = new Date($("#startDateHidden").val());
+			var outday = new Date($("#endDateHidden").val());
+			if(inday.getTime() > outday.getTime()) {
+				appcan.window.openToast('入住时间不能大于离店时间', 3000);
+				return;
+			}
+			cost_query();
+			appcan.setLocVal("inday", $("#startDateHidden").val());
+			appcan.setLocVal("outday", $("#endDateHidden").val());
+			if($("#reason_dummy").val() == "无") {
+				expId = 'null';
+			} else {
+				expId = $("#reason>option:checked").val();
+			}
+			if(($("#xingji>.place_choose_ok").length > 0) && ($("#xingji>.place_choose_ok")[0].innerHTML != "不限")) {
+				var i = 1,
+					j;
+				$("#xingji>.place_choose_ok").each(function() {
+					j = $(this).attr("data-id");
+					if(i < $("#xingji>.place_choose_ok").length) {
+						xingji += j + "|";
+					} else {
+						xingji += j;
+					}
+					i++;
+				});
+			}
+			appcan.setLocVal("xingji", xingji);
+			appcan.setLocVal("keyWord", $("#keyword").val());
+
+			appcan.window.open("map", "map.html", 2);
+		})
+	</script>
+
+</html>
