@@ -108,6 +108,7 @@
 		function pulldownRefresh() {
 			page = 1;
 			var type = 0;
+//          mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
             mui('#pullrefresh').pullRefresh().disablePullupToRefresh();
 			hotelList(type);
 		}
@@ -149,7 +150,7 @@
 							}
 							
 							if(type==1){
-								mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh();
 							}
 							
 							for(var i = 0; i < arrData.length; i++) {
@@ -167,6 +168,8 @@
 								app.items.push(myItem);
 							}
 							
+							 mui('#pullrefresh').pullRefresh().endPulldownToRefresh(false);
+							 mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
 						}else{
 							mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
                             mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);							
