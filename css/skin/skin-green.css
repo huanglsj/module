@@ -52,3 +52,12 @@
 .plane-ticket-con .list .bc-head {
 	background-color: #63F6B4;
 }
+
+.deep-bg{
+	background-color: #287C57 !important;
+	color: #fff;
+}
+.shallow-bg{
+	background-color: #38B87F !important;
+	color: #fff;
+}

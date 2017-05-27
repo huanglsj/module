@@ -2,10 +2,11 @@ body{
     margin:0;
     padding:0;
     background-color: rgb(244,248,249);
-    font-size: 0.8rem;
+    /*font-size: 0.8rem;*/
 }
 .content{
     background-color: #FFFFFF;
+    font-size: 0.8rem;
 }
 .segmentation{
     height: 10px;
@@ -23,9 +24,9 @@ body{
     position: relative;
     border-bottom: 1px solid #EBEBEB;
 }
-.hotel_pic>img{
+.hotel_pic img{
     width: 100%;
-    height: 9rem;
+    height: 10.8rem;
 }
 .hotel_pic_left{
     max-width: 70%;
@@ -41,6 +42,7 @@ body{
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
+    z-index: 9;
 }
 .hotel_pic_right{
     max-width: 80%;
@@ -53,6 +55,7 @@ body{
     background-color: rgba(0,0,0,0.6);
     color: #FFFFFF;
     border-radius:0.2rem; 
+     z-index: 9;
 }
 .detailed_address{
     margin-right:1rem;

@@ -13,8 +13,11 @@
     font-size: 0.86rem;
 }
 /******************/
+.mui-scroll-wrapper{
+	margin-top: 5rem;
+}
 #hotelList{
-    margin: 0.6rem 0.8rem 0;
+    margin: 0 0.8rem 0;
 }
 .hotel_show{
     margin-top: 1rem;
@@ -28,8 +31,8 @@
     width: 100%;
 }
 .hotel-price{
-    width:4rem; 
-    height:4rem;
+    width:4.5rem; 
+    height:4.5rem;
     -webkit-border-radius:50%; 
     -moz-border-radius:50%; 
     -o-border-radius:50%; 
@@ -39,7 +42,7 @@
     position: absolute;
     top: 8rem;
     left: 70%;
-    font-size: 0.8em;
+    font-size: 0.75em;
     color:#333;
 }
 .hotel-price div:first-child{

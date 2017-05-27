@@ -50,6 +50,7 @@
 			self.el.alert = self.box.querySelector(classSelector('indexed-list-alert'));
 			self.el.his = self.box.querySelector(classSelector('indexed-history'));
 			self.el.hot = self.box.querySelector(classSelector('indexed-hot'));
+			self.el.curr = self.box.querySelector(classSelector('indexed-curr'));
 		},
 		caleLayout: function() {
 			var self = this;
@@ -124,11 +125,25 @@
 			var itemTotal = liArray.length;
 			self.hiddenGroups = [];
 			if(keyword != ''){
-				self.el.his.style.display = 'none';
-				self.el.hot.style.display = 'none';
+				if(self.el.his){
+					self.el.his.style.display = 'none';
+				}
+				if(self.el.hot){
+					self.el.hot.style.display = 'none';
+				}
+				if(self.el.curr){
+					self.el.curr.style.display = 'none';
+				}
 			}else{
-				self.el.his.style.display = 'block';
-				self.el.hot.style.display = 'block';
+				if(self.el.his){
+					self.el.his.style.display = 'block';
+				}
+				if(self.el.hot){
+					self.el.hot.style.display = 'block';
+				}
+				if(self.el.curr){
+					self.el.curr.style.display = 'block';
+				}
 			}
 			var checkGroup = function(currentIndex, last) {
 				if (itemCount >= currentIndex - groupIndex - (last ? 0 : 1)) {

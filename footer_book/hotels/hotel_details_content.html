@@ -1,46 +1,58 @@
 <!DOCTYPE html>
 <html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
-    <head>
-        <title></title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-        <link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
-        <link rel="stylesheet" href="../../css/ui-box.css">
-        <link rel="stylesheet" href="../../css/ui-base.css">
-        <link rel="stylesheet" href="../../css/ui-color.css">
-        <link rel="stylesheet" href="../../css/appcan.icon.css">
-        <link rel="stylesheet" href="../../css/appcan.control.css">
-        <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
-        <link rel="stylesheet" href="css/hotel_details.css">
-    </head>
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/mui/mui.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/ui-base.css">
+		<link rel="stylesheet" href="../../css/appcan.control.css">
+		<link rel="stylesheet" type="text/css" href="../../css/main.css" />
+		<link rel="stylesheet" href="css/hotel_details.css">
+		<script type="text/javascript" src="../../js/setSkin.js"></script>
+	</head>
+
 	<body>
-	    <div id="header" class="uh bc-text-head ub header-bg">
-                <div class="nav-btn back" id="nav-left">
-                    <div class="ub-img user-icon-goback umw1-5 umh4"></div>
-                </div>
-                <h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">酒店详情</h1>
-                <div class="nav-btn nav-bt icon-act" id="nav-right">
-                    <div class="ub-img user-icon-phone umw1-5 umh4"></div>
-                </div>
-        </div>
-	    <div class="content" id="hotelDetail" style="display: none;">
-	        <div class="hotel_pic">
-	            <div id='slider' class='slider'></div>
-	            <div class="hotel_pic_left" id="hotelName"></div>
-	            <div class="hotel_pic_right">20张</div>
-	        </div>
-	        <div class="detailed_address">
-	            <div class="address_details" id="hotelAddress"></div>
-	            <div class="address_query" v-on:click="hotelIn()">地图&nbsp;&nbsp;<span class="right_back">></span></div>
-	            <!--<div class='address_distance'>啊实打实大实打距离该酒店18公里</div>-->
-	        </div>
-	        <div class="hotel_details">
-	            <div>
-	                <span id="shortDesc"></span>
-	                <span id="hotelTel"></span>
-	            </div>
-	            <div v-on:click="hotelIn()">详情&nbsp;&nbsp;<span class="right_back">></span></div>
-	            <!--<div>
+		<div id="header" class="uh bc-text-head ub header-bg">
+			<div class="nav-btn back mui-action-back" id="nav-left">
+				<div class="ub-img user-icon-goback umw1-5 umh4"></div>
+			</div>
+			<h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">酒店详情</h1>
+			<a href="tel:02086132900" class="nav-btn nav-bt icon-act" id="nav-right">
+				<div class="ub-img user-icon-phone umw1-5 umh4"></div>
+			</a>
+		</div>
+		<div class="content" id="hotelDetail" style="display: none;">
+			<div class="hotel_pic">
+				
+				<div id="slider" class="mui-slider">
+				<div class="mui-slider-group mui-slider-loop">
+					<div class="mui-slider-item" v-for="img in picArr">
+						<a href="#">
+							<img :src="img.img">
+						</a>
+					</div>
+				</div>
+			</div>
+				
+				<!--<div id='slider' class='slider'></div>-->
+				<div class="hotel_pic_left" id="hotelName"></div>
+				<div class="hotel_pic_right">20张</div>
+			</div>
+			<div class="detailed_address">
+				<div class="address_details" id="hotelAddress"></div>
+				<div class="address_query" v-on:click="hotelIn()">地图&nbsp;&nbsp;<span class="right_back">></span></div>
+				<!--<div class='address_distance'>啊实打实大实打距离该酒店18公里</div>-->
+			</div>
+			<div class="hotel_details">
+				<div>
+					<span id="shortDesc"></span>
+					<span id="hotelTel"></span>
+				</div>
+				<div v-on:click="hotelIn()">详情&nbsp;&nbsp;<span class="right_back">></span></div>
+				<!--<div>
 	                <img src="img/wifi.png" />
 	                <img src="img/restaurant.png" />
 	                <img src="img/KTV.png" />
@@ -53,209 +65,2165 @@
                     <img src="img/golf.png" />
                     <img src="img/meeting.png" />
 	            </div>-->
-	        </div>
-	        <div class="Check_in_time">
-	            <span id="bgnDate">03月03日</span>&nbsp;-&nbsp;<span id="endDate">03月04日</span>
-	            <span class="sum_time">共<span id="day"></span>晚&nbsp;&nbsp;<span class="right_back">></span></span>
-	        </div>
-	        <ul class="room_information_ul">
-	            <li v-for="item in items">
-	                <div class="room_information ub ub-pc">
-	                    <div class="ub-f1">
-	                        <img src="img/executive.png">
-                        </div> 
-                        <div class="room_introduce ub ub-f2 ub-ver">
-                            <div class="ub">{{item.roomTypeName}}</div> 
-                        <div class="ub">{{item.ratePlanName}}</div> 
-                        <div class="ub">{{item.roomTypeDesc}}</div>
-                        </div> 
-                        <div class="drop_down_an ub ub-f1 ub-pe ub-ac" v-bind:data-rateplanCode="item.rateplanCode" v-bind:data-roomPrice="item.roomPrice" v-bind:data-totalPrice="item.totalPrice" v-bind:data-planName="item.ratePlanName">
-                            <div class="price ub-ac">￥<span>{{item.roomPrice}}</span></div> 
-                            <div class="order" v-bind:id="item.roomIndex" v-bind:data-supplierCode="item.vendorCode" v-bind:data-roomCode="item.roomTypeCode" v-bind:data-roomName="item.roomTypeName" v-on:click="checkSubmit(hotelOrder(item.roomIndex))">预订</div>
-                        </div>
-                    </div>
-                </li>
-	        </ul>
-	    </div>
+			</div>
+			<div class="Check_in_time">
+				<span id="bgnDate">03月03日</span>&nbsp;-&nbsp;<span id="endDate">03月04日</span>
+				<span class="sum_time">共<span id="day"></span>晚&nbsp;&nbsp;<span class="right_back">></span></span>
+			</div>
+			<ul class="room_information_ul">
+				<li v-for="item in items">
+					<div class="room_information ub ub-pc">
+						<div class="ub-f1">
+							<img src="img/executive.png">
+						</div>
+						<div class="room_introduce ub ub-f2 ub-ver">
+							<div class="ub">{{item.roomTypeName}}</div>
+							<div class="ub">{{item.ratePlanName}}</div>
+							<div class="ub">{{item.roomTypeDesc}}</div>
+						</div>
+						<div class="drop_down_an ub ub-f1 ub-pe ub-ac" v-bind:data-rateplanCode="item.rateplanCode" v-bind:data-roomPrice="item.roomPrice" v-bind:data-totalPrice="item.totalPrice" v-bind:data-planName="item.ratePlanName">
+							<div class="price ub-ac">￥<span>{{item.roomPrice}}</span></div>
+							<div class="order" v-bind:id="item.roomIndex" v-bind:data-supplierCode="item.vendorCode" v-bind:data-roomCode="item.roomTypeCode" v-bind:data-roomName="item.roomTypeName" v-on:click="checkSubmit(hotelOrder(item.roomIndex))">预订</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
 	</body>
-	<script src="../../js/appcan.js"></script>
-  <script src="../../js/appcan.control.js"></script>
-  <script src="../../js/common.js"></script>
-  <script src="../../js/appcan.slider.js"></script>
+	<script src="../../js/mui/mui.min.js"></script>
 	<script src="../../js/jquery.min.js"></script>
-	<script src="../../js/vue.js"></script>
+	<script src="../../js/global.js"></script>
+	<script src="../../js/vue.min.js"></script>
 	<script>
-	  var hotelCode;
-      var bgnDate;
-      var endDate,app;
-      appcan.ready(function() {
-          $(".content").offset({
-              top:$("#header").height(),
-          })
-        appcan.window.disableBounce();
-        app = new Vue({
-          el: '#hotelDetail',
-          data: {items: []},
-          methods: {
-            edit: function (item) {
-            },
-            hotelIn:function(){
-              appcan.window.open("hotel_introduction","hotel_introduction.html",2);
-            },
-            hotelOrder:function(id){
-              if(appcan.locStorage.getVal("applys")==="true" && (!appcan.locStorage.getVal("expId") || appcan.locStorage.getVal("expId") === 'undefined')){
-                  appcan.window.openToast("请您先选择出差申请再预订",3000);
-              }else{
-                  appcan.locStorage.setVal("roomIndex",id);
-                  var divID = "#"+id;
-                  appcan.locStorage.setVal("totalReduce","0");
-                  appcan.locStorage.setVal("totalRefund","0");
-                  appcan.locStorage.setVal("supplierCode",$(divID).attr("data-supplierCode"));
-                  appcan.locStorage.setVal("roomCode",$(divID).attr("data-roomCode"));
-                  appcan.locStorage.setVal("roomName",$(divID).attr("data-roomName"));
-                  appcan.locStorage.setVal("rateplanCode",$(divID).parent().attr("data-rateplanCode"));
-                  appcan.locStorage.setVal("roomPrice",$(divID).parent().attr("data-roomPrice"));
-                  appcan.locStorage.setVal("totalPrice",$(divID).parent().attr("data-totalPrice"));
-                  appcan.locStorage.setVal("planName",$(divID).parent().attr("data-planName"));
-                  appcan.window.open("hotel_show","hotel_show.html",2);
-                }
-            }
-          }
-        });
-        appcan.button("#nav-right", "btn-act", function() {
-            var hotelTel = appcan.locStorage.getVal("hotelTel");
-            uexCall.dial(hotelTel);
-        });
-        appcan.button("#nav-left", "btn-act", function() {
-            appcan.window.evaluateScript({
-                name:"hotel_details",
-                scriptContent:"appcan.window.close(1)"
-            })
-        })
-        addMask('../../img/loading.gif',"加载中，请稍后");
-        hotelCode=appcan.locStorage.getVal("hotelCode");
-        bgnDate=appcan.locStorage.getVal("inday");
-        endDate=appcan.locStorage.getVal("outday");
-        //显示日期
-        $("#bgnDate").html(NYR(bgnDate,2));
-        $("#endDate").html(NYR(endDate,2));
-        findHotel();
-      });
-      function findHotel(){
-          appcan.request.ajax({
-          url : httpHost+'hotelController.do?findHotel',
-          beforeSend:addHeader,
-          data : {
-            hotelCode:hotelCode,
-            bgnDate:bgnDate,
-            endDate:endDate
-          },
-          type : "POST",
-          dataType:"json",
-          success : function(data) {
-            console.log(data);
-            removeMask();                   
-            if (data.success) {
-              $('#hotelDetail').show();
-              var hotelDetail = data.obj.basicProperty;
-              var roomDetail = data.obj.roomRates;
-              appcan.locStorage.setVal("hotelDetail",hotelDetail);
-              appcan.locStorage.setVal("roomDetail",roomDetail);
-              appcan.locStorage.setVal("hotelAddr",hotelDetail.address);
-              appcan.locStorage.setVal("hotelCode",hotelDetail.hotelCode);
-              appcan.locStorage.setVal("hotelName",hotelDetail.hotelName);
-              //显示酒店信息
-              $("#hotelAddress").html(hotelDetail.address);
-              $("#shortDesc").html(hotelDetail.shortDesc);
-              var hotelTel = hotelDetail.tel?hotelDetail.tel:"无";
-              if(hotelTel=="无"){
-                $("#hotelTel").html("暂无联系电话");
-              }else{
-                $("#hotelTel").html(hotelDetail.tel);
-              }
-              appcan.locStorage.setVal("hotelTel",hotelTel);
-              $("#hotelName").text(hotelDetail.hotelName);
-              $("#day").text(roomDetail[0].rates.length);
-              var picArr = [];//展示图片数组
-              var imgArr = new Array();
-              for(var i=0;i<hotelDetail.images.length;i++){
-                  if(hotelDetail.images[i].type == "W" || hotelDetail.images[i].type == "L"){
-                    imgArr.push(hotelDetail.images[i]);
-                  }
-              }
-              if(imgArr.length > 0){
-                //生成随机数
-                var randomNum = Math.random();
-                randomNum = parseInt( 5 * (randomNum + 1) );
-                if(randomNum > imgArr.length){
-                  randomNum = imgArr.length;
-                }
-                $(".hotel_pic .hotel_pic_right").html(randomNum + "张");
-                for(var i=0;i<randomNum;i++){
-                  var imgObj = {};//图片对象
-                  imgObj["img"] = imgArr[i].URL;
-                  picArr[i] = imgObj;
-                }
-              }else{
-                picArr[0] = {"img":"hotel_details_content/css/myImg/noHotalImg.png"};
-                $(".hotel_pic .hotel_pic_right").hide();
-              }
-              goodsImg(picArr);//绑定图片 
-              //酒店设施
-              //if(hotelDetail.freeWIFI=="")//展示设施WIFI
-              //$(".wifi").css("display","none");
-              for(var obj in roomDetail){
-                var pr=0,ar=0;
-                var days=0;
-                $.each(roomDetail[obj].rates,function(index,item) {
-                  pr +=parseFloat(roomDetail[obj].rates[index].amountPrice);
-                  ar +=parseFloat(roomDetail[obj].rates[index].diaplayPrice);
-                  days++;
-                });
-                roomDetail[obj]["totalPrice"]=pr;
-                roomDetail[obj]["roomPrice"]=(pr/days).toFixed(2);
+		var hotelCode;
+		var bgnDate;
+		var endDate, app,picArrList;
+			$(".content").offset({
+				top: $("#header").height(),
+			})
+			app = new Vue({
+				el: '#hotelDetail',
+				data: {
+					items: [],
+					picArr:[]
+				},
+				methods: {
+					edit: function(item) {},
+					hotelIn: function() {
+//						appcan.window.open("hotel_introduction", "hotel_introduction.html", 2);
+					},
+					hotelOrder: function(id) {
+//						if(appcan.locStorage.getVal("applys") === "true" && (!appcan.locStorage.getVal("expId") || appcan.locStorage.getVal("expId") === 'undefined')) {
+//							appcan.window.openToast("请您先选择出差申请再预订", 3000);
+//						} else {
+//							appcan.locStorage.setVal("roomIndex", id);
+//							var divID = "#" + id;
+//							appcan.locStorage.setVal("totalReduce", "0");
+//							appcan.locStorage.setVal("totalRefund", "0");
+//							appcan.locStorage.setVal("supplierCode", $(divID).attr("data-supplierCode"));
+//							appcan.locStorage.setVal("roomCode", $(divID).attr("data-roomCode"));
+//							appcan.locStorage.setVal("roomName", $(divID).attr("data-roomName"));
+//							appcan.locStorage.setVal("rateplanCode", $(divID).parent().attr("data-rateplanCode"));
+//							appcan.locStorage.setVal("roomPrice", $(divID).parent().attr("data-roomPrice"));
+//							appcan.locStorage.setVal("totalPrice", $(divID).parent().attr("data-totalPrice"));
+//							appcan.locStorage.setVal("planName", $(divID).parent().attr("data-planName"));
+//							appcan.window.open("hotel_show", "hotel_show.html", 2);
+//						}
+					}
+				}
+			});
+//			appcan.button("#nav-right", "btn-act", function() {
+//				var hotelTel = appcan.locStorage.getVal("hotelTel");
+//				uexCall.dial(hotelTel);
+//			});
+//			appcan.button("#nav-left", "btn-act", function() {
+//				appcan.window.evaluateScript({
+//					name: "hotel_details",
+//					scriptContent: "appcan.window.close(1)"
+//				})
+//			})
+//			addMask('../../img/loading.gif', "加载中，请稍后");
+//			hotelCode = appcan.locStorage.getVal("hotelCode");
+//			bgnDate = appcan.locStorage.getVal("inday");
+//			endDate = appcan.locStorage.getVal("outday");
+//			//显示日期
+//			$("#bgnDate").html(NYR(bgnDate, 2));
+//			$("#endDate").html(NYR(endDate, 2));
+//			findHotel();
+        var queryHotelData = localGetItem("queryHotelData");
+        queryHotelData = JSON.parse(queryHotelData);
+        $("#bgnDate").text(NYR(queryHotelData.inday, 2));
+		$("#endDate").text(NYR(queryHotelData.outday, 2));
+        myHotelDetails();
+		function myHotelDetails() {
+			var data = {
+				"paymentMode": "",
+				"availabilityStatus": "",
+				"roomRates": [{
+						"roomTypeCode": "INCE007",
+						"roomTypeDesc": "所在楼层:-1-2;房型面积:16-20;床面积:1.5/1.35床型:大/双;上网情况:未知;无窗；该房型不可加床;",
+						"total": {
+							"amountPrice": "348.0",
+							"additionalFeeExcludeIndicator": "",
+							"currency": "CNY"
+						},
+						"vendorCode": "LTJL",
+						"startDate": "2017-05-26",
+						"maxGuestNum": "0",
+						"availabilityStatus": "noavail",
+						"authorizedChannel": "ALL",
+						"endDate": "2017-05-29",
+						"policies": {
+							"cancelRule": {
+								"limits": [],
+								"description": "此酒店即订即保，订单一经预订，将不可取消和修改。",
+								"cancelable": "False",
+								"policyCode": "CAN001"
+							},
+							"guaranteeRule": {}
+						},
+						"commissions": [],
+						"crsPath": "EXT",
+						"quantity": "0",
+						"roomNight": "",
+						"guestTypeIndicator": "A",
+						"confirmRightNowIndicator": "",
+						"quotas": [{
+								"roomStatus": "noavail",
+								"avail": "0",
+								"date": "2017-05-26"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "1",
+								"date": "2017-05-27"
+							},
+							{
+								"roomStatus": "noavail",
+								"avail": "0",
+								"date": "2017-05-28"
+							}
+						],
+						"vendorName": "龙腾捷旅",
+						"payment": "S",
+						"hotelCode": "SOHOTO40792",
+						"bedTypeCode": "B",
+						"fees": [],
+						"rates": [{
+								"vendorCode": "",
+								"roomTypeCode": "INCE007",
+								"startDate": "2017-05-26",
+								"amountPrice": "122",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-26",
+								"displayPrice": "",
+								"amountBeforeTax": "122",
+								"currency": "CNY",
+								"ratePlanCode": "490823_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE007",
+								"startDate": "2017-05-27",
+								"amountPrice": "122",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-27",
+								"displayPrice": "",
+								"amountBeforeTax": "122",
+								"currency": "CNY",
+								"ratePlanCode": "490823_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE007",
+								"startDate": "2017-05-28",
+								"amountPrice": "104",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-28",
+								"displayPrice": "",
+								"amountBeforeTax": "104",
+								"currency": "CNY",
+								"ratePlanCode": "490823_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							}
+						],
+						"forceGuarantee": "Y",
+						"specAuth": "N",
+						"ratePlanName": "不含早 限内宾",
+						"ratePlanCode": "490823_1665",
+						"favPolicies": [],
+						"bedType": "大/双",
+						"roomTypeName": "经济房",
+						"internet": "C",
+						"bookingPolicies": []
+					},
+					{
+						"roomTypeCode": "INCE001",
+						"roomTypeDesc": "所在楼层:1-6;房型面积:16-20;床面积:1.8床型:大床;上网情况:未知;有窗；该房型不可加床;    其它：不提供一次性洗漱用品及面巾 ",
+						"total": {
+							"amountPrice": "440.0",
+							"additionalFeeExcludeIndicator": "",
+							"currency": "CNY"
+						},
+						"vendorCode": "LTJL",
+						"startDate": "2017-05-26",
+						"maxGuestNum": "0",
+						"availabilityStatus": "avail",
+						"authorizedChannel": "ALL",
+						"endDate": "2017-05-29",
+						"policies": {
+							"cancelRule": {
+								"limits": [],
+								"description": "此酒店即订即保，订单一经预订，将不可取消和修改。",
+								"cancelable": "False",
+								"policyCode": "CAN001"
+							},
+							"guaranteeRule": {}
+						},
+						"commissions": [],
+						"crsPath": "EXT",
+						"quantity": "2",
+						"roomNight": "",
+						"guestTypeIndicator": "A",
+						"confirmRightNowIndicator": "",
+						"quotas": [{
+								"roomStatus": "avail",
+								"avail": "9",
+								"date": "2017-05-26"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-27"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-28"
+							}
+						],
+						"vendorName": "龙腾捷旅",
+						"payment": "S",
+						"hotelCode": "SOHOTO40792",
+						"bedTypeCode": "B",
+						"fees": [],
+						"rates": [{
+								"vendorCode": "",
+								"roomTypeCode": "INCE001",
+								"startDate": "2017-05-26",
+								"amountPrice": "147",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-26",
+								"displayPrice": "",
+								"amountBeforeTax": "147",
+								"currency": "CNY",
+								"ratePlanCode": "490825_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE001",
+								"startDate": "2017-05-27",
+								"amountPrice": "150",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-27",
+								"displayPrice": "",
+								"amountBeforeTax": "150",
+								"currency": "CNY",
+								"ratePlanCode": "490825_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE001",
+								"startDate": "2017-05-28",
+								"amountPrice": "143",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-28",
+								"displayPrice": "",
+								"amountBeforeTax": "143",
+								"currency": "CNY",
+								"ratePlanCode": "490825_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							}
+						],
+						"forceGuarantee": "Y",
+						"specAuth": "N",
+						"ratePlanName": "不含早 限内宾",
+						"ratePlanCode": "490825_1665",
+						"favPolicies": [],
+						"bedType": "大床",
+						"roomTypeName": "自主大床房",
+						"internet": "C",
+						"bookingPolicies": []
+					},
+					{
+						"roomTypeCode": "INCE003",
+						"roomTypeDesc": "所在楼层:1-6;房型面积:16-20;床面积:1.8床型:大床;上网情况:未知;有窗；该房型不可加床;（房间不配置“洁净封包面巾”，有需要您可以在前台凭身份证免费领取）",
+						"total": {
+							"amountPrice": "479.0",
+							"additionalFeeExcludeIndicator": "",
+							"currency": "CNY"
+						},
+						"vendorCode": "LTJL",
+						"startDate": "2017-05-26",
+						"maxGuestNum": "0",
+						"availabilityStatus": "avail",
+						"authorizedChannel": "ALL",
+						"endDate": "2017-05-29",
+						"policies": {
+							"cancelRule": {
+								"limits": [],
+								"description": "此酒店即订即保，订单一经预订，将不可取消和修改。",
+								"cancelable": "False",
+								"policyCode": "CAN001"
+							},
+							"guaranteeRule": {}
+						},
+						"commissions": [],
+						"crsPath": "EXT",
+						"quantity": "2",
+						"roomNight": "",
+						"guestTypeIndicator": "A",
+						"confirmRightNowIndicator": "",
+						"quotas": [{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-26"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-27"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-28"
+							}
+						],
+						"vendorName": "龙腾捷旅",
+						"payment": "S",
+						"hotelCode": "SOHOTO40792",
+						"bedTypeCode": "B",
+						"fees": [],
+						"rates": [{
+								"vendorCode": "",
+								"roomTypeCode": "INCE003",
+								"startDate": "2017-05-26",
+								"amountPrice": "169",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-26",
+								"displayPrice": "",
+								"amountBeforeTax": "169",
+								"currency": "CNY",
+								"ratePlanCode": "490827_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE003",
+								"startDate": "2017-05-27",
+								"amountPrice": "169",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-27",
+								"displayPrice": "",
+								"amountBeforeTax": "169",
+								"currency": "CNY",
+								"ratePlanCode": "490827_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE003",
+								"startDate": "2017-05-28",
+								"amountPrice": "141",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-28",
+								"displayPrice": "",
+								"amountBeforeTax": "141",
+								"currency": "CNY",
+								"ratePlanCode": "490827_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							}
+						],
+						"forceGuarantee": "Y",
+						"specAuth": "N",
+						"ratePlanName": "不含早 限内宾",
+						"ratePlanCode": "490827_1665",
+						"favPolicies": [],
+						"bedType": "大床",
+						"roomTypeName": "传统大床房",
+						"internet": "C",
+						"bookingPolicies": []
+					},
+					{
+						"roomTypeCode": "INCE002",
+						"roomTypeDesc": "所在楼层:1-6;房型面积:20-24;床面积:1.35床型:双床;上网情况:未知;有窗；该房型不可加床;    其它：不提供一次性洗漱用品及面巾",
+						"total": {
+							"amountPrice": "521.0",
+							"additionalFeeExcludeIndicator": "",
+							"currency": "CNY"
+						},
+						"vendorCode": "LTJL",
+						"startDate": "2017-05-26",
+						"maxGuestNum": "0",
+						"availabilityStatus": "avail",
+						"authorizedChannel": "ALL",
+						"endDate": "2017-05-29",
+						"policies": {
+							"cancelRule": {
+								"limits": [],
+								"description": "此酒店即订即保，订单一经预订，将不可取消和修改。",
+								"cancelable": "False",
+								"policyCode": "CAN001"
+							},
+							"guaranteeRule": {}
+						},
+						"commissions": [],
+						"crsPath": "EXT",
+						"quantity": "2",
+						"roomNight": "",
+						"guestTypeIndicator": "A",
+						"confirmRightNowIndicator": "",
+						"quotas": [{
+								"roomStatus": "avail",
+								"avail": "9",
+								"date": "2017-05-26"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-27"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-28"
+							}
+						],
+						"vendorName": "龙腾捷旅",
+						"payment": "S",
+						"hotelCode": "SOHOTO40792",
+						"bedTypeCode": "D",
+						"fees": [],
+						"rates": [{
+								"vendorCode": "",
+								"roomTypeCode": "INCE002",
+								"startDate": "2017-05-26",
+								"amountPrice": "178",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-26",
+								"displayPrice": "",
+								"amountBeforeTax": "178",
+								"currency": "CNY",
+								"ratePlanCode": "490824_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE002",
+								"startDate": "2017-05-27",
+								"amountPrice": "181",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-27",
+								"displayPrice": "",
+								"amountBeforeTax": "181",
+								"currency": "CNY",
+								"ratePlanCode": "490824_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE002",
+								"startDate": "2017-05-28",
+								"amountPrice": "162",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-28",
+								"displayPrice": "",
+								"amountBeforeTax": "162",
+								"currency": "CNY",
+								"ratePlanCode": "490824_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							}
+						],
+						"forceGuarantee": "Y",
+						"specAuth": "N",
+						"ratePlanName": "不含早 限内宾",
+						"ratePlanCode": "490824_1665",
+						"favPolicies": [],
+						"bedType": "双床",
+						"roomTypeName": "自主双床房",
+						"internet": "C",
+						"bookingPolicies": []
+					},
+					{
+						"roomTypeCode": "INCE004",
+						"roomTypeDesc": "所在楼层:1-6;房型面积:20-24;床面积:1.35/1.2床型:双床;上网情况:未知;有窗；该房型不可加床;",
+						"total": {
+							"amountPrice": "547.0",
+							"additionalFeeExcludeIndicator": "",
+							"currency": "CNY"
+						},
+						"vendorCode": "LTJL",
+						"startDate": "2017-05-26",
+						"maxGuestNum": "0",
+						"availabilityStatus": "avail",
+						"authorizedChannel": "ALL",
+						"endDate": "2017-05-29",
+						"policies": {
+							"cancelRule": {
+								"limits": [],
+								"description": "此酒店即订即保，订单一经预订，将不可取消和修改。",
+								"cancelable": "False",
+								"policyCode": "CAN001"
+							},
+							"guaranteeRule": {}
+						},
+						"commissions": [],
+						"crsPath": "EXT",
+						"quantity": "2",
+						"roomNight": "",
+						"guestTypeIndicator": "A",
+						"confirmRightNowIndicator": "",
+						"quotas": [{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-26"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-27"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-28"
+							}
+						],
+						"vendorName": "龙腾捷旅",
+						"payment": "S",
+						"hotelCode": "SOHOTO40792",
+						"bedTypeCode": "D",
+						"fees": [],
+						"rates": [{
+								"vendorCode": "",
+								"roomTypeCode": "INCE004",
+								"startDate": "2017-05-26",
+								"amountPrice": "189",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-26",
+								"displayPrice": "",
+								"amountBeforeTax": "189",
+								"currency": "CNY",
+								"ratePlanCode": "490826_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE004",
+								"startDate": "2017-05-27",
+								"amountPrice": "189",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-27",
+								"displayPrice": "",
+								"amountBeforeTax": "189",
+								"currency": "CNY",
+								"ratePlanCode": "490826_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE004",
+								"startDate": "2017-05-28",
+								"amountPrice": "169",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-28",
+								"displayPrice": "",
+								"amountBeforeTax": "169",
+								"currency": "CNY",
+								"ratePlanCode": "490826_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							}
+						],
+						"forceGuarantee": "Y",
+						"specAuth": "N",
+						"ratePlanName": "不含早 限内宾",
+						"ratePlanCode": "490826_1665",
+						"favPolicies": [],
+						"bedType": "双床",
+						"roomTypeName": "传统双床房",
+						"internet": "C",
+						"bookingPolicies": []
+					},
+					{
+						"roomTypeCode": "INCE005",
+						"roomTypeDesc": "所在楼层:1-6;房型面积:16-20;床面积:1.8床型:大床;上网情况:未知;有窗；该房型不可加床;生活用品包: 包含品牌洗漱牙具、品牌洗发露、品牌沐浴露各1份； 温馨提示：入住时凭二代身份证或有芯会员卡在前台领取，每间房最多可领2份",
+						"total": {
+							"amountPrice": "574.0",
+							"additionalFeeExcludeIndicator": "",
+							"currency": "CNY"
+						},
+						"vendorCode": "LTJL",
+						"startDate": "2017-05-26",
+						"maxGuestNum": "0",
+						"availabilityStatus": "avail",
+						"authorizedChannel": "ALL",
+						"endDate": "2017-05-29",
+						"policies": {
+							"cancelRule": {
+								"limits": [],
+								"description": "此酒店即订即保，订单一经预订，将不可取消和修改。",
+								"cancelable": "False",
+								"policyCode": "CAN001"
+							},
+							"guaranteeRule": {}
+						},
+						"commissions": [],
+						"crsPath": "EXT",
+						"quantity": "2",
+						"roomNight": "",
+						"guestTypeIndicator": "A",
+						"confirmRightNowIndicator": "",
+						"quotas": [{
+								"roomStatus": "avail",
+								"avail": "9",
+								"date": "2017-05-26"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-27"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-28"
+							}
+						],
+						"vendorName": "龙腾捷旅",
+						"payment": "S",
+						"hotelCode": "SOHOTO40792",
+						"bedTypeCode": "B",
+						"fees": [],
+						"rates": [{
+								"vendorCode": "",
+								"roomTypeCode": "INCE005",
+								"startDate": "2017-05-26",
+								"amountPrice": "187",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-26",
+								"displayPrice": "",
+								"amountBeforeTax": "187",
+								"currency": "CNY",
+								"ratePlanCode": "490828_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE005",
+								"startDate": "2017-05-27",
+								"amountPrice": "198",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-27",
+								"displayPrice": "",
+								"amountBeforeTax": "198",
+								"currency": "CNY",
+								"ratePlanCode": "490828_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE005",
+								"startDate": "2017-05-28",
+								"amountPrice": "189",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-28",
+								"displayPrice": "",
+								"amountBeforeTax": "189",
+								"currency": "CNY",
+								"ratePlanCode": "490828_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							}
+						],
+						"forceGuarantee": "Y",
+						"specAuth": "N",
+						"ratePlanName": "不含早 限内宾",
+						"ratePlanCode": "490828_1665",
+						"favPolicies": [],
+						"bedType": "大床",
+						"roomTypeName": "商务大床房",
+						"internet": "C",
+						"bookingPolicies": []
+					},
+					{
+						"roomTypeCode": "INCE006",
+						"roomTypeDesc": "所在楼层:1-6;房型面积:20-24;床面积:1.35床型:双床;上网情况:未知;有窗；该房型不可加床;生活用品包: 包含品牌洗漱牙具、品牌洗发露、品牌沐浴露各1份； 温馨提示：入住时凭二代身份证或有芯会员卡在前台领取，每间房最多可领2份",
+						"total": {
+							"amountPrice": "624.0",
+							"additionalFeeExcludeIndicator": "",
+							"currency": "CNY"
+						},
+						"vendorCode": "LTJL",
+						"startDate": "2017-05-26",
+						"maxGuestNum": "0",
+						"availabilityStatus": "avail",
+						"authorizedChannel": "ALL",
+						"endDate": "2017-05-29",
+						"policies": {
+							"cancelRule": {
+								"limits": [],
+								"description": "此酒店即订即保，订单一经预订，将不可取消和修改。",
+								"cancelable": "False",
+								"policyCode": "CAN001"
+							},
+							"guaranteeRule": {}
+						},
+						"commissions": [],
+						"crsPath": "EXT",
+						"quantity": "2",
+						"roomNight": "",
+						"guestTypeIndicator": "A",
+						"confirmRightNowIndicator": "",
+						"quotas": [{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-26"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-27"
+							},
+							{
+								"roomStatus": "avail",
+								"avail": "2",
+								"date": "2017-05-28"
+							}
+						],
+						"vendorName": "龙腾捷旅",
+						"payment": "S",
+						"hotelCode": "SOHOTO40792",
+						"bedTypeCode": "D",
+						"fees": [],
+						"rates": [{
+								"vendorCode": "",
+								"roomTypeCode": "INCE006",
+								"startDate": "2017-05-26",
+								"amountPrice": "208",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-26",
+								"displayPrice": "",
+								"amountBeforeTax": "208",
+								"currency": "CNY",
+								"ratePlanCode": "490822_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE006",
+								"startDate": "2017-05-27",
+								"amountPrice": "208",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-27",
+								"displayPrice": "",
+								"amountBeforeTax": "208",
+								"currency": "CNY",
+								"ratePlanCode": "490822_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							},
+							{
+								"vendorCode": "",
+								"roomTypeCode": "INCE006",
+								"startDate": "2017-05-28",
+								"amountPrice": "208",
+								"agentPrice": "",
+								"hotelCode": "",
+								"endDate": "2017-05-28",
+								"displayPrice": "",
+								"amountBeforeTax": "208",
+								"currency": "CNY",
+								"ratePlanCode": "490822_1665",
+								"fee": "",
+								"additionalFeeExcludeIndicator": "",
+								"freeMeal": "0"
+							}
+						],
+						"forceGuarantee": "Y",
+						"specAuth": "N",
+						"ratePlanName": "不含早 限内宾",
+						"ratePlanCode": "490822_1665",
+						"favPolicies": [],
+						"bedType": "双床",
+						"roomTypeName": "商务双床房",
+						"internet": "C",
+						"bookingPolicies": []
+					}
+				],
+				"roomStayStatus": "",
+				"guestCounts": [],
+				"specialRequest": "",
+				"agentAmount": "",
+				"guaranteeDeadLine": "",
+				"vendorComments": "",
+				"currency": "",
+				"arriveLateTime": "",
+				"guaranteeStatus": "",
+				"totalAmount": "",
+				"guaranteeAmount": "",
+				"basicProperty": {
+					"position": {
+						"longitude": "113.842732",
+						"latitudeFrom": "",
+						"longitudeFrom": "",
+						"latitude": "23.297995",
+						"latitudeTo": "",
+						"longitudeTo": ""
+					},
+					"businessarea": "增城新塘/白水寨/挂绿广场",
+					"vendorRates": [],
+					"flagT": false,
+					"location": {},
+					"tel": "020-32827777",
+					"cityName": "",
+					"cityCode": "CAN",
+					"hotelAmenities": [],
+					"flagS": false,
+					"brandName": "",
+					"currency": "",
+					"minRateS": "",
+					"rank": "1A",
+					"minRateT": "",
+					"brandCode": "7T",
+					"hotelName": "7天连锁酒店（广州增城挂绿广场店）",
+					"chainCode": "",
+					"longDesc": "7天连锁酒店（广州增城挂绿广场店）位于增城市荔城街新桥路15号，在增城客运站斜对面，紧临增城市商业中心（挂绿广场）。着名增城单车绿道游起点离酒店800米，别具特色的荔乡风情和水乡景色美不胜收，西园挂绿（母树）、增江画廊、历史悠久的何仙姑家庙、东南亚之最的盘龙古藤、正果佛寺等众多的名胜古迹，让游人大饱眼福。饮食（地道增城迟菜心、客家鹅等）、购物、娱乐极为方便。酒店设施完善，按照7天最新标准设计装修，院内设有免费停车场，为您的爱车解决后顾之忧。房间配有席梦思舒睡床垫、封包消毒毛巾、24小时热水供应，洗去您一天的旅途疲惫。酒店是设施最完善、服务最好的经济型连锁酒店，更是您探亲访友、旅途中转、商务休闲的绝佳休息场所！7天连锁酒店广州增城挂绿广场店全体员工，竭诚欢迎您快乐入住！\n　　酒店开业时间2012年3月，楼高6层，客房总数86间（套）。\n\n【温馨提示】酒店不能接待外宾。",
+					"district": "增城区",
+					"URL": "",
+					"roomQuantity": "6",
+					"maxRateS": "",
+					"enAddress": "Zengcheng Licheng Street Xinqiao Road 15 (opposite the Zengcheng Passenger Station)",
+					"fax": "020-82734688",
+					"hotelCode": "SOHOTO40792",
+					"postCode": "",
+					"shortDesc": "酒店开业时间2012年3月，楼高6层，客房总数86间（套）。",
+					"relativePositions": [],
+					"maxRate": "624.00",
+					"minRate": "348.00",
+					"POR": "null-null",
+					"fitment": "1900-01",
+					"floor": "",
+					"address": "增城荔城街新桥路15号（增城客运站斜对面）",
+					"opendate": "2012-03",
+					"taxFeeInd": "",
+					"images": [{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00012.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00006.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00001.jpg",
+							"type": "M",
+							"size": 7
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00002.jpg",
+							"type": "M",
+							"size": 5
+						},
+						{
+							"roomTypeCode": "",
+							"category": "DT",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00003.jpg",
+							"type": "M",
+							"size": 4
+						},
+						{
+							"roomTypeCode": "INCE004",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00004.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE003",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00005.jpg",
+							"type": "M",
+							"size": 4
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00006.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00008.jpg",
+							"type": "M",
+							"size": 4
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00009.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00011.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00012.jpg",
+							"type": "M",
+							"size": 4
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00013.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "",
+							"category": "QT",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00014.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00015.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00017.jpg",
+							"type": "M",
+							"size": 4
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00018.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00019.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00007.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00010.jpg",
+							"type": "M",
+							"size": 5
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 135,
+							"width": 180,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/M00016.jpg",
+							"type": "M",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 827,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00001.jpg",
+							"type": "L",
+							"size": 83
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00002.jpg",
+							"type": "L",
+							"size": 110
+						},
+						{
+							"roomTypeCode": "",
+							"category": "DT",
+							"height": 827,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00003.jpg",
+							"type": "L",
+							"size": 45
+						},
+						{
+							"roomTypeCode": "INCE004",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00004.jpg",
+							"type": "L",
+							"size": 33
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00006.jpg",
+							"type": "L",
+							"size": 31
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00007.jpg",
+							"type": "L",
+							"size": 34
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00008.jpg",
+							"type": "L",
+							"size": 42
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00009.jpg",
+							"type": "L",
+							"size": 45
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00010.jpg",
+							"type": "L",
+							"size": 72
+						},
+						{
+							"roomTypeCode": "",
+							"category": "QT",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00014.jpg",
+							"type": "L",
+							"size": 54
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00015.jpg",
+							"type": "L",
+							"size": 38
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00016.jpg",
+							"type": "L",
+							"size": 40
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00017.jpg",
+							"type": "L",
+							"size": 58
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00018.jpg",
+							"type": "L",
+							"size": 46
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00012.jpg",
+							"type": "W",
+							"size": 41
+						},
+						{
+							"roomTypeCode": "INCE004",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00004.jpg",
+							"type": "W",
+							"size": 34
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00006.jpg",
+							"type": "W",
+							"size": 25
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00018.jpg",
+							"type": "W",
+							"size": 35
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00001.jpg",
+							"type": "B",
+							"size": 22
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00002.jpg",
+							"type": "B",
+							"size": 23
+						},
+						{
+							"roomTypeCode": "",
+							"category": "DT",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00003.jpg",
+							"type": "B",
+							"size": 11
+						},
+						{
+							"roomTypeCode": "INCE003",
+							"category": "KF",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00005.jpg",
+							"type": "B",
+							"size": 12
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00006.jpg",
+							"type": "B",
+							"size": 8
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00007.jpg",
+							"type": "B",
+							"size": 9
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00008.jpg",
+							"type": "B",
+							"size": 11
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00009.jpg",
+							"type": "B",
+							"size": 12
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00010.jpg",
+							"type": "B",
+							"size": 18
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00011.jpg",
+							"type": "B",
+							"size": 10
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00012.jpg",
+							"type": "B",
+							"size": 12
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00013.jpg",
+							"type": "B",
+							"size": 10
+						},
+						{
+							"roomTypeCode": "",
+							"category": "QT",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00014.jpg",
+							"type": "B",
+							"size": 11
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00015.jpg",
+							"type": "B",
+							"size": 10
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00016.jpg",
+							"type": "B",
+							"size": 9
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00017.jpg",
+							"type": "B",
+							"size": 13
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00019.jpg",
+							"type": "B",
+							"size": 12
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 300,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00018.jpg",
+							"type": "B",
+							"size": 9
+						},
+						{
+							"roomTypeCode": "INCE004",
+							"category": "KF",
+							"height": 350,
+							"width": 350,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/B00004.jpg",
+							"type": "B",
+							"size": 9
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00002.jpg",
+							"type": "S",
+							"size": 4
+						},
+						{
+							"roomTypeCode": "",
+							"category": "DT",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00003.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE004",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00004.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE003",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00005.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00006.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00007.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00008.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00009.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00010.jpg",
+							"type": "S",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00011.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00012.jpg",
+							"type": "S",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00013.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "",
+							"category": "QT",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00014.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00015.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00016.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00018.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00019.jpg",
+							"type": "S",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00001.jpg",
+							"type": "T",
+							"size": 2
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00002.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "",
+							"category": "DT",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00003.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE004",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00004.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE003",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00005.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00007.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00008.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00009.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00010.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00011.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00013.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "",
+							"category": "QT",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00014.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00015.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00016.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00017.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00018.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 70,
+							"width": 70,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/T00019.jpg",
+							"type": "T",
+							"size": 1
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00019.jpg",
+							"type": "L",
+							"size": 55
+						},
+						{
+							"roomTypeCode": "INCE003",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00005.jpg",
+							"type": "L",
+							"size": 35
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00011.jpg",
+							"type": "L",
+							"size": 42
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 890,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00013.jpg",
+							"type": "L",
+							"size": 35
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00007.jpg",
+							"type": "W",
+							"size": 32
+						},
+						{
+							"roomTypeCode": "INCE002",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00008.jpg",
+							"type": "W",
+							"size": 38
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00009.jpg",
+							"type": "W",
+							"size": 32
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00010.jpg",
+							"type": "W",
+							"size": 57
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00011.jpg",
+							"type": "W",
+							"size": 36
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00013.jpg",
+							"type": "W",
+							"size": 33
+						},
+						{
+							"roomTypeCode": "",
+							"category": "QT",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00014.jpg",
+							"type": "W",
+							"size": 35
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00015.jpg",
+							"type": "W",
+							"size": 20
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00016.jpg",
+							"type": "W",
+							"size": 34
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00017.jpg",
+							"type": "W",
+							"size": 47
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00019.jpg",
+							"type": "W",
+							"size": 38
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00001.jpg",
+							"type": "W",
+							"size": 70
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00002.jpg",
+							"type": "W",
+							"size": 85
+						},
+						{
+							"roomTypeCode": "",
+							"category": "DT",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00003.jpg",
+							"type": "W",
+							"size": 36
+						},
+						{
+							"roomTypeCode": "INCE003",
+							"category": "KF",
+							"height": 500,
+							"width": 800,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/W00005.jpg",
+							"type": "W",
+							"size": 38
+						},
+						{
+							"roomTypeCode": "",
+							"category": "WJ",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00001.jpg",
+							"type": "S",
+							"size": 4
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 120,
+							"width": 120,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/S00017.jpg",
+							"type": "S",
+							"size": 3
+						},
+						{
+							"roomTypeCode": "INCE001",
+							"category": "KF",
+							"height": 814,
+							"width": 640,
+							"URL": "http://media.sohoto.com/thub/market/images/hotelimages/92/SOHOTO40792/L00012.jpg",
+							"type": "L",
+							"size": 43
+						}
+					],
+					"vendorMessages": [],
+					"hotelEnglishName": "7 Days Inn (Guangzhou Zengcheng Green Square)",
+					"maxRateT": "",
+					"chainName": ""
+				},
+				"cancelDeadLine": "",
+				"paymentStatus": "",
+				"specAuth": "",
+				"confirmLevels": [{
+					"vendorCode": "LTJL",
+					"vendorHotelCode": "104321",
+					"value": "0"
+				}],
+				"guaranteeType": "",
+				"totalFee": "",
+				"timeSpan": {
+					"startDate": "2017-05-26",
+					"start": "",
+					"endDate": "2017-05-29",
+					"end": ""
+				},
+				"arriveEarlyTime": "",
+				"totalCommission": "",
+				"comments": "",
+				"paymentDeadLine": "",
+				"formatSpecialRequest": {},
+				"resOrderID": ""
+			}
+		    $('#hotelDetail').show();
+						var hotelDetail = data.basicProperty;
+						var roomDetail = data.roomRates;
+						localSetItem("hotelDetail", JSON.stringify(hotelDetail));
+						localSetItem("roomDetail", JSON.stringify(roomDetail));
+						localSetItem("hotelAddr", JSON.stringify(hotelDetail.address));
+						localSetItem("hotelCode", JSON.stringify(hotelDetail.hotelCode));
+						localSetItem("hotelName", JSON.stringify(hotelDetail.hotelName));
+						//显示酒店信息
+						$("#hotelAddress").html(hotelDetail.address);
+						$("#shortDesc").html(hotelDetail.shortDesc);
+						var hotelTel = hotelDetail.tel ? hotelDetail.tel : "无";
+						if(hotelTel == "无") {
+							$("#hotelTel").html("暂无联系电话");
+						} else {
+							$("#hotelTel").html(hotelDetail.tel);
+						}
+						localSetItem("hotelTel", hotelTel);
+						$("#hotelName").text(hotelDetail.hotelName);
+						$("#day").text(roomDetail[0].rates.length);
+						var picArr = []; //展示图片数组
+						var imgArr = new Array();
+						for(var i = 0; i < hotelDetail.images.length; i++) {
+							if(hotelDetail.images[i].type == "W" || hotelDetail.images[i].type == "L") {
+								imgArr.push(hotelDetail.images[i]);
+							}
+						}
+						if(imgArr.length > 0) {
+							//生成随机数
+							var randomNum = Math.random();
+							randomNum = parseInt(5 * (randomNum + 1));
+							if(randomNum > imgArr.length) {
+								randomNum = imgArr.length;
+							}
+							$(".hotel_pic .hotel_pic_right").html(randomNum + "张");
+							for(var i = 0; i < randomNum; i++) {
+								var imgObj = {}; //图片对象
+								imgObj["img"] = imgArr[i].URL;
+								picArr[i] = imgObj;
+							}
+						} else {
+							picArr[0] = {
+								"img": "hotel_details_content/css/myImg/noHotalImg.png"
+							};
+							$(".hotel_pic .hotel_pic_right").hide();
+						}
+//						console.log(picArr)
+						goodsImg(picArr); //绑定图片 
+						//酒店设施
+						for(var obj in roomDetail) {
+							var pr = 0,
+								ar = 0;
+							var days = 0;
+							$.each(roomDetail[obj].rates, function(index, item) {
+								pr += parseFloat(roomDetail[obj].rates[index].amountPrice);
+								ar += parseFloat(roomDetail[obj].rates[index].diaplayPrice);
+								days++;
+							});
+							roomDetail[obj]["totalPrice"] = pr;
+							roomDetail[obj]["roomPrice"] = (pr / days).toFixed(2);
 
-                app.items.push({
-                  roomIndex: obj,
-                  roomTypeName: roomDetail[obj].roomTypeName,
-                  ratePlanName: roomDetail[obj].ratePlanName,
-                  roomTypeDesc: roomDetail[obj].roomTypeDesc,
-                  roomPrice: roomDetail[obj].roomPrice,
-                  totalPrice: roomDetail[obj].totalPrice,
-                  vendorCode: roomDetail[obj].vendorCode,
-                  roomTypeCode: roomDetail[obj].roomTypeCode,
-                  ratePlanCode: roomDetail[obj].ratePlanCode
-                });
-              }
-            }else{
-                if(data.msg=="用户未登录"){
-                reLogin(findHotel);
-              }else{
-                  var html = "<div style='margin-top:2em;text-align:center;color:#4679ff;font-size: 1rem;font-weight: bold;'>该酒店暂时无法预订，请选择其他酒店。</div>";
-                $('body').html(html);
-              }
-            }
-        },
-          error : function(err) {
-            removeMask();
-            appcan.window.openToast("网络请求异常，请检查网络是否正常。",3000);
-          }
-        });
-      }
-      //商品详情图片轮播
-        function goodsImg(images) {
-            var slider = appcan.slider({
-                selector : '#slider',
-            aspectRatio : 9 / 16,
-            hasLabel : false,
-            index : 0,
-            canDown:false,
-        });
-        slider.set(images);
-        slider.on("clickItem", function(index, data) {
-                console.log(index, data);
-        
-            })
-        }
+							app.items.push({
+								roomIndex: obj,
+								roomTypeName: roomDetail[obj].roomTypeName,
+								ratePlanName: roomDetail[obj].ratePlanName,
+								roomTypeDesc: roomDetail[obj].roomTypeDesc,
+								roomPrice: roomDetail[obj].roomPrice,
+								totalPrice: roomDetail[obj].totalPrice,
+								vendorCode: roomDetail[obj].vendorCode,
+								roomTypeCode: roomDetail[obj].roomTypeCode,
+								ratePlanCode: roomDetail[obj].ratePlanCode
+							});
+						}
+		}
+
+		function findHotel() {
+			appcan.request.ajax({
+				url: httpHost + 'hotelController.do?findHotel',
+				beforeSend: addHeader,
+				data: {
+					hotelCode: hotelCode,
+					bgnDate: bgnDate,
+					endDate: endDate
+				},
+				type: "POST",
+				dataType: "json",
+				success: function(data) {
+					console.log(data);
+					removeMask();
+					if(data.success) {
+						$('#hotelDetail').show();
+						var hotelDetail = data.obj.basicProperty;
+						var roomDetail = data.obj.roomRates;
+						appcan.locStorage.setVal("hotelDetail", hotelDetail);
+						appcan.locStorage.setVal("roomDetail", roomDetail);
+						appcan.locStorage.setVal("hotelAddr", hotelDetail.address);
+						appcan.locStorage.setVal("hotelCode", hotelDetail.hotelCode);
+						appcan.locStorage.setVal("hotelName", hotelDetail.hotelName);
+						//显示酒店信息
+						$("#hotelAddress").html(hotelDetail.address);
+						$("#shortDesc").html(hotelDetail.shortDesc);
+						var hotelTel = hotelDetail.tel ? hotelDetail.tel : "无";
+						if(hotelTel == "无") {
+							$("#hotelTel").html("暂无联系电话");
+						} else {
+							$("#hotelTel").html(hotelDetail.tel);
+						}
+						appcan.locStorage.setVal("hotelTel", hotelTel);
+						$("#hotelName").text(hotelDetail.hotelName);
+						$("#day").text(roomDetail[0].rates.length);
+						var picArr = []; //展示图片数组
+						var imgArr = new Array();
+						for(var i = 0; i < hotelDetail.images.length; i++) {
+							if(hotelDetail.images[i].type == "W" || hotelDetail.images[i].type == "L") {
+								imgArr.push(hotelDetail.images[i]);
+							}
+						}
+						if(imgArr.length > 0) {
+							//生成随机数
+							var randomNum = Math.random();
+							randomNum = parseInt(5 * (randomNum + 1));
+							if(randomNum > imgArr.length) {
+								randomNum = imgArr.length;
+							}
+							$(".hotel_pic .hotel_pic_right").html(randomNum + "张");
+							for(var i = 0; i < randomNum; i++) {
+								var imgObj = {}; //图片对象
+								imgObj["img"] = imgArr[i].URL;
+								picArr[i] = imgObj;
+							}
+						} else {
+							picArr[0] = {
+								"img": "hotel_details_content/css/myImg/noHotalImg.png"
+							};
+							$(".hotel_pic .hotel_pic_right").hide();
+						}
+						goodsImg(picArr); //绑定图片 
+						//酒店设施
+						//if(hotelDetail.freeWIFI=="")//展示设施WIFI
+						//$(".wifi").css("display","none");
+						for(var obj in roomDetail) {
+							var pr = 0,
+								ar = 0;
+							var days = 0;
+							$.each(roomDetail[obj].rates, function(index, item) {
+								pr += parseFloat(roomDetail[obj].rates[index].amountPrice);
+								ar += parseFloat(roomDetail[obj].rates[index].diaplayPrice);
+								days++;
+							});
+							roomDetail[obj]["totalPrice"] = pr;
+							roomDetail[obj]["roomPrice"] = (pr / days).toFixed(2);
+
+							app.items.push({
+								roomIndex: obj,
+								roomTypeName: roomDetail[obj].roomTypeName,
+								ratePlanName: roomDetail[obj].ratePlanName,
+								roomTypeDesc: roomDetail[obj].roomTypeDesc,
+								roomPrice: roomDetail[obj].roomPrice,
+								totalPrice: roomDetail[obj].totalPrice,
+								vendorCode: roomDetail[obj].vendorCode,
+								roomTypeCode: roomDetail[obj].roomTypeCode,
+								ratePlanCode: roomDetail[obj].ratePlanCode
+							});
+						}
+					} else {
+						if(data.msg == "用户未登录") {
+							reLogin(findHotel);
+						} else {
+							var html = "<div style='margin-top:2em;text-align:center;color:#4679ff;font-size: 1rem;font-weight: bold;'>该酒店暂时无法预订，请选择其他酒店。</div>";
+							$('body').html(html);
+						}
+					}
+				},
+				error: function(err) {
+					removeMask();
+					appcan.window.openToast("网络请求异常，请检查网络是否正常。", 3000);
+				}
+			});
+		}
+		//商品详情图片轮播
+		var slider = mui("#slider");
+		function goodsImg(images) {
+			app.picArr = images;
+		}
+		
+		app.$nextTick(function(){
+			slider.slider();		
+		})
+		
+		
 	</script>
+
 </html>

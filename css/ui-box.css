@@ -192,3 +192,4 @@ select:focus {
 	-webkit-flex-wrap:wrap ;
 	flex-wrap: wrap;
 }
+.cl:after,.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}.cl,.clearfix{zoom:1}

@@ -733,3 +733,13 @@ function setFontSize(){
         recalc();
     })(document, window);
 }
+
+
+function localGetItem(name){
+	var localName = window.localStorage.getItem(name);
+	return localName;
+}
+
+function localSetItem(key,val){
+	window.localStorage.setItem(key,val);
+}

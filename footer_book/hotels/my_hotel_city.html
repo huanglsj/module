@@ -10,6 +10,7 @@
 		<link href="../../css/mui/mui.min.css" rel="stylesheet" />
 		<link href="../../css/mui/mui.indexedlist.css" rel="stylesheet" />
 		<script type="text/javascript" src="../../js/setSkin.js"></script>
+		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=c9c9b2b402afe3efd3ee0134f3e2b77e"></script>
 		<style>
 			html,
 			body {
@@ -30,19 +31,49 @@
 			.hot-city {
 				margin-right: 23px;
 				margin-bottom: 10px;
+				padding-top: 10px;
 			}
 			
 			.hot-city .li {
 				width: 22%;
 				text-align: center;
 				margin: 1.5%;
+				float: left;
 			}
 			
 			.hot-city .li a {
 				border: 1px solid #ddd;
 				display: block;
-				padding: 6px 0;
+				padding: 6px;
 				border-radius: 6px;
+				color: #000;
+			}
+			
+			.hot-city .current {
+				display: none;
+				width: auto;
+				min-width: 22%;
+			}
+			
+			.hot-city .current a,
+			.hot-city .gps a {
+				color: red;
+			}
+			
+			.hot-city .title {
+				margin-left: 1.5%;
+			}
+			
+			.mui-indexed-history {
+				margin-bottom: 0;
+			}
+			
+			.map {
+				display: none;
+			}
+			.remove{
+				float: right;
+				margin-right: 5.5%;
 			}
 		</style>
 	</head>
@@ -52,10 +83,11 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">选择城市</h1>
 		</header>
+		<div id="map" class="map"></div>
 		<div class="mui-content">
 			<div id='list' class="mui-indexed-list">
 				<div class="mui-indexed-list-search mui-input-row mui-search">
-					<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索城市">
+					<input type="search" id="searchName" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索城市">
 				</div>
 				<div class="mui-indexed-list-bar">
 					<a>A</a>
@@ -86,18 +118,37 @@
 					<a>Z</a>
 				</div>
 				<div class="mui-indexed-list-alert"></div>
-				<div class="mui-indexed-list-inner">
+				<div class="mui-indexed-list-inner" v-cloak>
 					<div class="mui-indexed-list-empty-alert">没有数据</div>
 					<ul class="mui-table-view">
-						<div class="hot-city box box-fw" style="visibility: hidden;">
-							<div class="ub-f1 li" v-for="hot in hotCity">
+						<div class="hot-city mui-indexed-curr cl" v-if="currentCity">
+							<p class="title">当前定位</p>
+							<div class="ub-f1 li gps" id="gps">
+								<a>定位中</a>
+							</div>
+							<div class="ub-f1 li current" @click="choose(currentCity.cityCode,currentCity.cityName)" id="current">
+								<a>{{currentCity.cityName}}</a>
+							</div>
+						</div>
+						<div class="hot-city mui-indexed-history cl" v-if="hotelHistory.length>0">
+							<p class="title">
+								历史记录
+								<span class="remove" @click="remove">清除记录</span>
+							</p>
+							<div class="ub-f1 li" v-for="his in hotelHistory" @click="choose(his.cityCode,his.cityName)">
+								<a class="ut-s">{{his.cityName}}</a>
+							</div>
+						</div>
+						<div class="hot-city mui-indexed-hot cl" id="hotCity">
+							<p class="title">热门城市</p>
+							<div class="ub-f1 li" v-for="hot in hotelHotCity" @click="choose(hot.cityCode,hot.cityName)">
 								<a>{{hot.cityName}}</a>
 							</div>
 						</div>
 						<template v-for="(key, val) in hotelData">
 							<li v-bind:data-group="val" class="mui-table-view-divider mui-indexed-list-group">{{val}}</li>
 							<template v-for="(item, index) in key">
-								<li v-bind:data-value="item.cityCode" v-bind:data-city="item.cityName" class="city mui-table-view-cell mui-indexed-list-item">{{item.cityName}}</li>
+								<li v-bind:data-city="item.cityCode" v-bind:data-pinyinname="item.cityPinYin" v-bind:data-city="item.cityName" class="city mui-table-view-cell mui-indexed-list-item" @click="choose(item.cityCode,item.cityName)">{{item.cityName}}</li>
 							</template>
 						</template>
 					</ul>
@@ -105,10 +156,16 @@
 			</div>
 		</div>
 		<script src="../../js/mui/mui.min.js"></script>
-		<script src="../../js/mui/mui.indexedlist2.js"></script>
+		<script src="../../js/mui/mui.indexedlist.js"></script>
 		<script src="js/myHotelData.js"></script>
 		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/layer/layer.js"></script>
+		<script src="../../js/global.js"></script>
 		<script type="text/javascript" charset="utf-8">
+			layer.open({
+				type: 2,
+				content: '加载中'
+			});
 			mui.init();
 			mui.ready(function() {
 				var header = document.querySelector('header.mui-bar');
@@ -119,7 +176,7 @@
 				window.indexedList = new mui.IndexedList(list);
 			});
 
-			var hotCityArr = [{
+			var hotelHotCityArr = [{
 				"cityCode": "PEK",
 				"cityName": "北京",
 			}, {
@@ -283,14 +340,133 @@
 				}
 			}
 
-			console.log(hotelDataList);
+			var currentCity = {
+				cityCode: 'CAN',
+				cityName: '广州'
+			}
+
+			var map, geolocation;
+			//加载地图，调用浏览器定位服务
+			if(AMap) {
+				map = new AMap.Map('map', {
+					resizeEnable: true
+				});
+				map.plugin('AMap.Geolocation', function() {
+					geolocation = new AMap.Geolocation({
+						enableHighAccuracy: true, //是否使用高精度定位，默认:true
+						timeout: 10000, //超过10秒后停止定位，默认：无穷大
+						buttonOffset: new AMap.Pixel(10, 20), //定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+						zoomToAccuracy: true, //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+						buttonPosition: 'RB'
+					});
+					map.addControl(geolocation);
+					geolocation.getCurrentPosition();
+					AMap.event.addListener(geolocation, 'complete', onComplete); //返回定位信息
+					AMap.event.addListener(geolocation, 'error', onError); //返回定位出错信息
+				});
+			}else{
+				layer.closeAll();
+			}
+
+			//解析定位结果		
+			function onComplete(data) {
+				document.getElementById("gps").style.display = 'none';
+				document.getElementById("current").style.display = 'block';
+				var currentCity = data.addressComponent.city;
+				if(currentCity.substring(currentCity.length - 1, currentCity.length) == "市" && currentCity.substring(currentCity.length - 2, currentCity.length - 1) != "市") {
+					currentCity = currentCity.substring(0, currentCity.length - 1);
+				}
+				var currFlag = false;
+				var iCityCode;
+				for(var i = 0; i < myHotelData.length; i++) {
+					if(myHotelData[i].cityName.indexOf(currentCity) > -1) {
+						currFlag = true;
+						iCityCode = myHotelData[i].cityCode
+					}
+				}
+				if(currFlag) {
+					document.getElementById("current").children[0].innerText = currentCity;
+					currentCity.cityCode = iCityCode;
+					currentCity.cityName = currentCity;
+				} else {
+					mui.toast('地址解析失败，返回默认城市');
+					currentCity.cityCode = 'CAN';
+					currentCity.cityName = '广州';
+				}
+
+			}
+			//解析定位错误信息
+			function onError(data) {
+				mui.toast('定位失败，返回默认城市');
+				document.getElementById("gps").style.display = 'none';
+				document.getElementById("current").style.display = 'block';
+				currentCity.cityCode = 'CAN';
+				currentCity.cityName = '广州';
+			}
+
+			var hotelHistoryCityArr = localGetItem("hotelHistoryCity");
+			if(hotelHistoryCityArr) {
+				hotelHistoryCityArr = JSON.parse(hotelHistoryCityArr);
+			} else {
+				hotelHistoryCityArr = [];
+			}
 
 			var app = new Vue({
 				el: "#list",
 				data: {
 					hotelData: hotelDataList,
-					hotCity: hotCityArr
+					hotelHotCity: hotelHotCityArr,
+					hotelHistory: hotelHistoryCityArr,
+					currentCity: currentCity
+				},
+				methods: {
+					choose: function(code, name) {
+						var  appHotelHistory = this.hotelHistory;
+						if(code) {
+							localSetItem('chooseHotelCode', code);
+							localSetItem('chooseHotelName', name);
+							if(appHotelHistory.length > 0) {
+								var selected = {};
+								var flag = false;
+								for(var i = 0; i < appHotelHistory.length; i++) {
+									if(appHotelHistory[i].cityCode == code) {
+										flag = false;
+										mui.back();
+										return;
+									} else {
+										selected.cityCode = code;
+										selected.cityName = name;
+										flag = true;
+									}
+								}
+								if(flag) {
+									appHotelHistory.push(selected);
+									localSetItem('hotelHistoryCity', JSON.stringify(appHotelHistory));
+								}
+
+							} else {
+								appHotelHistory.push({
+									cityCode: code,
+									cityName: name
+								});
+								localSetItem('hotelHistoryCity', JSON.stringify(appHotelHistory));
+							}
+							mui.back();
+
+						} else {
+							mui.toast('选择城市失败');
+						}
+
+					},
+					remove:function(){
+						this.hotelHistory = [];
+						localRemoveItem("hotelHistoryCity");
+					}
 				}
+			});
+
+			app.$nextTick(function() {
+				layer.closeAll();
 			})
 		</script>
 	</body>
