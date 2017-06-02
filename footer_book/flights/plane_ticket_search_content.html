@@ -206,11 +206,34 @@
 					$("#startDate .con .date").text(NYR(val, 2));
 					$("#startDate .con .week").text(NYR(val, 3));
 					$("#startDateHidden").val(val);
+					
+					var myEndDate = new Date($("#endDateHidden").val()).getTime();
+			        var mystartDate = new Date(val).getTime();
+			        
+		        	if((mystartDate - myEndDate) > 0) {
+						$("#endDate .con .date").text(NYR(val, 2));
+						$("#endDate .con .week").text(NYR(val, 3));
+						$("#endDateHidden").val(val);
+					}
+		        	endDateChangeMobiscroll(val);
 				}
 			});
-			//结束日期控件绑定
+			
+			endDateChangeMobiscroll(myDate);
+		}
+		
+		//结束日期控件绑定
+		function endDateChangeMobiscroll(mindate, maxDate) {
+			if(!mindate) {
+				mindate = new Date();
+			}
+			var year = NYR(new Date(),4)*1+1;
+			if(!maxDate) {
+				maxDate = new Date(year,11,31,23,59);
+			}
 			endDateMobiscroll = $("#endDate").mobiscroll().calendar({
-				min: myDate,
+				min: new Date(mindate),
+				max: new Date(maxDate),
 				dateFormat: 'yy-mm-dd',
 				onSet: function(val, obj) {
 					val = val.valueText;
@@ -218,10 +241,7 @@
 					$("#endDate .con .week").text(NYR(val, 3));
 					$("#endDateHidden").val(val);
 				}
-			})
-			if(applys){
-			    getApply();
-            }
+			});
 		}
 
 		function getApply() {
@@ -404,7 +424,7 @@
 			var arr = '';
 			$("#shipping li.active").each(function(k, v) {
 				arr += $(this).data("val") + ',';
-			});console.log(arr);
+			});
 			return arr;
 		}
 
@@ -427,14 +447,17 @@
 			appcan.locStorage.setVal("flightToCityNode", from.node);
 		});
 		
-		//begin 出发日期
-		//end 返回日期
-		//airDate 查询航班的日期
+		//return 是否往返
+		//returnFlight 往返状态
+		//airDate 查询航班的日期(出发日期)
+		//backAirDate 回程日期
 		//flightSiteType 舱位类型
 		//openFlightSearchResult 是否打开了查询航班页面
 		
 		//查询机票
 		function searchPlane() {
+			appcan.locStorage.setVal("return", $(".switch").attr("data-checked"));
+            appcan.locStorage.setVal("returnFlight",0);
 			appcan.locStorage.setVal("begin", mySelect.begin);
 			appcan.locStorage.setVal("end", mySelect.end);
 			appcan.locStorage.setVal("airDate", $("#startDateHidden").val());
@@ -442,9 +465,17 @@
 			appcan.locStorage.setVal("openFlightSearchResult", "true");
 			appcan.locStorage.setVal("itineraryId", mySelect.id);
 			appcan.locStorage.setVal("expId", mySelect.id);
-			//appcan.window.open("plane_ticket_searchresult", "plane_ticket_searchresult.html", 2);
-			window.location.href = 'plane_ticket_searchresult_content.html';
-			closeMobiscroll();
+            if($(".switch").attr("data-checked")=="true"){
+                appcan.locStorage.setVal("backAirDate", $("#endDateHidden").val());
+            }
+            
+            if(appcan.locStorage.getVal("flightFromCityNode")!=appcan.locStorage.getVal("flightToCityNode")){
+				closeMobiscroll();
+				window.location.href = 'plane_ticket_searchresult_content.html';
+			}else{
+				alert('始发地和目的地不能相同，请重新选择。');
+				return false;
+			}
 		}
 	</script>
 

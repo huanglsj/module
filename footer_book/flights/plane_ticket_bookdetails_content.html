@@ -53,7 +53,10 @@
 			</div>
 			<!-- 顶部栏  -->
 			<div class="conten ub-f1 longlist">
-				<div class="Order_data">
+				<div class="Order_data" style="height: auto;">
+	                <div style="padding: 0.5rem 1rem">
+	                	<span v-if="flightDetail[1]" v-cloak>往：</span><span id="f0_Date"></span>
+	                </div>
 					<div class="Order_data_noe">
 						<div class="Order_time">
 							<div class="Order_StarTime">
@@ -78,6 +81,34 @@
 							<img id="flightLogo" />
 						</div>
 					</div>
+	                <div v-if="flightDetail[1]" style="height: 2px;background-color: #fff;margin: 0.5rem 1rem;"></div>
+	                <div style="padding: 0.5rem 1rem" v-if="flightDetail[1]" v-cloak>
+	                	<span>返：</span><span>{{backAirDate}}</span>
+	                </div>
+	                <div class="Order_data_noe" v-if="flightDetail[1]" v-cloak>
+                        <div class="Order_time">
+                            <div class="Order_StarTime">
+                            	<div>{{flightDetail[1].myDepDate}}</div>
+                            </div>
+                            <div class="Order_EndTime">
+                            	<div>{{flightDetail[1].myArrDate}}</div>
+                            </div>
+                        </div>
+                        <!-- 圈 -->
+                        <div class="progress_quan">
+                            <div class="progress_quan_noe"></div>
+                            <div class="progress_quan_two"></div>
+                            <div class="progress_quan_three"></div>
+                        </div>
+                        <div class="Order_address">
+                            <div class="Star_address">{{flightDetail[1].fromName}}</div>
+                            <div class="End_address">{{flightDetail[1].toName}}</div>
+                        </div>
+                        <div class="provenance">
+                            <div>{{flightDetail[1].carrier}}{{flightDetail[1].flightNo}}</div>
+                            <img v-bind:src="flightDetail[1].logo"/>
+                        </div>
+                    </div>
 					<!-- <div class="progress_stay">
                                            <div class="progress_time">停12h22m</div>
                                            <div class="progress_quans">
@@ -123,9 +154,15 @@
 					<div class="ub ub-ver">
 						<div class="ub-f1">成人票价</div>
 						<div class="ub-f1">
-							<span>￥</span>
-							<span id="price">---</span>
+	                       <span v-if="flightDetail[1]">往：</span>
+	                       <span>￥</span>
+	                       <span id="price">---</span>
 						</div>
+	                   <div class="ub-f1" v-cloak v-if="flightDetail[1]">
+	                       <span v-if="flightDetail[1]">返：</span>
+	                       <span>￥</span>
+	                       <span>{{backSeatDetail.price}}</span>
+	                   </div>
 					</div>
 					<div class="ub ub-ver">
 						<div class="ub-f1">儿童票价</div>
@@ -137,9 +174,15 @@
 					<div class="ub ub-ver">
 						<div class="ub-f1">机建+燃油</div>
 						<div class="ub-f1">
+	                       <span v-if="flightDetail[1]">往：</span>
 							<span>￥</span>
 							<span id="tax">---</span>
 						</div>
+	                   <div class="ub-f1" v-cloak v-if="flightDetail[1]">
+	                       <span v-if="flightDetail[1]">返：</span>
+	                       <span>￥</span>
+	                       <span>{{backSeatDetail.tax}}</span>
+	                   </div>
 					</div>
 				</div>
 				<div class="Refund_instructions">

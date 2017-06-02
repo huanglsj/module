@@ -10,8 +10,8 @@ if(appcan.locStorage.getVal("testUser")=="true"){
     // httpHost = "http://219.137.228.109:7070/";
     // httpHost = "http://192.168.8.81:8081/";
     //httpHost = 'http://112.74.137.212/';
-      httpHost = "http://192.168.8.124:8081/";
-//    httpHost = "http://192.168.8.54:8081/";
+//    httpHost = "http://192.168.8.124:8081/";
+      httpHost = "http://192.168.8.54:8081/";
 }
 var domainName = '';
 var appId = '';

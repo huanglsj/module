@@ -9,12 +9,16 @@ var app, count = 1,
 	arriveHour = 0,
 	arriveMinute = 0,
 	priceObj = null;
+
+var flightFromCity = appcan.locStorage.getVal("flightFromCity");
+var flightToCity = appcan.locStorage.getVal("flightToCity");
+
 $(function() {
 //	$("#vueEl").offset({
 //		top: $("#header").height(),
 //	})
-	$("#depPlane").html(appcan.locStorage.getVal("flightFromCity"));
-	$("#arrPlane").html(appcan.locStorage.getVal("flightToCity"));
+	$("#depPlane").html(flightFromCity);
+	$("#arrPlane").html(flightToCity);
 	//vue初始化
 	app = new Vue({
 		el: "#vueEl",
@@ -28,6 +32,9 @@ $(function() {
 //				"chose": true
 //			}
 			],
+			flightDetail: [],
+			backAirDate: '',
+			backSeatDetail: {},
 			chosedNum: 0,
 			price: 0,
 			tax: 0,
@@ -56,7 +63,12 @@ $(function() {
 			}
 		},
 		created: function() {
-			var pasList = appcan.locStorage.getVal('passengersList');
+			var pasList = '';
+			if(appcan.locStorage.getVal("return")=='true'&&appcan.locStorage.getVal("returnFlight")==1){
+				pasList = appcan.locStorage.getVal('backPassengersList');
+			}else{
+				pasList = appcan.locStorage.getVal('passengersList');
+			}
 			this.passengers = pasList==null?[]:JSON.parse(pasList);
 		}
 	});
@@ -97,69 +109,90 @@ $(function() {
 	departMinute = Number(flightDetail.depDate.minutes) < 10 ? "0" + flightDetail.depDate.minutes : flightDetail.depDate.minutes;
 	arriveHour = Number(flightDetail.arrDate.hours) < 10 ? "0" + flightDetail.arrDate.hours : flightDetail.arrDate.hours;
 	arriveMinute = Number(flightDetail.arrDate.minutes) < 10 ? "0" + flightDetail.arrDate.minutes : flightDetail.arrDate.minutes;
+	$("#f0_Date").text(appcan.locStorage.getVal("airDate"));
 	$("#departTime").text(departHour + ":" + departMinute); //出发时间
 	$("#arriveTime").text(arriveHour + ":" + arriveMinute); //到达时间
 	appcan.locStorage.setVal("flightDetail", flightDetail);
 	appcan.locStorage.setVal("seatDetail", seatDetail);
+
+	$("#price").text(seatDetail.price);
+	app.price = Number(seatDetail.price);
+	$("#cprice").text("---"); //儿童票价
+	$("#tax").text(Number(flightDetail.tax) + Number(flightDetail.yq));//税费
+	app.tax = Number(flightDetail.tax) + Number(flightDetail.yq);
+	
+	app.flightDetail[0] = flightDetail;
+	backFlightDetail = JSON.parse(appcan.locStorage.getVal("backFlightDetail")); //选择的航班信息
+	backSeatDetail = JSON.parse(appcan.locStorage.getVal("backSeatDetail")); //选择的座位信息
+	if(appcan.locStorage.getVal("returnFlight") == 1) {
+		app.flightDetail[1] = backFlightDetail;
+		app.backSeatDetail = backSeatDetail;
+		app.backAirDate = appcan.locStorage.getVal("backAirDate");
+		if(app.flightDetail[1]) {
+			app.tax += Number(app.flightDetail[1].tax) + Number(app.flightDetail[1].yq);
+			app.price += Number(app.backSeatDetail.price);
+		}
+	}
 	
 	//验价
-	addMask('../../img/loading.gif', 'loading......');
-	$.ajax({
-		url: httpHost + "flightController.do?checkPriceWithoutPNRModular",
-		data: {
-			"carrier": flightDetail.carrier,
-			"flightNo": flightDetail.flightNo,
-			"classCode": seatDetail.code,
-			"depart": flightDetail.depart,
-			"arrival": flightDetail.arrival,
-			"departDate": appcan.locStorage.getVal("airDate"),
-			"F_price": Number(seatDetail.price),
-			"T_price": Number(flightDetail.tax) + Number(flightDetail.yq),
-			"A_price": Number(seatDetail.price) + Number(flightDetail.tax) + Number(flightDetail.yq),
-		},
-		//beforeSend: addHeader,
-		type: "POST",
-		success: function(data) {
-			var dataJson = data;
-			priceObj = dataJson.obj;
-			console.log(dataJson);
-			
-			removeMask();
-			if(!dataJson.success && dataJson.obj !== null) {
-				for(var i = 0; i < dataJson.obj.items.length; i++) {
-					console.log(dataJson.obj.items[i].type);
-					switch(dataJson.obj.items[i].type) {
-						case "F":
-							seatDetail.price = Number(dataJson.obj.items[i].value);
-							break;
-						case "X":
-							tax = Number(dataJson.obj.items[i].value);
-							break;
-						case "A":
-							break;
-						default:
-							break;
-					}
-				}
-			} else if(!dataJson.obj) {
-				alert('该航班暂时无法预订，请选择其他航班。');
-				window.history.back();
-			}
-			//价格
-			$("#price").text(seatDetail.price);
-			app.price = Number(seatDetail.price);
-			$("#cprice").text("---"); //儿童票价
-			$("#tax").text(Number(flightDetail.tax) + Number(flightDetail.yq));//税费
-			app.tax = Number(flightDetail.tax) + Number(flightDetail.yq);
-		},
-		error: function(err, errMsg, error) {
-			console.log(err, errMsg);
-			removeMask();
-		}
-	});
-	if(appcan.locStorage.getVal("applys") === "true") {
-		getPassenger();
-	}
+//	addMask('../../img/loading.gif', 'loading......');
+//	$.ajax({
+//		url: httpHost + "flightController.do?checkPriceWithoutPNRModular",
+//		data: {
+//			"carrier": flightDetail.carrier,
+//			"flightNo": flightDetail.flightNo,
+//			"classCode": seatDetail.code,
+//			"depart": flightDetail.depart,
+//			"arrival": flightDetail.arrival,
+//			"departDate": appcan.locStorage.getVal("airDate"),
+//			"F_price": Number(seatDetail.price),
+//			"T_price": Number(flightDetail.tax) + Number(flightDetail.yq),
+//			"A_price": Number(seatDetail.price) + Number(flightDetail.tax) + Number(flightDetail.yq),
+//		},
+//		//beforeSend: addHeader,
+//		type: "POST",
+//		success: function(data) {
+//			var dataJson = data;
+//			priceObj = dataJson.obj;
+//			console.log(dataJson);
+//			
+//			removeMask();
+//			if(!dataJson.success && dataJson.obj !== null) {
+//				for(var i = 0; i < dataJson.obj.items.length; i++) {
+//					console.log(dataJson.obj.items[i].type);
+//					switch(dataJson.obj.items[i].type) {
+//						case "F":
+//							seatDetail.price = Number(dataJson.obj.items[i].value);
+//							break;
+//						case "X":
+//							tax = Number(dataJson.obj.items[i].value);
+//							break;
+//						case "A":
+//							break;
+//						default:
+//							break;
+//					}
+//				}
+//			} else if(!dataJson.obj) {
+//				alert('该航班暂时无法预订，请选择其他航班。');
+//				window.history.back();
+//			}
+//			//价格
+//			$("#price").text(seatDetail.price);
+//			app.price = Number(seatDetail.price);
+//			$("#cprice").text("---"); //儿童票价
+//			$("#tax").text(Number(flightDetail.tax) + Number(flightDetail.yq));//税费
+//			app.tax = Number(flightDetail.tax) + Number(flightDetail.yq);
+//		},
+//		error: function(err, errMsg, error) {
+//			console.log(err, errMsg);
+//			removeMask();
+//		}
+//	});
+//	if(appcan.locStorage.getVal("applys") === "true") {
+//		getPassenger();
+//	}
+
 }); //ready结束
 
 //通讯录选择回调
@@ -231,7 +264,12 @@ function addpas_add(){
 			}
 		}
 		app.passengers = vuepas.concat(thispas);
-		appcan.locStorage.setVal('passengersList', JSON.stringify(app.passengers));
+		
+		if(appcan.locStorage.getVal("return")=='true'&&appcan.locStorage.getVal("returnFlight")==1){
+			appcan.locStorage.setVal('backPassengersList', JSON.stringify(app.passengers));
+		}else{
+			appcan.locStorage.setVal('passengersList', JSON.stringify(app.passengers));
+		}
 		
 		addpas_hide();
 	}
@@ -377,18 +415,25 @@ function submitOrder(reason) {
 		return false;
 	}
 	
-	airlines[0] = {
-		id: "123",
-		carrier: flightDetail.carrier,
-		flightNo: flightDetail.flightNo,
-		classCode: seatDetail.code,
-		departDate: appcan.locStorage.getVal("airDate"),
-		departTime: flightDetail.myDepDate,
-		departCode: flightDetail.depart,
-		arrivalCode: flightDetail.arrival,
-		arriveDate: NYR(new Date(flightDetail.arrDate.time), 1),
-		arriveTime: flightDetail.myArrDate + ":00",
-	};
+	for(var n = 0; n < app.flightDetail.length; n++) {
+		airlines[n] = {
+			carrier: app.flightDetail[n].carrier,
+			flightNo: app.flightDetail[n].flightNo,
+			classCode: n == 0 ? seatDetail.code : app.backSeatDetail.code,
+			departDate: n == 0 ? appcan.locStorage.getVal("airDate") : appcan.locStorage.getVal("backAirDate"),
+			departTime: app.flightDetail[n].myDepDate,
+			departCode: app.flightDetail[n].depart,
+			arrivalCode: app.flightDetail[n].arrival,
+			arriveDate: NYR(new Date(app.flightDetail[n].arrDate.time), 1),
+			arriveTime: app.flightDetail[n].myArrDate + ":00",
+		};
+		if(n===0){
+			prices.push(seatDetail.priceObj);
+		}
+		else{
+			prices.push(app.backSeatDetail.priceObj);
+		}
+	}
 
 	var subData = {
 		telephone: mobile,
@@ -399,46 +444,9 @@ function submitOrder(reason) {
 		limitTime: "",
 		al: (JSON.stringify(airlines)).replace(/\"/g, "'")
 	};
-	
-	//机票订单信息
-	var flightFromCity = appcan.locStorage.getVal("flightFromCity");
-	var flightToCity = appcan.locStorage.getVal("flightToCity");
-//	var subData = {
-//		itineraryId: appcan.locStorage.getVal("itineraryId"),
-//		telephone: mobile,
-//		fTotalPrice: parseFloat(app.price + app.tax) * app.chosedNum,
-//		passengers: passengers,
-//		limitDate: "",
-//		limitTime: "",
-//		fCityName: flightFromCity,
-//		tCityName: flightToCity,
-//		arrTime: NYR(new Date(flightDetail.arrDate.time), 1) + " " + HM(new Date(flightDetail.arrDate.time)) + ":00",
-//		depAirportName: flightDetail.fromName,
-//		arrAirportName: flightDetail.toName,
-//		al: {
-//			id: "",
-//			carrier: flightDetail.carrier,
-//			flightNo: flightDetail.flightNo,
-//			classCode: seatDetail.code,
-//			departDate: appcan.locStorage.getVal("airDate"),
-//			departTime: departHour + ":" + departMinute,
-//			departCode: flightDetail.depart,
-//			arrivalCode: flightDetail.arrival,
-//
-//		},
-//		form: {
-//			params: {
-//				isMinPrice: appcan.locStorage.getVal("isMinPrice") || (reason === undefined),
-//				reason: reason,
-//				stop: flightDetail.stop == 0 ? false : true,
-//				date: NYR(appcan.locStorage.getVal("airDate"), 1),
-//				isMinFlightTime: appcan.locStorage.getVal("isMinFlightTime"),
-//				refund: seatDetail.ei ? false : true,
-//				change: seatDetail.ei ? false : true
-//			},
-//		}
-//	};
 	console.log(subData);
+	
+	addMask('../../img/loading.gif', 'loading......');
 	$.ajax({
 		url: httpHost + 'flightController.do?planeBookModular',
 		type: 'POST',
@@ -448,34 +456,56 @@ function submitOrder(reason) {
 			var objson = data;
 			console.log(data);
 			
+			removeMask();
 			if(objson.success) {
-				var flightOrderDetail = {
-					"price": (app.price + app.tax) * app.chosedNum,
-					"passengers": passengers,
-					"departStation": appcan.locStorage.getVal("flightFromCity"),
-					"departTime": subData.al.departTime,
-					"arriveStation": appcan.locStorage.getVal("flightToCity"),
-					"arriveTime": flightDetail.arrDate.hours + ":" + flightDetail.arrDate.minutes,
-					"date": subData.al.departDate,
-					"flightNo": subData.al.flightNo,
-					"phone": subData.telephone,
-					"PNR": objson.obj.PNR,
-				};
+//				for(var j=0; j<data.obj.length; j++){
+//				  	if(j===0){
+//				  		orderIds = data.obj[0].orderId;
+//				  	}
+//				  	else{
+//				  		orderIds = orderIds+","+data.obj[j].orderId;
+//				  	}
+//	  			}
+//				var flightOrderDetail = {
+//					"price": (app.price + app.tax) * app.chosedNum,
+//					"passengers": passengers,
+//					"departStation": appcan.locStorage.getVal("flightFromCity"),
+//					"departTime": subData.al.departTime,
+//					"arriveStation": appcan.locStorage.getVal("flightToCity"),
+//					"arriveTime": flightDetail.arrDate.hours + ":" + flightDetail.arrDate.minutes,
+//					"date": subData.al.departDate,
+//					"flightNo": subData.al.flightNo,
+//					"phone": subData.telephone,
+//					"PNR": objson.obj.PNR,
+//				};
+				var flightOrderDetail = [];
+				var singlePrice = (seatDetail.price+flightDetail.tax+flightDetail.yq)*app.chosedNum;
+				var backPrice = '';
+				if(appcan.locStorage.getVal("returnFlight") == 1) {
+					backPrice = (backSeatDetail.price+backFlightDetail.tax+backFlightDetail.yq)*app.chosedNum;
+				}
+				for(var f=0; f<app.flightDetail.length; f++) {
+					flightOrderDetail[f] = {
+						"price": f==0?singlePrice:backPrice,
+						"passengers": passengers,
+						"departStation": f==0?flightFromCity:flightToCity,
+						"departTime": app.flightDetail[f].myDepDate,
+						"arriveStation": f==0?flightToCity:flightFromCity,
+						"arriveTime": app.flightDetail[f].myArrDate,
+						"date": f==0?appcan.locStorage.getVal("airDate"):appcan.locStorage.getVal("backAirDate"),
+						"flightNo": app.flightDetail[f].carrier+''+app.flightDetail[f].flightNo,
+						"phone": mobile,
+						"pnr": objson.obj[f].order.pnr,
+						"orderNo": objson.obj[f].order.orderNo
+					};
+				}
+				
 				appcan.locStorage.setVal("flightOrderDetail", flightOrderDetail);
+//				appcan.locStorage.setVal('myOrderId', orderIds);
 				
-				for(var j=0; j<data.obj.length; j++){
-  				  	if(j===0){
-  				  		orderIds = data.obj[0].orderId;
-  				  	}
-  				  	else{
-  				  		orderIds = orderIds+","+data.obj[j].orderId;
-  				  	}
-	  			}
-				appcan.locStorage.setVal('myOrderId', orderIds);
-				
-				//window.history.replaceState(null, null, '../../commonHtml/orderDetails_content.html');
+				alert(objson.msg);
 				window.history.replaceState(null, null, 'order_success_content.html');
-            	//location.reload();
+              	location.reload();
             	
 				/*appcan.window.confirm({
 				  title:'提示',
@@ -495,13 +525,14 @@ function submitOrder(reason) {
 				  }
 				});*/
 			} else if(objson.success == false && objson.isRuleCheckResult == "true") {
-				ticketReason(objson.msg, subTicket);
+				//ticketReason(objson.msg, subTicket);
 			} else {
 				alert(objson.msg);
 			}
 		},
 		error: function(err, errMsg, error) {
-			console.log('网络请求异常，请重新提交。');
+			alert('网络请求异常，请重新提交。');
+			removeMask();
 		}
 	});
 }

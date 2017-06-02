@@ -1,7 +1,28 @@
 var httpHost = 'http://192.168.8.124:8081/';
-//var skin = 'green';
-//document.getElementById("changeSkin").href="/module/css/skin/skin-" + skin + ".css";
+localSetItem("changeSkin", 'green');
+var changeSkin = localGetItem("changeSkin");
 
+if(!changeSkin) {
+	changeLink('blue');
+} else {
+	changeLink(changeSkin);
+}
+
+//更改默认皮肤
+function changeLink(skin){
+	var link = document.getElementsByTagName("link");
+	for(var i=0;i<link.length;i++){
+		var linkTitle = link[i].title;
+		if(linkTitle){
+			if(skin==linkTitle){
+				link[i].removeAttribute("disabled");
+			}else{
+				link[i].setAttribute("disabled","disabled");
+			}
+		}
+		
+	}
+}
 
 //获取对象属性值 
 function getPropKey(obj) {
@@ -23,12 +44,21 @@ function getProp(obj) {
 	}
 	return names;
 }
+
 //判断变量是否存在，不为空，不是未定义，不是null
 function isDefine(para) {
-	if(typeof para == 'undefined' || $.trim(para) == "" || para == "[]" || para == null || para == undefined || para == 'undefined' || para == '[]' || para == "null")
+	if(typeof para == 'undefined' || para == "[]" || para == null || para == undefined || para == 'undefined' || para == '[]' || para == "null")
 		return false;
 	else
 		return true;
+}
+
+function trim(str) {
+	return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
+function delMarks(str) {
+	return str.replace(/(\")/g, "\\\"");;
 }
 //获取或格式化日期
 //flag 无值：返回2016年07月13日
@@ -214,4 +244,28 @@ function localRemoveItem(key) {
 
 function localRemoveAll() {
 	window.localStorage.clear();
+}
+
+//验证身份证
+function isIDCard(str) {
+	//身份证正则表达式(15位)
+	var isIDCard1 = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$/;
+	//身份证正则表达式(18位)
+	var isIDCard2 = /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/;
+
+	if(!isIDCard1.test(str) && !isIDCard2.test(str)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+//验证手机
+function isPhoneNumber(str) {
+	var isPhoneNumber = /^0?1[3|4|5|7|8]\d{9}$/;
+	if(!isPhoneNumber.test(str)) {
+		return false;
+	} else {
+		return true;
+	}
 }

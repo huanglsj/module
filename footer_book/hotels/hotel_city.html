@@ -1,85 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
 
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>选择城市</title>
-		<link href="../../css/ui-base.css" rel="stylesheet" />
 		<link href="../../css/ui-box.css" rel="stylesheet" />
 		<link href="../../css/mui/mui.min.css" rel="stylesheet" />
 		<link href="../../css/mui/mui.indexedlist.css" rel="stylesheet" />
-		<script type="text/javascript" src="../../js/setSkin.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/hotel_city.css"/>
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+        <link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+        <script src="../../js/global.js"></script>
 		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=c9c9b2b402afe3efd3ee0134f3e2b77e"></script>
-		<style>
-			html,
-			body {
-				height: 100%;
-				overflow: hidden;
-			}
-			
-			.mui-bar {
-				-webkit-box-shadow: none;
-				box-shadow: none;
-			}
-			
-			.header-bg a,
-			.header-bg .mui-title {
-				color: #fff;
-			}
-			
-			.hot-city {
-				margin-right: 23px;
-				margin-bottom: 10px;
-				padding-top: 10px;
-			}
-			
-			.hot-city .li {
-				width: 22%;
-				text-align: center;
-				margin: 1.5%;
-				float: left;
-			}
-			
-			.hot-city .li a {
-				border: 1px solid #ddd;
-				display: block;
-				padding: 6px;
-				border-radius: 6px;
-				color: #000;
-			}
-			
-			.hot-city .current {
-				display: none;
-				width: auto;
-				min-width: 22%;
-			}
-			
-			.hot-city .current a,
-			.hot-city .gps a {
-				color: red;
-			}
-			
-			.hot-city .title {
-				margin-left: 1.5%;
-			}
-			
-			.mui-indexed-history {
-				margin-bottom: 0;
-			}
-			
-			.map {
-				display: none;
-			}
-			.remove{
-				float: right;
-				margin-right: 5.5%;
-			}
-		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav header-bg">
+		<header class="mui-bar mui-bar-nav deep-bg">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">选择城市</h1>
 		</header>
@@ -90,32 +27,7 @@
 					<input type="search" id="searchName" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索城市">
 				</div>
 				<div class="mui-indexed-list-bar">
-					<a>A</a>
-					<a>B</a>
-					<a>C</a>
-					<a>D</a>
-					<a>E</a>
-					<a>F</a>
-					<a>G</a>
-					<a>H</a>
-					<a>I</a>
-					<a>J</a>
-					<a>K</a>
-					<a>L</a>
-					<a>M</a>
-					<a>N</a>
-					<a>O</a>
-					<a>P</a>
-					<a>Q</a>
-					<a>R</a>
-					<a>S</a>
-					<a>T</a>
-					<a>U</a>
-					<a>V</a>
-					<a>W</a>
-					<a>X</a>
-					<a>Y</a>
-					<a>Z</a>
+					<a v-for="(c,index) in hotelData">{{index}}</a>
 				</div>
 				<div class="mui-indexed-list-alert"></div>
 				<div class="mui-indexed-list-inner" v-cloak>
@@ -159,8 +71,7 @@
 		<script src="../../js/mui/mui.indexedlist.js"></script>
 		<script src="js/myHotelData.js"></script>
 		<script src="../../js/vue.min.js"></script>
-		<script src="../../js/layer/layer.js"></script>
-		<script src="../../js/global.js"></script>
+		<script src="../../js/layer/layer.js"></script>		
 		<script type="text/javascript" charset="utf-8">
 			layer.open({
 				type: 2,
@@ -423,8 +334,8 @@
 					choose: function(code, name) {
 						var  appHotelHistory = this.hotelHistory;
 						if(code) {
-							localSetItem('chooseHotelCode', code);
-							localSetItem('chooseHotelName', name);
+							localSetItem('hotelChooseCode', code);
+							localSetItem('hotelChooseName', name);
 							if(appHotelHistory.length > 0) {
 								var selected = {};
 								var flag = false;

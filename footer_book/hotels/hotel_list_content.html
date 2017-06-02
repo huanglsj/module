@@ -2,48 +2,37 @@
 <html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
 
 	<head>
-		<title></title>
+		<title>酒店列表</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="../../css/ui-box.css">
-		<link rel="stylesheet" href="../../css/ui-base.css">
-		<link rel="stylesheet" href="../../css/appcan.control.css">
-		<link rel="stylesheet" href="../../css/main.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />		
 		<link rel="stylesheet" href="css/hotel_list.css">
-		<script type="text/javascript" src="../../js/setSkin.js"></script>
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" >
+        <link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+        <script src="../../js/global.js"></script>
 	</head>
 
 	<body class="um-vp bc-bg" ontouchstart>
-		<div id="header">
-			<div class="uh bc-text-head ub header-bg" id="title">
-				<div class="nav-btn back mui-action-back" id="nav-left">
-					<div class="ub-img user-icon-goback umw1-5 umh4"></div>
-				</div>
-				<h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">酒店列表</h1>
-				<a href="tel:02086132900" class="nav-btn nav-bt icon-act" id="nav-right">
-					<div class="ub-img user-icon-phone umw1-5 umh4"></div>
-				</a>
-			</div>
-			<div class="list-header ub ub-ac my-footer" id="subTitle">
-				<img src="img/hotel_img.png" class="ub ub-ac hotel-img">
-				<span class="ub ub-ac list-font">酒店</span>
-			</div>
-		</div>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">酒店列表</h1>
+			<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
+		</header>
 		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
 			<div class="mui-scroll">
 				<div id="hotelList" v-cloak>
-					<div class="hotel_show" v-for="item in items" v-on:click="hotelDetail(item.hotelCode)">
-						<div style="width:100%;" class="swipe">
+					<div class="hotel_show" v-for="item in items" v-on:tap="hotelDetail(item.hotelCode)">
+						<div class="swipe">
 							<div class="swipe-wrap">
 								<img class="ub ub-img7 umar-at1" v-bind:src="item.mainImageUrl" />
-								<div class="hotel-price ub ub-ver ub-ac">
+								<div class="hotel-price ub ub-ver ub-ac ub-pc">
 									<div class="ub ub-ac">最低价</div>
 									<img class="ub ub-ac line-img" src="img/line.png" />
 									<div class="ub ub-ac">￥ {{item.minRate}}</div>
 								</div>
 							</div>
-							<div class="hotel-name">{{item.hotelName}}</div>
+							<div class="hotel-name deep-text">{{item.hotelName}}</div>
 							<div class="ub ub-ac address">{{item.address}}</div>
 						</div>
 					</div>
@@ -53,7 +42,7 @@
 	</body>
 	<script src="../../js/mui/mui.min.js"></script>
 	<script src="../../js/vue.min.js"></script>
-	<script src="../../js/global.js"></script>
+	<script src="../../js/vue.tap.js"></script>	
 	<script>
 		var app = new Vue({
 			el: '#hotelList',
@@ -62,37 +51,20 @@
 			},
 			methods: {
 				hotelDetail: function(id) {
-					localGetItem("hotelCode", id);
-					mui.openWindow({
-						url: 'hotel_details_content.html',
-						id: 'hotel_details_content',
-						extras: {},
-						createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-						show: {
-							autoShow: true, //页面loaded事件发生后自动显示，默认为true
-							event: 'titleUpdate', //页面显示时机，默认为titleUpdate事件时显示
-							extras: {} //窗口动画是否使用图片加速
-						},
-						waiting: {
-							autoShow: true, //自动显示等待框，默认为true
-							title: '正在加载...', //等待对话框上显示的提示内容
-						}
-					})
+					if(id) {
+						localSetItem("hotelCode", id);
+						mui.openWindow({
+							url: 'hotel_details_content.html',
+							id: 'hotel_details_content'
+						})
+					} else {
+						mui.alert('获取酒店ID失败');
+					}
+
 				}
 			}
 		});
 
-		var page = 0; //开始页码
-		var pageSize = 10; //每页显示10条
-		var queryHotelData = localGetItem("queryHotelData");
-		if(!queryHotelData) {			
-			mui.alert('参数有误，请重新查询', function() {
-				mui.back();
-			});
-		}
-		
-		queryHotelData = JSON.parse(queryHotelData);
-		
 		mui.init({
 			pullRefresh: {
 				container: '#pullrefresh',
@@ -105,11 +77,32 @@
 			}
 		});
 
+		var page = 0; //开始页码
+		var pageSize = 10; //每页显示10条
+		var hotelQueryData = localGetItem("hotelQueryData");
+		if(!hotelQueryData) {
+			mui.alert('参数有误，请重新查询', function() {
+				mui.back();
+			});
+		} else {
+			hotelQueryData = JSON.parse(hotelQueryData);
+			if(mui.os.plus) {
+				mui.plusReady(function() {
+					setTimeout(function() {
+						mui('#pullrefresh').pullRefresh().pullupLoading();
+					}, 1000);
+
+				});
+			} else {
+				mui.ready(function() {
+					mui('#pullrefresh').pullRefresh().pullupLoading();
+				});
+			}
+		}
+
 		function pulldownRefresh() {
 			page = 1;
 			var type = 0;
-//          mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-            mui('#pullrefresh').pullRefresh().disablePullupToRefresh();
 			hotelList(type);
 		}
 
@@ -119,21 +112,19 @@
 			hotelList(type);
 		}
 
-		
-
 		function hotelList(type) {
 			mui.ajax({
 				url: httpHost + 'hotelController.do?queryHotelListModular',
 				data: {
-					cityCode: queryHotelData.cityCode,
-					bgnDate: queryHotelData.inday,
-					endDate: queryHotelData.outday,
-					keyWord: queryHotelData.keyWord,
-					lPrice: queryHotelData.priceMin,
-					hPrice: queryHotelData.priceMax,
+					cityCode: hotelQueryData.cityCode,
+					bgnDate: hotelQueryData.inday,
+					endDate: hotelQueryData.outday,
+					keyWord: hotelQueryData.keyWord,
+					lPrice: hotelQueryData.priceMin,
+					hPrice: hotelQueryData.priceMax,
 					page: page,
 					pageSize: pageSize,
-					rank: queryHotelData.xingji
+					rank: hotelQueryData.xingji
 				},
 				type: 'post',
 				dataType: 'json',
@@ -142,20 +133,16 @@
 					if(data.success) {
 						var arrData = data.obj;
 						if(arrData) {
-							
-							if(type==0){
-								app.items = [];		
-								mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
+
+							if(type == 0) {
+								app.items = [];
 								mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+								mui('#pullrefresh').pullRefresh().refresh(true);
 							}
-							
-							if(type==1){
-								mui('#pullrefresh').pullRefresh().endPullupToRefresh();
-							}
-							
+
 							for(var i = 0; i < arrData.length; i++) {
 								var mainImageUrl = arrData[i].mainImageUrl;
-								if(!mainImageUrl){
+								if(!mainImageUrl) {
 									mainImageUrl = 'img/noHotalImg.png';
 								}
 								var myItem = {
@@ -167,12 +154,9 @@
 								};
 								app.items.push(myItem);
 							}
-							
-							 mui('#pullrefresh').pullRefresh().endPulldownToRefresh(false);
-							 mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-						}else{
-							mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
-                            mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);							
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+						} else {
+							mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
 							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
 						}
 					} else {
@@ -187,20 +171,6 @@
 				}
 			})
 		}
-
-		if(mui.os.plus) {
-			mui.plusReady(function() {
-				setTimeout(function() {
-					mui('#pullrefresh').pullRefresh().pullupLoading();
-				}, 1000);
-
-			});
-		} else {
-			mui.ready(function() {
-				mui('#pullrefresh').pullRefresh().pullupLoading();
-			});
-		}
-		
 	</script>
 
 </html>

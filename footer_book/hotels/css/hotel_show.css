@@ -1,0 +1,197 @@
+.deep-bg a,
+.deep-bg .mui-title {
+	color: #fff;
+}
+
+#roomCount_dummy{
+    /*width:6rem;*/
+    border:none !important;
+    height: 30px;
+}
+input{
+    background-color: #fff !important;
+    border:none !important;
+}
+.section{
+    background-color:#fff;
+    padding: 10px;
+    border-top:#eae9ee 1px solid;
+}
+.message{
+    color:#9098A3;
+    font-size: 16px;
+}
+.order-detail{
+    display:flex;
+    display:-webkit-flex;
+    margin:0 0 0.75em 0;
+    border-bottom: #eae9ee 1px solid;
+}
+.od-hotel{
+    color:#f7c252;
+    font-size:2em;
+    font-weight: 900;
+}
+#orderId{
+    margin-top:0.75em;
+    color:#3B69A4;
+    font-weight: 900
+}
+#order{
+    color:#fff;
+    height:100%;
+    width:30%;
+}
+#footer{
+    /*border-top:2px solid #EAE9EE;
+    background-color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    min-height: 2rem;*/
+}
+#price{
+    color:red;
+    font-weight: bold;
+}
+.hotel-detail{
+    margin-bottom:15px;
+    border-bottom: #eae9ee 1px solid;
+}
+.hotel-detail .red{
+	color: red;
+	font-weight: bold;
+	font-size: 16px;
+}
+.hd-hotel{
+    font-size:20px;
+    margin-bottom: 0.25em;
+}
+.hd-date{
+    margin:0.5em 0 0.5em 0;
+    font-size: 14px;
+}
+.guest-detail{
+    background-color:#FFF;
+    margin-bottom: 15px;
+}
+.gd-room{
+    border-bottom:#D7DAE1 1px solid;
+    padding:0 0 0.75em;
+}
+.gd-room .fa{
+	font-size: 30px;
+}
+.gd-room-title{
+    min-width:2.6rem;
+    display:inline-block;
+}
+.gd-room-count{
+    width:8.07rem;
+    margin-left:0.75rem;
+    color:#76869D;
+}
+.gd-room img{
+    width:1.5em;
+    height:0.75em;
+}
+.gd-room input{
+	padding: 0;
+	margin: 0;
+}
+.gd-guestslist{
+    padding-bottom: 10px;
+}
+#guests{
+    color:#76869D;
+}
+.guest{
+   width: 100%;
+}
+.gd-phone{
+    border-bottom:#D7DAE1 1px solid;
+    padding:0.4em 0 0.6em;
+}
+.gd-phone input{
+	padding: 0;
+	margin: 0;
+}
+.gd-phone-title{
+    min-width:2.6rem;
+    display:inline-block;
+}
+
+.gd-phone-number{
+    margin-left:0.75rem;
+    color:#76869D;
+}
+.gd-phone-number input{
+    background-color:#fff;
+    border:none;
+    color:#76869D;
+    width: 100%;
+    height: 30px;
+}
+.gd-phone img{
+    position:absolute;
+    right:1rem;
+    width:1.5em;
+    height:1.5em;
+}
+.ruleImg{
+    background-image: url('myImg/redMark.png');
+    background-size: 100%;
+    width: 0.5rem;
+    height: 0.5rem;
+}
+.guest .tr{
+	border-bottom: 1px solid #ddd;
+}
+.guest input{
+	padding: 0;
+	margin: 0;
+	height: 35px;
+	border-bottom: 1px dashed #ddd !important;
+}
+.guest input:last-child{
+	border-bottom: 0 !important;
+}
+.guest .no{
+	width: 25px;
+	height: 25px;
+	background-color: #4679ff;
+	color: #fff;
+	border-radius: 50%;
+	margin-right: 15px;
+	font-size: 12px;
+}
+.guest .guest-del{
+	margin-left: 15px;
+}
+.guest .guest-del .mui-icon-minus{
+	font-size: 30px;
+	color: red;
+}
+.guest .add-guests{
+	background-color: #4679ff;
+	color: #fff;
+	margin-top: 15px;
+	border-radius: 10px;
+	padding: 6px 0;
+	font-size: 16px;
+}
+.guest-name{
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+.footer{
+	font-size: 15px;
+	box-shadow: none;
+}
+.footer .ub-left{
+	padding: 0 10px;
+	border-top: 1px solid #ddd;
+}
+.totalPrice{
+	color: red;
+}

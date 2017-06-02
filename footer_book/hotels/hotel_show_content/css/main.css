@@ -199,8 +199,9 @@ background-color: #51c4d4;
 
 /* 2016-12-02 */
 #roomCount_dummy{
-    width:6rem;
+    /*width:6rem;*/
     border:none !important;
+    height: 30px;
 }
 input{
     background-color: #fff !important;
@@ -232,8 +233,8 @@ input{
 }
 #order{
     color:#fff;
-    height:2rem;
-    width:40%;
+    height:100%;
+    width:30%;
 }
 #footer{
     border-top:2px solid #EAE9EE;
@@ -248,16 +249,20 @@ input{
     font-weight: bold;
 }
 .hotel-detail{
-    margin-bottom:1.5em;
+    margin-bottom:0.8em;
     border-bottom: #eae9ee 1px solid;
-    margin-top: 3.8em;
+}
+.hotel-detail .red{
+	color: red;
+	font-weight: bold;
 }
 .hd-hotel{
     font-size:20px;
     margin-bottom: 0.25em;
 }
 .hd-date{
-    margin:1em 0 0.25em 0;
+    margin:0.5em 0 0.5em 0;
+    font-size: 14px;
 }
 .guest-detail{
     background-color:#FFF;
@@ -265,7 +270,10 @@ input{
 }
 .gd-room{
     border-bottom:#D7DAE1 1px solid;
-    padding:0.75em 0;
+    padding:0 0 0.75em;
+}
+.gd-room .fa{
+	font-size: 30px;
 }
 .gd-room-title{
     min-width:2.6rem;
@@ -277,31 +285,29 @@ input{
     color:#76869D;
 }
 .gd-room img{
-    position:absolute;
-    right:1rem;
     width:1.5em;
     height:0.75em;
 }
+.gd-room input{
+	padding: 0;
+	margin: 0;
+}
 .gd-guestslist{
-    display:flex;
-    display:-webkit-flex;
-    flex-direction:row;
-    align-items:center;
     padding:0.75em 0 0.75em 0 ;
-    border-top:#E4E8EB 1px solid;
 }
 #guests{
-    margin-left:0.75rem;
     color:#76869D;
-    width:8.07rem;
 }
 .guest{
-    border-bottom:#E4E8EB 2px solid;
-    padding:1.25em 0;
+   width: 100%;
 }
 .gd-phone{
-    border-bottom:#D7DAE1 2px solid;
-    padding:0.75em 0;
+    border-bottom:#D7DAE1 1px solid;
+    padding:0.4em 0 0.6em;
+}
+.gd-phone input{
+	padding: 0;
+	margin: 0;
 }
 .gd-phone-title{
     min-width:2.6rem;
@@ -309,7 +315,6 @@ input{
 }
 
 .gd-phone-number{
-    width:8.07rem;
     margin-left:0.75rem;
     color:#76869D;
 }
@@ -317,6 +322,8 @@ input{
     background-color:#fff;
     border:none;
     color:#76869D;
+    width: 100%;
+    height: 30px;
 }
 .gd-phone img{
     position:absolute;
@@ -329,4 +336,58 @@ input{
     background-size: 100%;
     width: 0.5rem;
     height: 0.5rem;
+}
+.guest .tr{
+	border-bottom: 1px solid #ddd;
+}
+.guest input{
+	padding: 0;
+	margin: 0;
+	height: 35px;
+	border-bottom: 1px dashed #ddd !important;
+}
+.guest input:last-child{
+	border-bottom: 0 !important;
+}
+.guest .no{
+	width: 25px;
+	height: 25px;
+	background-color: #4679ff;
+	color: #fff;
+	border-radius: 50%;
+	margin-right: 15px;
+	font-size: 12px;
+}
+.guest .guest-del{
+	margin-left: 15px;
+}
+.guest .guest-del .fa{
+	font-size: 30px;
+	color: red;
+}
+.guest .add-guests{
+	background-color: #4679ff;
+	color: #fff;
+	margin-top: 15px;
+	border-radius: 10px;
+	padding: 6px 0;
+}
+.guest-name{
+	margin-bottom: 0.5em;
+}
+#content{
+	padding-bottom: 3em;
+	padding-top: 3.5em;
+}
+.footer{
+	font-size: 14px;
+}
+.footer > .ub{
+	height: 3em;
+}
+.footer .ub-left{
+	padding: 0 10px;
+}
+.totalPrice{
+	color: red;
 }

@@ -4,7 +4,7 @@
 	<head>
 		<title></title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
 		<link rel="stylesheet" href="../../css/ui-box.css">
 		<link rel="stylesheet" href="../../css/ui-base.css">
@@ -21,6 +21,14 @@
 				position: initial;
 			}
 			.longlist{overflow-y: scroll;-webkit-overflow-scrolling : touch;}
+			.loading-box{
+			    padding: 0.5rem 0.8rem;
+			    font-size: 1.2rem;
+			}
+			.loading-pic{
+			    width: 4rem;
+			    height: 4rem;
+			}
 			[v-cloak]{display: none !important;}
 		</style>
         <script type="text/javascript" src="../../js/setSkin.js"></script>
@@ -33,6 +41,7 @@
 	            </div>
 	            <div class="ub ub-ver ub-f1 title">
 	                <div class="ub ub-ac ub-pc ub-f1 ulev-3 ut-s tx-c">
+	                	<div id="isBack"></div>
 	                    <div id="depPlane">北京</div>
 	                    <div class="head-icon ub-img"></div>
 	                    <div id="arrPlane">上海</div>
@@ -103,18 +112,44 @@
 	<script src="../../js/common.js"></script>
 	<script>
 	    $(function(){
+			if(appcan.locStorage.getVal("return") == "true") {
+                if(appcan.locStorage.getVal("returnFlight")==0){
+                    $("#isBack").html("往：");
+                    $("#depPlane").html(appcan.locStorage.getVal("flightFromCity"));
+                    $("#arrPlane").html(appcan.locStorage.getVal("flightToCity"));
+                }
+                else if(appcan.locStorage.getVal("returnFlight")==1){
+                    $("#isBack").html("返：");
+                    $("#depPlane").html(appcan.locStorage.getVal("flightToCity"));
+                    $("#arrPlane").html(appcan.locStorage.getVal("flightFromCity"));
+                }
+            }
+            else{
+                $("#depPlane").html(appcan.locStorage.getVal("flightFromCity"));
+                $("#arrPlane").html(appcan.locStorage.getVal("flightToCity"));
+            }
+	    	
+			var getDay = appcan.locStorage.getVal("returnFlight")==0?appcan.locStorage.getVal("airDate"):appcan.locStorage.getVal("backAirDate");
+			$("#curDay").text(NYR(getDay, 2) + ' ' + NYR(getDay, 3));
+			
 	        appcan.button("#nav-left", "btn-act", function() {
+                appcan.locStorage.setVal("returnFlight",0);
                 window.history.back();
-           });
+            });
             appcan.button("#nav-right", "btn-act", function() {
                 //uexCall.dial("02086132900");
             });
             $("#depPlane").html(appcan.locStorage.getVal("flightFromCity"));
             $("#arrPlane").html(appcan.locStorage.getVal("flightToCity"));
-            var getDay = appcan.locStorage.getVal("airDate");
-            $("#curDay").text(NYR(getDay, 2) + ' ' + NYR(getDay, 3));
 	    });
-		var flightDetail = appcan.locStorage.getVal('flightDetail');
+	    
+	    var flightDetail;
+	    if(appcan.locStorage.getVal("return")=="true" && appcan.locStorage.getVal("returnFlight")==1){
+	        flightDetail = appcan.locStorage.getVal('backFlightDetail');
+	    }
+	    else{
+	        flightDetail = appcan.locStorage.getVal("flightDetail");
+	    }
 		flightDetail = eval('(' + flightDetail + ')');
 		if(flightDetail) {
 			var seats = flightDetail.seats;
@@ -142,25 +177,98 @@
 				},
 				methods: {
 					book: function(item) {
-					    if(appcan.locStorage.getVal("applys")==="true"){
-					        var beginDate = new Date(appcan.locStorage.getVal("begin")),
+                        if(item.seatsRemain<1){
+                            return;
+                        }
+				        var beginDate = new Date(appcan.locStorage.getVal("begin")),
                             endDate = new Date(appcan.locStorage.getVal("end")),
                             airDate = new Date(appcan.locStorage.getVal("airDate")),
-                            applyId = appcan.locStorage.getVal("itineraryId");
-                            if(airDate.getTime()<beginDate.getTime() || airDate.getTime()>endDate.getTime()){
-                                appcan.window.openToast("所选航班时间超出行程时间范围",2000);
+                            applyId = appcan.locStorage.getVal("itineraryId"),
+                            backFlightDetail = null,
+                            flightDetail = null;
+                        
+						if(appcan.locStorage.getVal("returnFlight")==0){
+						    appcan.locStorage.setVal("seatDetail",item);
+						    checkPrice(appcan.locStorage.getVal("flightDetail"),appcan.locStorage.getVal("seatDetail"),appcan.locStorage.getVal("airDate"));
+						}
+						else if(appcan.locStorage.getVal("return")=="true" && appcan.locStorage.getVal("returnFlight")==1){
+                            backFlightDetail=JSON.parse(appcan.locStorage.getVal("backFlightDetail"));
+                            flightDetail=JSON.parse(appcan.locStorage.getVal("flightDetail"));
+                            if(backFlightDetail.depDate.time<flightDetail.arrDate.time){
+                                alert("返程航班出发时间不能早于去程航班时间");
                                 return;
                             }
-                            if(applyId == 0) {
-                                appcan.window.openToast('请您先选择出差申请再预订', 2000);
-                                return;
-                            }
-					    }
-						appcan.locStorage.setVal('seatDetail', item);
-						window.location.href = 'plane_ticket_bookdetails_content.html';
+						    appcan.locStorage.setVal("backSeatDetail",item);
+						    checkPrice(appcan.locStorage.getVal("backFlightDetail"),appcan.locStorage.getVal("backSeatDetail"),appcan.locStorage.getVal("backAirDate"));
+						}
+						
 					}
 				}
 			});
+        }
+		
+		function checkPrice(fd,sd,airDate){
+            var flightDetail = JSON.parse(fd),
+                seatDetail = JSON.parse(sd);
+            ajaxRequest({
+                url:httpHost+"flightController.do?checkPriceWithoutPNRModular",
+                data:{
+                    "carrier":flightDetail.carrier,
+                    "flightNo":flightDetail.flightNo,
+                    "classCode":seatDetail.code,
+                    "depart" :flightDetail.depart,
+                    "arrival":flightDetail.arrival,
+                    "departDate":airDate,
+                    "F_price":Number(seatDetail.price),
+                    "T_price":Number(flightDetail.tax)+Number(flightDetail.yq),
+                    "A_price":Number(seatDetail.price)+Number(flightDetail.tax)+Number(flightDetail.yq),
+                },
+                dataType:"json",
+                type:"POST",
+                success:function(dataJson){
+                   if(dataJson.obj !== null){
+                       for(var i = 0;i<dataJson.obj.items.length;i++){
+                           switch(dataJson.obj.items[i].type){
+                               case "F":
+                                  seatDetail.price = Number(dataJson.obj.items[i].value);
+                                  break;
+                               case "X":
+                                  flightDetail.tax = Number(dataJson.obj.items[i].value);
+                                  break;
+                               default:
+                                  break;
+                           }
+                        }
+                        seatDetail.priceObj = dataJson.obj;
+                        if(appcan.locStorage.getVal("returnFlight")==1 && appcan.locStorage.getVal("return")=="true"){
+                            appcan.locStorage.setVal("backFlightDetail",flightDetail);
+                            appcan.locStorage.setVal("backSeatDetail",seatDetail);
+                            window.location.href = "plane_ticket_bookdetails_content.html";
+                        }
+                        else if(appcan.locStorage.getVal("return")=="true" && appcan.locStorage.getVal("returnFlight")==0){
+                            appcan.locStorage.setVal("flightDetail",flightDetail);
+                            appcan.locStorage.setVal("seatDetail",seatDetail);
+                            appcan.locStorage.setVal("returnFlight",1);
+                            window.location.href = "plane_ticket_searchresult_content.html";
+                        }
+                        else if(appcan.locStorage.getVal("return")==="false"){
+                            appcan.locStorage.setVal("flightDetail",flightDetail);
+                            appcan.locStorage.setVal('seatDetail', seatDetail);
+                            window.location.href = "plane_ticket_bookdetails_content.html";
+                        }
+                        else{
+                            alert("请退出重试");
+                        }
+                    }
+                    else if(!dataJson.obj){
+                   		alert("航班"+flightDetail.carrier+flightDetail.flightNo+"暂时无法预订，请选择其他航班");
+                        window.history.back();
+                   }
+               },
+               error:function(e,errMsg,error,err,ea){
+                   console.log(e);
+               }
+            },"../../img/loading.gif");
         }
 	</script>
 

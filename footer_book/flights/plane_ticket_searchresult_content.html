@@ -29,6 +29,7 @@
                 </div>
                 <div class="ub ub-ver ub-f1 title">
                     <div class="ub ub-ac ub-pc ub-f1 ulev-3 ut-s tx-c">
+						<span id="isBack"></span>
                         <div id="depPlane">北京</div>
                         <div class="head-icon ub-img"></div>
                         <div id="arrPlane">上海</div>
@@ -135,10 +136,30 @@
 		var app;
 		var screenDir = 0; //是否是正序
 		var screenType = 0; //筛选的类型
+		var isReturn = false; //是否往返
 
-		flightFromCityNode = appcan.locStorage.getVal("flightFromCityNode");
-		flightToCityNode = appcan.locStorage.getVal("flightToCityNode");
-		airDate = appcan.locStorage.getVal("airDate");
+		flightFromCityNode = appcan.locStorage.getVal("returnFlight")==0?appcan.locStorage.getVal("flightFromCityNode"):appcan.locStorage.getVal("flightToCityNode");
+		flightToCityNode = appcan.locStorage.getVal("returnFlight")==0?appcan.locStorage.getVal("flightToCityNode"):appcan.locStorage.getVal("flightFromCityNode");
+		
+        if(appcan.locStorage.getVal('return')=='true'){
+        	if(appcan.locStorage.getVal('returnFlight')=='0'){
+        		airDate = appcan.locStorage.getVal('airDate');
+        	}else if(appcan.locStorage.getVal('returnFlight')=='1'){
+        		var startDate = (new Date(appcan.locStorage.getVal('airDate'))).getTime();
+        		var endDate = (new Date(appcan.locStorage.getVal('backAirDate'))).getTime();
+        		
+        		if(startDate > endDate){
+        			appcan.locStorage.setVal('backAirDate', appcan.locStorage.getVal('airDate'));
+        		}
+        		airDate = appcan.locStorage.getVal('backAirDate');
+        	}
+        }else if(appcan.locStorage.getVal('return')=='false'){
+        	airDate = appcan.locStorage.getVal('airDate');
+        }else{
+        	airDate = NYR(new Date(), 1);
+        }
+        
+        $("#today").text(airDate);
 		$("#calendarHidden").val(airDate);
 		flightSiteType = appcan.locStorage.getVal("flightSiteType");
 		if(flightSiteType) {
@@ -150,24 +171,38 @@
 		flightKeyWord = appcan.locStorage.getVal("flightKeyWord");
 		
 		$(function() {
+			//头部初始化操作
+			if(appcan.locStorage.getVal("return") == "true") {
+			    if(appcan.locStorage.getVal("returnFlight")==0){
+			        $("#isBack").html("往：");
+			        $("#depPlane").html(appcan.locStorage.getVal("flightFromCity"));
+                    $("#arrPlane").html(appcan.locStorage.getVal("flightToCity"));
+			    }
+				else if(appcan.locStorage.getVal("returnFlight")==1){
+				    $("#isBack").html("返：");
+				    $("#depPlane").html(appcan.locStorage.getVal("flightToCity"));
+                    $("#arrPlane").html(appcan.locStorage.getVal("flightFromCity"));
+				}
+			}
+			else{
+			    $("#depPlane").html(appcan.locStorage.getVal("flightFromCity"));
+                $("#arrPlane").html(appcan.locStorage.getVal("flightToCity"));
+			}
+			
 		    preventClick();
 			//shieldRequest(); //屏蔽公司
 			screenNoClick(); //是否可以点击
 			showPlaneList(); //航班列表
 			getMinDatePrice(); //最低价格
 			
-			//头部初始化操作
-			if(appcan.locStorage.getVal("flightFromCity")) {
-                $("#depPlane").html(appcan.locStorage.getVal("flightFromCity"));
-                $("#arrPlane").html(appcan.locStorage.getVal("flightToCity"));
-            }
             appcan.button("#nav-left", "btn-act", function() {
-//              appcan.window.evaluateScript({
-//                  name:"plane_ticket_searchresult",
-//                  scriptContent:"appcan.window.close(1)"
-//              })
-				window.history.back();
                 appcan.locStorage.setVal("openFlightSearchResult", "false");
+                if(appcan.locStorage.getVal("returnFlight")=="1"){
+                	appcan.locStorage.setVal("returnFlight", 0);
+                }else if(appcan.locStorage.getVal("returnFlight")=="0"){
+                	appcan.locStorage.setVal("return", "false");
+                }
+				window.history.back();
             })
             appcan.button("#nav-right", "btn-act", function() {
                 //uexCall.dial("02086132900");
@@ -184,10 +219,6 @@
             appcan.button("#nextDay", "btn-act", function() {
                 nextDay();
             });
-
-            var getDay = appcan.locStorage.getVal("airDate");
-            $("#today").text(getDay);
-            $("#curDay").text(NYR(getDay, 2) + ' ' + NYR(getDay, 3));
             //头部初始化操作结束
 
 		});
@@ -199,10 +230,15 @@
 			},
 			methods: {
 				openRand: function(item) {
-					appcan.locStorage.setVal('flightDetail', item);
+                    if(appcan.locStorage.getVal("return")=="true" && appcan.locStorage.getVal("returnFlight")==1){
+                        appcan.locStorage.setVal("backFlightDetail",item);
+                    }
+                    else{
+                        appcan.locStorage.setVal("flightDetail",item);
+                    }
 					window.location.href = 'plane_ticket_book_content.html';
-				},
-			},
+				}
+			}
 		});
 
 		var planePm = {
@@ -254,7 +290,7 @@
 						$("#msg").hide();
 						var flights = filterCode(data.obj.data.flights);
 						flights = compareArrList(flights);
-						if(flights.length > 0) {
+						if(flights && flights.length > 0) {
 							for(var i = 0; i < flights.length; i++) {
 								var seat = flights[i].seats;
 								var logo = 'img/logo/' + flights[i].carrier + '.png';
@@ -419,12 +455,12 @@
 		}
 
 		function prevDay() {
-			var myDate = appcan.locStorage.getVal("airDate");
+			var myDate = appcan.locStorage.getVal(appcan.locStorage.getVal('returnFlight')==1?'backAirDate':'airDate');
 			var curDate = new Date();
 			var dateText = asDay(new Date(myDate), 1, 1);
 			var poor = (new Date(dateText).getTime() - (new Date(NYR(curDate, 1))).getTime());
 			if(poor >= 0) {
-				appcan.locStorage.setVal("airDate", dateText);
+				appcan.locStorage.setVal(appcan.locStorage.getVal('returnFlight')==1?'backAirDate':'airDate', dateText);
 				airDate = dateText;
 				setDate(dateText);
 				$("#calendarHidden").val(dateText);
@@ -448,10 +484,10 @@
 		}
 
 		function nextDay() {
-			var myDate = appcan.locStorage.getVal("airDate");
+			var myDate = appcan.locStorage.getVal(appcan.locStorage.getVal('returnFlight')==1?'backAirDate':'airDate');
 			var dateText = asDay(new Date(myDate), 1, 0);
 			airDate = dateText;
-			appcan.locStorage.setVal("airDate", dateText);
+			appcan.locStorage.setVal(appcan.locStorage.getVal('returnFlight')==1?'backAirDate':'airDate', dateText);
 			setDate(dateText);
 			$("#calendarHidden").val(dateText);
 			planePm.airDate = dateText;
@@ -473,8 +509,9 @@
 			var today = $("#calendarHidden").val();
 			preventClick();
 			screenNoClick();
+			var thismin = appcan.locStorage.getVal("returnFlight")==1?new Date(appcan.locStorage.getVal("airDate")):new Date();
 			calendarShow = $("#calendarHidden").mobiscroll().calendar({
-				min: new Date(),
+				min: thismin,
 				dateFormat: 'yy-mm-dd',
 				defaultValue: new Date(today),
 				onCancel: function(val, obj) {
@@ -483,7 +520,7 @@
 				},
 				onSet: function(val, obj) {
 					val = val.valueText;
-					appcan.locStorage.setVal("airDate", val);
+					appcan.locStorage.setVal(appcan.locStorage.getVal('returnFlight')==1?'backAirDate':'airDate', val);
 					setDate(val);
 					planePm.airDate = val;
 					minPm = {
@@ -530,7 +567,7 @@
 
 		function getComPareValue(data, type) {
 			var compareValue;
-			var planeDate = appcan.locStorage.getVal("airDate");
+			var planeDate = appcan.locStorage.getVal(appcan.locStorage.getVal('returnFlight')==1?'backAirDate':'airDate');
 			if(type == 0) {
 				var myDepDate = new Date(NYR(planeDate, 1).replace(/-/g, "/") + ' ' + data.myDepDate).getTime();
 				compareValue = myDepDate;

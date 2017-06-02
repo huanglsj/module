@@ -48,27 +48,16 @@ var init = function() {
 	roomCityBtn.addEventListener("tap", function() {
 		mui.openWindow({
 			url: 'my_hotel_city.html',
-			id: 'my_hotel_city',
-			extras: {},
-			createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-			show: {
-				autoShow: true, //页面loaded事件发生后自动显示，默认为true
-				event: 'titleUpdate', //页面显示时机，默认为titleUpdate事件时显示
-				extras: {} //窗口动画是否使用图片加速
-			},
-			waiting: {
-				autoShow: true, //自动显示等待框，默认为true
-				title: '正在加载...', //等待对话框上显示的提示内容
-			}
+			id: 'my_hotel_city'
 		})
 	});
 
-	var chooseHotelCode = localGetItem('chooseHotelCode');
-	var chooseHotelName = localGetItem('chooseHotelName');
-	if(chooseHotelCode) {
-		$("#roomCity").attr("data-code", chooseHotelCode);
-		$("#roomCity").attr("data-city", chooseHotelName);
-		$("#roomCity").text(chooseHotelName);
+	var hotelChooseCode = localGetItem('hotelChooseCode');
+	var hotelChooseName = localGetItem('hotelChooseName');
+	if(hotelChooseCode) {
+		$("#roomCity").attr("data-code", hotelChooseCode);
+		$("#roomCity").attr("data-city", hotelChooseName);
+		$("#roomCity").text(hotelChooseName);
 	} else {
 		$("#roomCity").attr("data-code", "CAN");
 		$("#roomCity").attr("data-city", "广州");
@@ -121,24 +110,13 @@ var init = function() {
 		if(dataFlag) {
 			mui.openWindow({
 				url: 'map.html',
-				id: 'hotel_map',
-				extras: {},
-				createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-				show: {
-					autoShow: true, //页面loaded事件发生后自动显示，默认为true
-					event: 'titleUpdate', //页面显示时机，默认为titleUpdate事件时显示
-					extras: {} //窗口动画是否使用图片加速
-				},
-				waiting: {
-					autoShow: true, //自动显示等待框，默认为true
-					title: '正在加载...', //等待对话框上显示的提示内容
-				}
+				id: 'hotel_map'
 			})
 		}
 
 	});
 
-	mui("body").on("tap","#order",function(){
+	mui("body").on("tap", "#order", function() {
 		queryHotel();
 	});
 }
@@ -243,7 +221,7 @@ function queryHotelData() {
 	}
 
 	//查询酒店条件
-	var queryHotelData = {
+	var hotelQueryData = {
 		cityCode: cityCode,
 		cityName: cityName,
 		inday: inday,
@@ -254,7 +232,7 @@ function queryHotelData() {
 		xingji: xingji
 	}
 
-	localSetItem("queryHotelData", JSON.stringify(queryHotelData));
+	localSetItem("hotelQueryData", JSON.stringify(hotelQueryData));
 	return flag;
 }
 
@@ -264,20 +242,7 @@ function queryHotel() {
 	if(dataFlag) {
 		mui.openWindow({
 			url: 'hotel_list_content.html',
-			id: 'hotel_list_content',
-			extras: {},
-			createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-			show: {
-				autoShow: true, //页面loaded事件发生后自动显示，默认为true
-				event: 'titleUpdate', //页面显示时机，默认为titleUpdate事件时显示
-				extras: {} //窗口动画是否使用图片加速
-			},
-			waiting: {
-				autoShow: true, //自动显示等待框，默认为true
-				title: '正在加载...', //等待对话框上显示的提示内容
-			}
+			id: 'hotel_list_content'
 		})
-
-		//		JSON.stringify();
 	}
 }

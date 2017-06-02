@@ -57,8 +57,9 @@
 .plane-ticket-con .list .bc-head {
 	background-color: #6cbdf5;
 }
-
-
+.cancelBtn{
+	background-color: #72A1FD;
+}
 .deep-bg{
 	background-color: #3a5a98 !important;
 	color: #fff;
@@ -66,4 +67,10 @@
 .shallow-bg{
 	background-color: #5890ff !important;
 	color: #fff;
+}
+.deep-text{
+	color: #3a5a98 !important;
+}
+.shallow-text{
+	color: #5890ff !important;
 }
