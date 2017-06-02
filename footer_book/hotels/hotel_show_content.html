@@ -127,7 +127,7 @@
 								idCard: '',
 								telephone: ''
 							});
-							var total = (this.roomRates.price  * this.guests.length).toFixed(3);
+							var total = (this.roomRates.price * this.guests.length).toFixed(3);
 							this.totalPrice = total.substring(0, total.lastIndexOf('.') + 3);
 						}
 					},
@@ -231,12 +231,13 @@
 							endDate: _this.roomRates.endDate,
 							arriveEarlyTime: '1800', //最早入住时间
 							arriveLateTime: '2100', //最晚入住时间
-							resGuests: _this.guests
+							resGuests: JSON.stringify(_this.guests),
+							totalPrice: _this.totalPrice
 						}
 						console.log(orderData);
 						layer.open({
 							type: 2,
-							content: '正在提交订单...',
+							content: '正在提交订单',
 							shadeClose: false
 						});
 						mui.ajax({
@@ -247,6 +248,11 @@
 							success: function(data) {
 								layer.closeAll();
 								console.log(data);
+								if(data.success){
+									
+								}else{
+									mui.alert("订单提交失败");
+								}
 							},
 							error: function(err) {
 								layer.closeAll();
@@ -261,7 +267,6 @@
 					}
 				}
 			});
-
 		</script>
 	</body>
 
