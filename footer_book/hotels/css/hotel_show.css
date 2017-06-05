@@ -4,7 +4,6 @@
 }
 
 #roomCount_dummy{
-    /*width:6rem;*/
     border:none !important;
     height: 30px;
 }
@@ -41,14 +40,6 @@ input{
     color:#fff;
     height:100%;
     width:30%;
-}
-#footer{
-    /*border-top:2px solid #EAE9EE;
-    background-color: #fff;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    min-height: 2rem;*/
 }
 #price{
     color:red;
@@ -130,7 +121,7 @@ input{
     border:none;
     color:#76869D;
     width: 100%;
-    height: 30px;
+    height: 35px;
 }
 .gd-phone img{
     position:absolute;

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
+		<link rel="stylesheet" href="css/hotel_order.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+		<script src="../../js/global.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">酒店订单</h1>
+			<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
+		</header>
+		<footer class="mui-bar mui-bar-tab ub">
+			<div class="ub ub-f1 ub-ac ub-pc btn shallow-bg">确认订单</div>
+			<div class="ub ub-f1 ub-ac ub-pc btn shallow-text">取消订单</div>
+		</footer>
+		<div class="mui-content order">
+			<div class="list list-head">
+				<div class="tr ub">
+					<div class="status ub-f1">已预订成功</div>
+					<div class="total-price">
+						<span>总额:</span>
+						<span class="price">￥125</span>
+					</div>
+				</div>
+				<div class="tr order-number">订单号：<span>45645454</span></div>
+			</div>
+			<div class="list list-hotel">
+				<div class="tr name">哈哈酒店</div>
+				<div class="tr type">商务单间</div>
+				<div class="tr time">
+					<span>2017-06-04</span>
+					<span>~</span>
+					<span>2017-06-04</span>
+					<span class="all">共<b>1</b>晚</span>
+				</div>
+			</div>
+			<div class="list list-people">
+				<div class="ub ub-ac">
+					<div class="name">入住人</div>
+					<div class="con ub-f1">
+						<div class="tr ub ub-ac">
+							<div class="nonius ub ub-ac ub-pc shallow-bg">1</div>
+							<div class="people-list ub-f1">
+								<div>黄华华</div>
+								<div>456456464464466</div>
+								<div>11111111</div>
+							</div>
+						</div>
+						<div class="tr ub ub-ac">
+							<div class="nonius ub ub-ac ub-pc shallow-bg">1</div>
+							<div class="people-list ub-f1">
+								<div>黄华华</div>
+								<div>456456464464466</div>
+								<div>11111111</div>
+							</div>
+						</div>
+						<div class="tr ub ub-ac">
+							<div class="nonius ub ub-ac ub-pc shallow-bg">1</div>
+							<div class="people-list ub-f1">
+								<div>黄华华</div>
+								<div>456456464464466</div>
+								<div>11111111</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="list-contact">
+					<div class="tr ub">
+						<div class="name">联系人</div>
+						<div class="ub-f1">hhh</div>
+					</div>
+					<div class="tr ub">
+						<div class="name">联系电话</div>
+						<div class="ub-f1">15231</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/mui/mui.min.js"></script>
+		<script src="../../js/layer/layer.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script>
+			var hoterOrderNo = localGetItem("hoterOrderNo");
+			if(!hoterOrderNo) {
+				mui.alert('参数有误，请重新查询', function() {
+					mui.back();
+				});
+			} else {
+                queryDetails();
+			}
+
+			function queryDetails() {
+				layer.open({
+					type: 2,
+					content: '正在查询',
+					shadeClose: false
+				});
+
+				mui.ajax({
+					url: httpHost + 'hotelController.do?queryHotelOrderDetail',
+					data: {
+						orderNo: hoterOrderNo
+					},
+					dataType: 'json',
+					type: 'post',
+					success: function(data) {
+						layer.closeAll();
+						console.log(data)
+					},
+					error: function(err) {
+						layer.closeAll();
+						console.log(err)
+					}
+				});
+			}
+			
+			
+			function statusText(status){
+				switch (status){
+					case 1:
+					    return '订单已提交'
+						break;
+					case 2:
+					    return '订单已确认'
+						break;
+					case 3:
+					    return '订单已完成'
+						break;
+					case 4:
+					    return '订单已取消'
+						break;	
+					case 5:
+					    return '订单已退订'
+						break;	
+					case 6:
+					    return '订单已作废'
+						break;	
+					default:
+						break;
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -585,12 +585,6 @@ ul,ol,li{
     width: 1em;
     height: 1em;
 }
-#submitBtn{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-}
 .mbsc-mobiscroll .mbsc-sc-whl-w{
 	width: 100%;
 }
@@ -611,4 +605,28 @@ ul,ol,li{
 .plane-ticket-con .first-back{
 	padding: 0.4rem 0.48rem;
 	font-size: 0.6rem;
+}
+
+.longlist {
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch
+}
+
+.title-c {
+	line-height: 1.333;
+}
+
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #F6F7F9;
+	font-family: Microsoft YaHei;
+}
+.deep-bg a,
+.deep-bg .mui-title {
+	color: #fff;
+}
+.mui-bar-tab {
+	font-size: 16px;
 }

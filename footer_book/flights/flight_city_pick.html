@@ -40,6 +40,9 @@
         		display: inline-block;
         		box-sizing: border-box;
         	}
+        	body{
+        		font-size: 16px;
+        	}
 	    </style>
         <script type="text/javascript" src="../../js/setSkin.js"></script>
     </head>
@@ -284,11 +287,11 @@
                 
                 //左上返回键
                 appcan.button(".nav-btn", "btn-act", function() {
-                    if(appcan.locStorage.getVal("fromcity")=="true"){
-                        appcan.locStorage.setVal("fromcity","false");
+                    if(localGetItem("fromcity")=="true"){
+                        localSetItem("fromcity","false");
                     }
-                    if(appcan.locStorage.getVal("tocity")=="true"){
-                        appcan.locStorage.setVal("tocity","false");
+                    if(localGetItem("tocity")=="true"){
+                        localSetItem("tocity","false");
                     }
                     window.history.back();
                 });
@@ -368,11 +371,11 @@
 			//flag = 'GN'/'GJ'
 			function getHistoryCityNew(flag){
 				var historyCity = null;
-				if(!appcan.locStorage.getVal(cityArr["type"]+"historyCity"+flag)){
-					appcan.locStorage.setVal(cityArr["type"]+"historyCity"+flag, "[]");
-					historyCity = appcan.locStorage.getVal(cityArr["type"]+"historyCity"+flag);
+				if(!localGetItem(cityArr["type"]+"historyCity"+flag)){
+					localSetItem(cityArr["type"]+"historyCity"+flag, "[]");
+					historyCity = localGetItem(cityArr["type"]+"historyCity"+flag);
 				}else{
-					historyCity = eval('('+appcan.locStorage.getVal(cityArr["type"]+"historyCity"+flag)+')');
+					historyCity = eval('('+localGetItem(cityArr["type"]+"historyCity"+flag)+')');
 				}
 				
 				if(flag == 'GN'){
@@ -394,7 +397,7 @@
 	            	}
 	            	
 	            	//获取历史查询城市
-	            	var historyCity = eval(appcan.locStorage.getVal(cityArr["type"]+"historyCity"+flag));
+	            	var historyCity = eval(localGetItem(cityArr["type"]+"historyCity"+flag));
 	            	
 	            	//当前选中项写进缓存
 	            	for(var i=0; i<historyCity.length; i++){
@@ -404,7 +407,7 @@
 	            		}
 	            	}
 	            	
-	            	if(city != appcan.locStorage.getVal('currentCity')){
+	            	if(city != localGetItem('currentCity')){
 		            	var historyLen = historyCity.unshift({
 		                    city: city,
 		                    cityCode: cityNode
@@ -413,24 +416,24 @@
 		            		historyCity.pop();
 		            	}
 		            	
-		            	appcan.locStorage.setVal(cityArr["type"]+"historyCity"+flag, historyCity);
+		            	localSetItem(cityArr["type"]+"historyCity"+flag, historyCity);
 		            	
 						Vue.nextTick(function(){
 							getHistoryCityNew(flag);
 						});
 					}
 	            	
-	            	if(appcan.locStorage.getVal("fromcity") == "true"){
-	            		appcan.locStorage.setVal("fromcity", "false");
-						appcan.locStorage.setVal("flightFromCity", city);
-						appcan.locStorage.setVal("flightFromCityNode", cityNode);
+	            	if(localGetItem("fromcity") == "true"){
+	            		localSetItem("fromcity", "false");
+						localSetItem("flightFromCity", city);
+						localSetItem("flightFromCityNode", cityNode);
 						window.history.replaceState(null, null, 'plane_ticket_search_content.html');
 	                	location.reload();
 					}
-	            	if(appcan.locStorage.getVal("tocity") == "true"){
-	            		appcan.locStorage.setVal("tocity", "false");
-						appcan.locStorage.setVal("flightToCity", city);
-						appcan.locStorage.setVal("flightToCityNode", cityNode);
+	            	if(localGetItem("tocity") == "true"){
+	            		localSetItem("tocity", "false");
+						localSetItem("flightToCity", city);
+						localSetItem("flightToCityNode", cityNode);
 						window.history.replaceState(null, null, 'plane_ticket_search_content.html');
 	                	location.reload();
 					}
@@ -441,13 +444,13 @@
 				var city = str,
 					cityCode = '';
 				
-				if(!appcan.locStorage.getVal('currentCityCode')){
-					appcan.locStorage.setVal('currentCityCode', '');
+				if(!localGetItem('currentCityCode')){
+					localSetItem('currentCityCode', '');
 				}
 				
                 if (city.substring(city.length-1, city.length)=='市') {
                 	city = city.substring(0, city.length-1);
-                	appcan.locStorage.setVal('currentCity', city);
+                	localSetItem('currentCity', city);
                 }
                 
 				if (cityArr['type'] == 'flight') {
@@ -462,7 +465,7 @@
 					if (cityCode.split(',') > -1) {
 						cityCode = cityCode.split(',')[1];
 					}
-					appcan.locStorage.setVal('currentCityCode', cityCode);
+					localSetItem('currentCityCode', cityCode);
 				}
 				
 				vm.curCity = city;

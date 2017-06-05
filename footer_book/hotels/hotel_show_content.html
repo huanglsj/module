@@ -24,7 +24,7 @@
 				<div class="ub ub-ac ub-f1 ub-left">
 					<div class="ub-f1 ub-ac ub-pc umar-l1">
 						<span>总额</span>
-						<span>￥<span class="totalPrice">{{totalPrice}}</span></span>
+						<span>￥<span class="totalPrice">{{totalPrice | fixed}}</span></span>
 					</div>
 				</div>
 				<div class=" uinn_submit  user-blue ub ub-ac ub-pc shallow-bg" id="order" @click="submitOrder">
@@ -36,7 +36,7 @@
 					<div id="hotelName" class="hd-hotel">{{hotel.hotelName}}</div>
 					<div id="roomType" class="message">
 						<span>{{roomRates.roomTypeName}}</span>
-						<span class="red">￥{{roomRates.price}}</span>
+						<span class="red">￥{{roomRates.price | fixed}}</span>
 					</div>
 					<div class="message hd-date">
 						入住：
@@ -87,6 +87,14 @@
 				console.log(hotelRoomRates);
 				hotelDetail = JSON.parse(hotelDetail);
 			}
+			
+			Vue.filter("fixed", function(value) {  
+				value = value*1;
+				var price = value.toFixed(3);
+				price = price.substring(0, price.lastIndexOf('.') + 3);
+                return price;
+            });
+			
 			var app = new Vue({
 				el: '#main',
 				data: {
@@ -109,8 +117,7 @@
 							});
 						} else {
 							this.guests.splice(index, 1);
-							var total = (this.roomRates.price * this.guests.length).toFixed(3);
-							this.totalPrice = total.substring(0, total.lastIndexOf('.') + 3);
+							this.totalPrice = this.roomRates.price * this.guests.length;
 						}
 
 					},
@@ -127,8 +134,7 @@
 								idCard: '',
 								telephone: ''
 							});
-							var total = (this.roomRates.price * this.guests.length).toFixed(3);
-							this.totalPrice = total.substring(0, total.lastIndexOf('.') + 3);
+							this.totalPrice = this.roomRates.price * this.guests.length;
 						}
 					},
 					submitOrder: function() {
@@ -248,9 +254,17 @@
 							success: function(data) {
 								layer.closeAll();
 								console.log(data);
-								if(data.success){
-									
-								}else{
+								if(data.success) {
+									if(data.obj) {
+										localSetItem("hoterOrderNo", data.obj.orderNo);
+										mui.openWindow({
+											url: 'hotel_order.html',
+											id: 'hotel_order'
+										})
+									}else{
+										mui.alert("订单提交失败");
+									}
+								} else {
 									mui.alert("订单提交失败");
 								}
 							},

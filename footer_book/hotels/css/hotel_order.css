@@ -1,0 +1,70 @@
+.deep-bg a,
+.deep-bg .mui-title {
+	color: #fff;
+}
+.order .list{
+	background-color: #fff;
+	padding: 10px;
+	margin: 15px 0;
+	font-size: 16px;
+	color: #8F97A2;
+}
+.order .list > .tr{
+	margin-top: 10px;
+}
+.order .list > .tr:first-child{
+	margin-top: 0;
+}
+.list-head .status{
+	color: #F7C255;
+	font-size: 22px;
+	font-weight: bold;
+}
+.list-head .order-number{
+	color: #3C69A4;
+	font-weight: bold;
+}
+.list-head .price{
+	color: #FE0202;
+	font-weight: bold;
+}
+.list-hotel .name{
+	color: #000;
+}
+.list-hotel b{
+	font-weight: 300;
+}
+.list-people .name{
+	width: 76px;
+	color: #000;
+}
+.list-people .con .tr{
+	border-bottom: 1px solid #ddd;
+}
+.list-people .con .nonius{
+	width: 25px;
+    height: 25px;
+    background-color: #4679ff;
+    color: #fff;
+    border-radius: 50%;
+    margin-right: 15px;
+    font-size: 12px;
+}
+.people-list > div{
+	border-bottom: 1px dashed #ddd;
+	padding: 10px 0;
+}
+.people-list > div:last-child{
+	border-bottom: 0;
+}
+.list-contact{
+	margin-top: 20px;
+}
+.list-contact .tr{
+	margin-top: 10px;
+}
+.mui-bar{
+	-webkit-box-shadow: 0 0 1px rgba(0,0,0,.2);
+    box-shadow: 0 0 1px rgba(0,0,0,.2);
+    font-size: 16px;
+}

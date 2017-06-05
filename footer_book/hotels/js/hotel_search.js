@@ -110,7 +110,7 @@ var init = function() {
 		var dataFlag = queryHotelData();
 		if(dataFlag) {
 			mui.openWindow({
-				url: 'map.html',
+				url: 'hotel_map.html',
 				id: 'hotel_map'
 			})
 		}

@@ -2,39 +2,29 @@
 <html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
 
 	<head>
-		<title></title>
+		<title>机票查询</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
 		<link rel="stylesheet" href="../../css/ui-box.css">
-		<link rel="stylesheet" href="../../css/ui-base.css">
-		<link rel="stylesheet" href="../../css/ui-color.css">
-		<link rel="stylesheet" href="../../css/appcan.icon.css">
-		<link rel="stylesheet" href="../../css/appcan.control.css">
-		<link rel="stylesheet" href="../../css/main.css" />
+		<link rel="stylesheet" href="../../css/mui/mui.min.css">
 		<link rel="stylesheet" href="../../css/mobiscroll.min.css">
-		<link rel="stylesheet" href="../../css/mymedia.css">
 		<link rel="stylesheet" href="css/plane.css">
-        <script type="text/javascript" src="../../js/setSkin.js"></script>
-        <style type="text/css">
-			.longlist{overflow-y:auto;-webkit-overflow-scrolling:touch}
-			#submitBtn{position:initial;}
-        </style>
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<script src="../../js/global.js"></script>
 	</head>
 
-	<body class="um-vp" ontouchstart>
-		<div class="up ub ub-ver plane-ticket-body" tabindex="0">
-		    <div id="header" class="uh bc-text-head ub header-bg" style="position: initial;">
-                <div class="nav-btn back" id="nav-left">
-                    <div class="ub-img user-icon-goback umw1-5 umh4"></div>
-                </div>
-                <h1 class="ut ub-f1 ulev-3 ut-s tx-c title-c" tabindex="0">机票查询</h1>
-                <div class="nav-btn nav-bt icon-act" id="phone">
-                    <a class="ub-img user-icon-phone umw1-5 umh4 ub ub-ac" href="tel:02086132900"></a>
-                </div>
-            </div>
-			<!--content开始-->
-			<div id="content" class="ub-f1 tx-l longlist">
+	<body>
+		<div class="plane-ticket-body">
+		    <header class="mui-bar mui-bar-nav deep-bg">
+				<h1 class="mui-title">选择城市</h1>
+				<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
+            </header>
+			<div id="submitBtn" class="mui-bar mui-bar-tab ub ub-ac ub-pc shallow-bg">
+				<i class="mui-icon mui-icon-search"></i>
+				<span class="ub ub-ac">查询</span>
+			</div>
+			<div id="content" class="mui-content">
 				<div class="plane-ticket-con">
 					<div class="list first-head ub ub-ac none" id="applys">
 						<div class="ub ub-f1 ub-ac">
@@ -47,8 +37,8 @@
 					</div>
 					<div class="list first-back ub ub-ac">
                         <div class="ub ub-f1 ub-ac">是否往返</div>
-                        <div id="return" class="switch uba bc-border switch-mini" data-checked="false">
-                            <div class="switch-btn sc-bg-active"></div>
+                        <div id="return" class="switchs mui-switch mui-switch-mini">
+                        	<div class="mui-switch-handle"></div>
                         </div>
                     </div>
 					<div class="list three-list">
@@ -95,96 +85,72 @@
 					</div>
 				</div>
 			</div>
-			<div id="submitBtn" class="m-footer">
-				<div class="my-footer ub ub-pc ub-ac">
-					<img src="img/search.png" class="ub ub-ac">
-					<span class="ub ub-ac">查询</span>
-				</div>
-			</div>
-			<!--content结束-->
 		</div>
 
 	</body>
 	<script src="../../js/jquery.min.js"></script>
-	<script src="../../js/appcan.js"></script>
-	<script src="../../js/appcan.control.js"></script>
-	<script src="../../js/appcan.tab.js"></script>
-	<script src="../../js/appcan.listview.js"></script>
 	<script src="../../js/mobiscroll.min.zh.js"></script>
-	<script src="../../js/common.js"></script>
-	<script src="js/airPortCitysMap.js"></script>
 	<script>
 		//flightFromCity 出发城市
 		//flightFromCityNode 出发城市的三字码
-		//fromcity 出发城市列表页是否被点开
+		//fromcity 出发城市列表页是否被点开、
 		
 		var dancheng = true;
 		var wangfan = false;
 		var startDateMobiscroll, endDateMobiscroll, selectMobiscroll;
 		var mySelect = {};
 		$(function() {
-		    appcan.locStorage.setVal("historyCity", "[]");
+		    localSetItem("historyCity", "[]");
 		    
 		    //设置默认的起止地
-			if(appcan.locStorage.getVal("flightFromCity")) {
-				$("#from_city").html(appcan.locStorage.getVal("flightFromCity"));
+			if(localGetItem("flightFromCity")) {
+				$("#from_city").html(localGetItem("flightFromCity"));
 			} else {
 				$("#from_city").html("广州");
-				appcan.locStorage.setVal("flightFromCity", "广州");
-				appcan.locStorage.setVal("flightFromCityNode", "CAN");
+				localSetItem("flightFromCity", "广州");
+				localSetItem("flightFromCityNode", "CAN");
 			}
-			if(appcan.locStorage.getVal("flightToCity")) {
-				$("#to_city").html(appcan.locStorage.getVal("flightToCity"));
+			if(localGetItem("flightToCity")) {
+				$("#to_city").html(localGetItem("flightToCity"));
 			} else {
 				$("#to_city").html("北京");
-				appcan.locStorage.setVal("flightToCity", "北京");
-				appcan.locStorage.setVal("flightToCityNode", "PEK");
+				localSetItem("flightToCity", "北京");
+				localSetItem("flightToCityNode", "PEK");
 			}
-
-//			appcan.window.subscribe('singlefrom', function(msg) {
-//			    appcan.locStorage.setVal("fromcity", "false");
-//				setFromCity(msg);
-//			});
-//			appcan.window.subscribe('singleTo', function(msg) {
-//			    appcan.locStorage.setVal("tocity", "false");
-//				setToCity(msg);
-//			});
 			
 			//跳转到选择起止地的页面
 			$('#openFromCity').click(function() {
-				appcan.locStorage.setVal('fromcity', 'true');
+				localSetItem('fromcity', 'true');
 				window.location.href = 'flight_city_pick.html';
 			})
 			$('#openToCity').click(function() {
-				appcan.locStorage.setVal("tocity", "true");
+				localSetItem("tocity", "true");
 				window.location.href = 'flight_city_pick.html';
 			})
 			
 			//查询按钮
-			appcan.button("#submitBtn", "btn-act", function(){
+			$('#submitBtn').on('click', function(){
 				searchPlane();
 			});
 			
 			//header
-			appcan.button("#nav-left", "btn-act", function() {
-                appcan.locStorage.remove("setExpDetails");
-                appcan.locStorage.remove("beginDate");
+			$('#nav-left').on('click', function() {
+                localRemoveItem("setExpDetails");
+                localRemoveItem("beginDate");
                 window.history.back();
-            });
-            appcan.button("#phone", "btn-act", function() {
-            });
+           });
             
 			init();
 		});
 
 		function init(sessionId,upwd,userCode,userMobile,userName,userNum,applys) {
-//		    appcan.locStorage.setVal("applys",applys);
-//		    appcan.locStorage.setVal("sessionId",sessionId);
-//		    appcan.locStorage.setVal("upwd",upwd);
-//		    appcan.locStorage.setVal("userCode",userCode);
-//		    appcan.locStorage.setVal("userMobile",userMobile);
-//		    appcan.locStorage.setVal("userName",userName);
-//		    appcan.locStorage.setVal("userNum",userNum);
+//		    localSetItem("applys",applys);
+//		    localSetItem("sessionId",sessionId);
+//		    localSetItem("upwd",upwd);
+//		    localSetItem("userCode",userCode);
+//		    localSetItem("userMobile",userMobile);
+//		    localSetItem("userName",userName);
+//		    localSetItem("userNum",userNum);
 			var myDate = new Date();
 			$("#startDate .con .date").text(NYR(myDate, 2));
 			$("#startDate .con .week").text(NYR(myDate, 3));
@@ -244,82 +210,9 @@
 			});
 		}
 
-		function getApply() {
-			addMask('../../img/loading.gif', 'loading');
-			var str = '<li data-val="无" data-id="0" data-begin="0" data-end="0" >无</li>';
-			appcan.request.ajax({
-				url: httpHost + 'travelApplyController.do?queryForExp',
-				type: 'POST',
-				dataType: 'json',
-				beforeSend: addHeader,
-				success: function(data) {
-					removeMask();
-					objson = data;
-					appcan.window.closeToast();
-					if(objson.success) {
-						for(var i = 0; i < objson.obj.length; i++) {
-							var text = objson.obj[i].reason;
-							var id = objson.obj[i].id;
-							var begin = objson.obj[i].begin;
-							var end = objson.obj[i].end;
-							var from = objson.obj[i].from;
-							var to = objson.obj[i].to;
-							var span = '<span class="s-date">(' + NYR(begin, 1) + '~' + NYR(end, 1) + ')</span>';
-							str += '<li data-val=' + text + (i + 1) + ' data-id=' + id + ' data-begin=' + begin + ' data-end=' + end + ' data-from=' + from + ' data-to=' + to + '>' + text + span + '</li>';
-						}
-						$("#selectUl").html(str);
-						selectMobiscroll = $("#selectUl").mobiscroll().treelist({
-							onSet: function(val, obj) {
-								val = val.valueText;
-								if(val === "无") {
-									init();
-									return;
-								}
-								getSelect(val);
-								$("#selectUl_dummy").val(val.replace(/\d+/g, ''));
-							}
-						});
-						$("#selectUl_dummy").val('无');
-					} else {
-						if(objson.msg == "用户未登录") {
-							reLogin(getApply);
-						} else {
-							selectMobiscroll = $("#selectUl").mobiscroll().treelist();
-							$("#selectUl_dummy").val("无");
-						}
-					}
-					$("#applys").removeClass("none");
-				},
-				error: function(e, err) { removeMask(); }
-			});
-		}
-
-		function getSelect(val) {
-			$('#selectUl li').each(function() {
-				if($(this).data('val') == val) {
-					var self = $(this);
-					for(var key in citysMap) {
-						if(citysMap[key] === self.data("from").replace(/市/g, "")) {
-							$("#from_city").text(self.data("from").replace(/市/g, ""));
-							appcan.locStorage.setVal("flightFromCity", citysMap[key]);
-							appcan.locStorage.setVal("flightFromCityNode", key)
-						} else if(citysMap[key] === self.data("to").replace(/市/g, "")) {
-							$("#to_city").text(self.data("to").replace(/市/g, ""));
-							appcan.locStorage.setVal("flightToCity", citysMap[key]);
-							appcan.locStorage.setVal("flightToCityNode", key);
-						}
-					}
-					mySelect.begin = self.data('begin');
-					mySelect.end = self.data('end');
-					mySelect.id = self.data('id');
-					setStartTime(self);
-				}
-			});
-		}
-
 		function setStartTime(obj) {
 			var str = obj.data("begin");
-			appcan.locStorage.setVal("beginDate", str);
+			localSetItem("beginDate", str);
 			var str1 = obj.data("end");
 			if(str == '0' || str1 == '0') {
 				init();
@@ -366,26 +259,32 @@
 			var city = cityName.split(",")[0];
 			var cityNode = cityName.split(",")[1];
 			$("#from_city").text(city);
-			appcan.locStorage.setVal("flightFromCity", city);
-			appcan.locStorage.setVal("flightFromCityNode", cityNode);
+			localSetItem("flightFromCity", city);
+			localSetItem("flightFromCityNode", cityNode);
 		};
 
 		function setToCity(cityName) {
 			var city = cityName.split(",")[0];
 			var cityNode = cityName.split(",")[1];
 			$("#to_city").text(city);
-			appcan.locStorage.setVal("flightToCity", city)
-			appcan.locStorage.setVal("flightToCityNode", cityNode)
+			localSetItem("flightToCity", city)
+			localSetItem("flightToCityNode", cityNode)
 		}
 
-		appcan.switchBtn(".switch", function(obj, value) {
-			if(value) {
-				$("#endDate").show();
-			} else {
-				$("#endDate").hide();
+		$('.switchs').on('click', function() {
+			var that = $(this),
+				cls = 'mui-active';
+				
+			if(that.hasClass(cls)) {
+				that.removeClass(cls);
+				$('#endDate').hide();
+			}else{
+				that.addClass(cls);
+				$('#endDate').show();
 			}
-		})
-		appcan.button("#shipping li", "btn-act", function() {
+		});
+		
+		$('#shipping li').on('click', function() {
 			var self = $(this);
 			if(self.is(":first-child")) {
 				$(this).addClass("active").siblings().removeClass("active");
@@ -428,23 +327,23 @@
 			return arr;
 		}
 
-		appcan.button("#planeIcon", "btn-act", function() {
+		$('#planeIcon').on('click', function() {
 			var temCity;
 			temCity = $("#from_city").html();
 			$("#from_city").html($("#to_city").html());
 			$("#to_city").html(temCity);
 			var from = {
-				city: appcan.locStorage.getVal("flightFromCity"),
-				node: appcan.locStorage.getVal("flightFromCityNode"),
+				city: localGetItem("flightFromCity"),
+				node: localGetItem("flightFromCityNode"),
 			}
 			var to = {
-				city: appcan.locStorage.getVal("flightToCity"),
-				node: appcan.locStorage.getVal("flightToCityNode"),
+				city: localGetItem("flightToCity"),
+				node: localGetItem("flightToCityNode"),
 			}
-			appcan.locStorage.setVal("flightFromCity", to.city);
-			appcan.locStorage.setVal("flightFromCityNode", to.node);
-			appcan.locStorage.setVal("flightToCity", from.city);
-			appcan.locStorage.setVal("flightToCityNode", from.node);
+			localSetItem("flightFromCity", to.city);
+			localSetItem("flightFromCityNode", to.node);
+			localSetItem("flightToCity", from.city);
+			localSetItem("flightToCityNode", from.node);
 		});
 		
 		//return 是否往返
@@ -456,24 +355,24 @@
 		
 		//查询机票
 		function searchPlane() {
-			appcan.locStorage.setVal("return", $(".switch").attr("data-checked"));
-            appcan.locStorage.setVal("returnFlight",0);
-			appcan.locStorage.setVal("begin", mySelect.begin);
-			appcan.locStorage.setVal("end", mySelect.end);
-			appcan.locStorage.setVal("airDate", $("#startDateHidden").val());
-			appcan.locStorage.setVal("flightSiteType", getShipping());
-			appcan.locStorage.setVal("openFlightSearchResult", "true");
-			appcan.locStorage.setVal("itineraryId", mySelect.id);
-			appcan.locStorage.setVal("expId", mySelect.id);
+			localSetItem("return", $(".switch").attr("data-checked"));
+            localSetItem("returnFlight",0);
+			localSetItem("begin", mySelect.begin);
+			localSetItem("end", mySelect.end);
+			localSetItem("airDate", $("#startDateHidden").val());
+			localSetItem("flightSiteType", getShipping());
+			localSetItem("openFlightSearchResult", "true");
+			localSetItem("itineraryId", mySelect.id);
+			localSetItem("expId", mySelect.id);
             if($(".switch").attr("data-checked")=="true"){
-                appcan.locStorage.setVal("backAirDate", $("#endDateHidden").val());
+                localSetItem("backAirDate", $("#endDateHidden").val());
             }
             
-            if(appcan.locStorage.getVal("flightFromCityNode")!=appcan.locStorage.getVal("flightToCityNode")){
+            if(localGetItem("flightFromCityNode")!=localGetItem("flightToCityNode")){
 				closeMobiscroll();
 				window.location.href = 'plane_ticket_searchresult_content.html';
 			}else{
-				alert('始发地和目的地不能相同，请重新选择。');
+				mui.toast('始发地和目的地不能相同，请重新选择。');
 				return false;
 			}
 		}

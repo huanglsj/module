@@ -9,18 +9,18 @@ if(!changeSkin) {
 }
 
 //更改默认皮肤
-function changeLink(skin){
+function changeLink(skin) {
 	var link = document.getElementsByTagName("link");
-	for(var i=0;i<link.length;i++){
+	for(var i = 0; i < link.length; i++) {
 		var linkTitle = link[i].title;
-		if(linkTitle){
-			if(skin==linkTitle){
+		if(linkTitle) {
+			if(skin == linkTitle) {
 				link[i].removeAttribute("disabled");
-			}else{
-				link[i].setAttribute("disabled","disabled");
+			} else {
+				link[i].setAttribute("disabled", "disabled");
 			}
 		}
-		
+
 	}
 }
 
@@ -121,6 +121,11 @@ function NYR(date, flag) {
 		da = new Date();
 		return da.getFullYear() + "年" + ((da.getMonth() + 1) < 10 ? "0" + (da.getMonth() + 1) : (da.getMonth() + 1)) + "月" + (da.getDate() < 10 ? "0" + da.getDate() : da.getDate()) + "日";
 	}
+}
+function getDayInWeek(myDate){
+    var weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+    var day = weekday[myDate.getDay()];
+    return day;
 }
 //加减天数
 //date 传来的日期2016-12-12
@@ -268,4 +273,13 @@ function isPhoneNumber(str) {
 	} else {
 		return true;
 	}
+}
+
+
+//获取链接参数
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r != null) return unescape(r[2]);
+	return null;
 }
