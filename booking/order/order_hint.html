@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>订单提示</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/order_hint.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<div class="mui-title">订单提示</div>
+		</header>
+		<div class="mui-content order-list" id="list" v-cloak>
+			<div class="title">
+				<i class="mui-icon mui-icon-checkmarkempty"></i>
+				<span>订单创建成功</span>
+			</div>
+			<div class="con">
+				<div class="tr" v-for="o in orderList" @click="details(o.orderNo)">
+					<a href="javascript:;">
+						<span>查看订单{{o.orderNo}}详情</span>
+						<i class="mui-icon mui-icon-arrowright"></i>
+					</a>
+				</div>
+			</div>
+
+			<div class="hint-btn">
+				<button type="button" class="mui-btn mui-btn-block mui-btn-outlined shallow-bg" @click="back">返回首页</button>
+			</div>
+		</div>
+	</body>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script src="/module/js/vue.min.js"></script>
+	<script>
+		var orderList = localGetItem("orderList");
+		var orderListType = localGetItem("orderListType");
+		if(orderList) {
+			orderList = JSON.parse(orderList);
+			console.log(orderList);
+			var app = new Vue({
+				el: '#list',
+				data: {
+					orderList: orderList
+				},
+				methods: {
+					details: function(code) {
+						if(code) {
+							localSetItem("orderNo", code);
+							if(orderListType == 1) {
+								mui.openWindow({
+									url: '/module/booking/order/order_plane.html',
+									id: 'order_plane'
+								})
+							} else if(orderListType == 2) {
+								mui.openWindow({
+									url: '/module/booking/order/order_hotel.html',
+									id: 'order_hotel'
+								})
+							}
+
+						} else {
+							mui.alert("订单号不存在");
+						}
+					},
+					back: function() {
+						mui.openWindow({
+							url: '/module/index.html',
+							id: 'index'
+						})
+					}
+				}
+			})
+		} else {
+
+		}
+	</script>
+
+</html>

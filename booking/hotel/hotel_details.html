@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title>酒店详情</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" href="/module/css/mui/mui.min.css">
+		<link rel="stylesheet" href="css/hotel_details.css">
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<div id="body">
+			<header class="mui-bar mui-bar-nav deep-bg">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">酒店详情</h1>
+				<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
+			</header>
+			<div class="content mui-content" id="hotelDetail" v-cloak>
+				<div class="hotel_pic">
+					<div id="slider" class="mui-slider">
+						<div class="mui-slider-group mui-slider-loop">
+							<div class="mui-slider-item" v-for="(img,index) in picArr">
+								<a href="#">
+									<img :src="img">
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="hotel_pic_left shallow-bg" id="hotelName">{{items.hotelName}}</div>
+					<div class="hotel_pic_right">{{picArr.length}}张</div>
+				</div>
+				<div class="detailed_address ub" v-on:click="hotelIn(items)">
+					<div class="address_details ub-f1" id="hotelAddress">{{items.address}}</div>
+					<div class="address_query ub ub-ac">地图<span class="right_back">></span></div>
+				</div>
+				<div class="hotel_details ub" v-on:click="hotelIn(items)">
+					<div class="ub-f1">
+						<span id="shortDesc" v-if="items.shortDesc">{{items.shortDesc}}</span>
+						<span id="hotelTel" class="shallow-text" v-if="items.fax">{{items.fax}}</span>
+						<span v-if="!items.shortDesc">暂无简介</span>
+					</div>
+					<div class="ub ub-ac">详情<span class="right_back">></span></div>
+				</div>
+				<div class="Check_in_time">
+					<span id="bgnDate"></span>~<span id="endDate"></span>
+					<span class="sum_time">共<span id="day">{{day}}</span>晚</span>
+				</div>
+				<ul class="room_information_ul">
+					<li v-for="(item,index) in items.roomRates">
+						<div class="room_information ub ub-pc">
+							<div class="room-img">
+								<img src="img/executive.png">
+							</div>
+							<div class="room_introduce ub ub-f2 ub-ver">
+								<div class="ub">{{item.roomTypeName}}</div>								
+								<div class="ub">{{item.roomTypeDesc}}</div>
+								<div class="ub">{{item.cancelRuleDesc}}</div>
+							</div>
+							<div class="drop_down_an ub">
+								<div class="price ub-ac shallow-text">￥<span>{{item.price}}</span></div>
+								<div class="order shallow-bg ub ub-ac" v-on:click="hotelOrder(items,item,index)">预订</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script src="/module/js/layer/layer.js"></script>
+	<script src="/module/js/vue.min.js"></script>
+	<script>
+		var hotelCode;
+		var bgnDate;
+		var endDate, app, picArrList;
+		app = new Vue({
+			el: '#hotelDetail',
+			data: {
+				items: [],
+				picArr: [],
+				day: 0
+			},
+			methods: {
+				hotelIn: function(items) {
+					localSetItem("hotelDetail", JSON.stringify(items));
+					mui.openWindow({
+						url: 'hotel_introduction.html',
+						id: 'hotel_introduction'
+					})
+				},
+				hotelOrder: function(items, item, index) {
+					localSetItem("hotelDetail", JSON.stringify(items));
+					localSetItem("hotelRoomRates", JSON.stringify(item));
+					localSetItem("hotelRoomRatesIndex", index);
+					mui.openWindow({
+						url: 'hotel_show.html',
+						id: 'hotel_show'
+					});
+				}
+			}
+		});
+
+		var hotelQueryData = localGetItem("hotelQueryData");
+		var hotelCode = localGetItem("hotelCode");
+		if(!hotelCode || !hotelQueryData) {
+			mui.alert('参数有误，请重新查询', function() {
+				mui.back();
+			});
+		} else {
+			hotelQueryData = JSON.parse(hotelQueryData);
+			document.getElementById("bgnDate").innerText = NYR(hotelQueryData.inday, 2);
+			document.getElementById("endDate").innerText = NYR(hotelQueryData.outday, 2);
+			layer.open({
+				type: 2,
+				content: '数据正在加载',
+				shadeClose: false
+			});
+			myHotelDetails();
+		}
+
+		function myHotelDetails() {
+			mui.ajax({
+				url: httpHost + 'hotelController.do?findHotelListModular',
+				data: {
+					hotelCode: hotelCode,
+					bgnDate: hotelQueryData.inday,
+					endDate: hotelQueryData.outday
+				},
+				type: 'post',
+				dataType: 'json',
+				success: function(data) {
+					layer.closeAll();
+					console.log(data);
+					document.getElementById("hotelDetail").style.display = 'block';
+					if(data.success) {
+						app.items = data.obj;
+						var imgMap = data.obj.imgMap;
+						var imgMapArr = [];
+						if(imgMap.CT) {
+							for(var i = 0; i < 2; i++) {
+								imgMapArr.push(imgMap.CT[i].url);
+							}
+						}
+						if(imgMap.DT) {
+							for(var i = 0; i < 2; i++) {
+								imgMapArr.push(imgMap.DT[i].url);
+							}
+						}
+						if(imgMap.HY) {
+							for(var i = 0; i < 2; i++) {
+								imgMapArr.push(imgMap.HY[i].url);
+							}
+						}
+						if(imgMap.KF) {
+							for(var i = 0; i < 2; i++) {
+								imgMapArr.push(imgMap.KF[i].url);
+							}
+						}
+						if(imgMap.QT) {
+							for(var i = 0; i < 2; i++) {
+								imgMapArr.push(imgMap.QT[i].url);
+							}
+						}
+						if(imgMap.WJ) {
+							for(var i = 0; i < 2; i++) {
+								imgMapArr.push(imgMap.WJ[i].url);
+							}
+						}
+						app.picArr = imgMapArr;
+						var slider = mui("#slider");
+						app.$nextTick(function() {
+							slider.slider();
+						})
+						app.day = data.obj.roomRates[0].rateDetail.length;
+					} else {
+						mui.toast('查询失败');
+					}
+				},
+				error: function(err) {
+					console.log(err);
+					layer.closeAll();
+					mui.alert('网络请求异常，请重新查询', function() {
+						mui.back();
+					});
+				}
+			});
+		}
+	</script>
+
+</html>

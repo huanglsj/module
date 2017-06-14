@@ -1,0 +1,39 @@
+ul,ol,li{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.main > .ub li{
+	padding: 25px 0;
+	background-color: #fff;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	width: 50%;
+	font-size: 16px;
+}
+.main > .ub li:last-child{
+	border-right: 0;
+}
+.main > .ub:last-child li{
+	border-bottom: 0;
+}
+.main > .ub li i{
+	font-size: 45px;
+}
+.main > .ub li .name{
+	padding-top: 10px;
+	color: #666;
+}
+.icon-feiji1{
+	color: #3a5a98;
+}
+.icon-jiudian-copy{
+	color: #1edcdc;
+}
+.icon-huoche{
+	color: #D15543;
+}
+.icon-dingdan{
+	color: #f5d012;
+}
+

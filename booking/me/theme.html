@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>更改主题</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/module/css/ui-box.css" />
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/module/css/mobiscroll.min.css" />
+		<link rel="stylesheet" href="css/theme.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+			<div class="mui-title">更改主题</div>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" data-color="#3a5a98" data-name="blue">#3a5a98</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3" data-color="#287C57" data-name="green">#287C57</li>
+			</ul>
+		</div>
+	</body>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script>
+		var li = document.getElementsByTagName("li");
+		for(var i = 0; i < li.length; i++) {
+			li[i].style.backgroundColor = li[i].getAttribute("data-color");
+		}
+
+		mui(".mui-table-view").on("tap", "li", function(e) {
+			var color = e.target.getAttribute("data-name");
+			mui.confirm('您确定要改成这个'+color+'主题', '提示', ['是', '否'], function(e) {
+				if(e.index == 0) {
+					localSetItem("changeSkin",color);
+					window.location.reload();
+				}
+			});
+		})
+	</script>
+
+</html>

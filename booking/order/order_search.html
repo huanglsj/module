@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>订单查询</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/module/css/ui-box.css" />
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/module/css/mobiscroll.min.css" />
+		<link rel="stylesheet" href="css/order_search.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+			<div class="mui-title">订单查询</div>
+		</header>
+		<div id="query" class="mui-bar mui-bar-tab ub ub-ac ub-pc shallow-bg">
+			<i class="mui-icon mui-icon-search"></i>
+			<span class="ub ub-ac">查询</span>
+		</div>
+		<div class="mui-content">
+			<div class="order-condition">
+				<div class="tr">
+					<div class="name">时间：</div>
+					<div class="ub-f1 ub ub-ac">
+						<div class="tr-list">
+							<input type="text" class="text" placeholder="开始时间" id="startDate" />
+						</div>
+						<div class="arrow">~</div>
+						<div class="tr-list">
+							<input type="text" class="text end-date" placeholder="结束时间" id="endDate" />
+						</div>
+					</div>
+				</div>
+				<div class="tr">
+					<div class="name">订单号：</div>
+					<div class="ub-f1">
+						<input type="text" class="text ub-f1" id="orderNo" placeholder="支持多个订单号的查询，以|隔开" />
+					</div>
+				</div>
+				<div class="tr">
+					<div class="name">订单类型：</div>
+					<div class="ub-f1">
+						<select class="select" id="select">
+							<option value="">无</option>
+							<option value="YSKFLIGHT">机票</option>
+							<option value="BEHOTEL">酒店</option>
+						</select>
+					</div>
+				</div>
+				<div class="tr">
+					<div class="name">订单类型：</div>
+					<div class="ub-f1">
+						<select class="select" id="status">
+							<option value="">无</option>
+							<option value="1">新单</option>
+							<option value="2">确认</option>
+							<option value="3">完成</option>
+							<option value="4">取消</option>
+							<option value="5">退订</option>
+							<option value="6">作废</option>
+						</select>
+					</div>
+				</div>
+				<!--<div class="tr">
+					<div class="name">订单人身份证：</div>
+					<div class="ub-f1">
+						<input type="text" class="text" id="card" value="440106198212171816" placeholder="身份证" />
+					</div>
+				</div>-->
+				<div class="tr">
+					<div class="name">订单人手机号码：</div>
+					<div class="ub-f1">
+						<input type="text" class="text" id="mobile" value="13922331217" placeholder="手机号码" />
+					</div>
+				</div>
+				<div class="tr tips">
+					*身份证和手机号码二选一必填
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script src="/module/js/jquery.min.js"></script>
+	<script src="/module/js/mobiscroll.min.zh.js"></script>
+	<script src="/module/js/vue.min.js"></script>
+	<script>
+		$("#startDate").mobiscroll().calendar({
+			onSet: function(val, obj) {
+				val = val.valueText;
+				$("#startDate").val(val);
+				var endVal = $("#endDate").val();
+				if(endVal) {
+					var myEndDate = new Date($("#endDate").val()).getTime();
+					var mystartDate = new Date(val).getTime();
+					if((mystartDate - myEndDate) > 0) {
+						$("#endDate").val(val);
+					}
+					endDateMobiscroll(val);
+				} else {
+					endDateMobiscroll(val);
+				}
+			}
+		});
+
+		endDateMobiscroll();
+
+		function endDateMobiscroll(date) {
+			if(!date) {
+				date = '';
+			} else {
+				date = new Date(date);
+			}
+			$("#endDate").mobiscroll().calendar({
+				min: date,
+				onSet: function(val, obj) {
+					val = val.valueText;
+					$("#endDate").val(val);
+				}
+			});
+		}
+
+		$("#select").mobiscroll().select();
+		$("#status").mobiscroll().select();
+
+		$("#query").click(function() {
+			var startDate = $("#startDate").val();
+			var endDate = $("#endDate").val();
+			var orderNo = $("#orderNo").val().trim();
+			var type = $("#select").val();
+			var status = $("#status").val();
+//			var card = $("#card").val().trim();
+			var mobile = $("#mobile").val().trim();
+
+			if(!mobile) {
+				mui.alert("手机号码不能为空");
+				return;
+			}
+
+//			if(card && !isIDCard(card)) {
+//				mui.alert("填写的身份证格式不对");
+//				return;
+//			}
+
+			if(mobile && !isPhoneNumber(mobile)) {
+				mui.alert("填写的手机号码格式不对");
+				return;
+			}
+
+			var orderSearchData = {
+				orderNos: orderNo,
+				startTime: startDate,
+				endTime: endDate,
+				enumProduct: type,
+				status: status,
+				contactCertificateNo: '',
+				contactName: '',
+				contactPhone: mobile,
+			}
+
+			localSetItem("orderSearchData", JSON.stringify(orderSearchData));
+
+			mui.openWindow({
+				url: '/module/booking/order/order_list.html',
+				id: 'order_list'
+			});
+
+		})
+	</script>
+
+</html>

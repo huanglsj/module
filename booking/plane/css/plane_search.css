@@ -1,0 +1,98 @@
+*{
+	padding: 0;
+	margin: 0;
+}
+ul,ol,li{
+    list-style: none;
+}
+.none{
+	display: none !important;
+}
+.mui-bar-tab {
+	font-size: 16px;
+}
+.plane-ticket-con .list{
+	background-color: #fff;
+    padding: 0 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    color:#546581; 
+    border-bottom: 1px solid #eae9ee;
+    border-top: 1px solid #eae9ee;
+}
+.plane-ticket-con .first-back{
+	padding: 12px 10px;
+}
+.plane-ticket-con .first-back .mui-switch-mini{
+	height: 27px;
+}
+.plane-ticket-con .three-list{
+    padding-bottom: 10px;
+}
+.three-list .tr:first-child{
+    padding-top: 10px;
+}
+.three-list .tr .icon{
+    background: url("../img/plane.png") no-repeat;
+    width: 40px;
+    height: 40px;
+    background-size: 100%;
+}
+.three-list .tr .con{
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.three-list .tr .address{
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eae9ee;
+    width: 100%;
+}
+.three-list .tr:nth-of-type(2){
+    padding: 10px 0;
+    border-bottom: 1px solid #eae9ee;
+}
+.three-list .tr .week{
+    font-size: 14px;
+}
+.three-list .tr:nth-of-type(3){
+    padding: 10px 0;
+}
+.plane-ticket-con .three-list .start-date{
+   width: 50%;
+}
+.plane-ticket-con .three-list .end-date{
+   display: none;
+   width: 50%;
+}
+.three-list .shipping{
+    margin-top: 10px;
+}
+.three-list .shipping li{
+    width: 25%;
+    border-bottom: 1px solid #526283;
+    border-top: 1px solid #526283;
+    border-left: 1px solid #526283;
+    text-align: center;
+    padding: 8px 0;
+    color: #546380;
+}
+.three-list .shipping li:first-child{
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+.three-list .shipping li:last-child{
+    border-right: 1px solid #526283;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+.three-list .shipping li.active{
+    background-color: #6CBDF5;
+    color: #fff;
+}
+.three-list .shipping li.shallow-bg{
+	color: #fff;
+}
+.plane-ticket-con .icon-feiji{
+	font-size: 40px;
+}

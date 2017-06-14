@@ -1,0 +1,43 @@
+.order-condition{
+	font-size: 16px;
+	background-color: #fff;
+	padding: 12px;
+}
+.order-condition .tr{
+	margin-bottom: 15px;
+	border-bottom: 1px solid #ddd;
+}
+.order-condition .tr-list{
+	width: 40%;
+}
+.order-condition .arrow{
+	width: 20%;
+	text-align: center;
+}
+.order-condition .text{
+	height: 45px;
+	padding: 0;
+	border-radius: 0;
+	border: 0;
+	margin: 0;
+	color: #666;
+}
+.order-condition .name{
+	/*width: 120px;*/
+}
+.order-condition .end-date{
+	text-align: right;
+}
+.order-condition .select,#select_dummy,#status_dummy{
+	padding: 0;
+	margin: 0;
+	height: 45px;
+	color: #666;
+	border: 0;
+}
+.order-condition .tips{
+	border-bottom: 0;
+	font-size: 12px;
+	color: red;
+	margin-bottom: 0;
+}

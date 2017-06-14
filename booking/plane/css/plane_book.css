@@ -1,0 +1,117 @@
+ul,ol,ol{
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+.mui-bar{
+	box-shadow: none;
+}
+.mui-title{
+	line-height: 18px;
+	padding-top: 8px;
+}
+.mui-title .head-icon{
+    background-image: url("../img/head_plane.png");
+    width: 60px;
+    height: 16px;
+    margin: -5px 5px 0;
+}
+.mui-title .cur-day{
+	margin: 0;
+	font-size: 12px;
+	color: #ddd;
+}
+.plane-t-head{
+    padding: 15px 10px;
+    color: #fff;
+    font-size: 16px;
+}
+.plane-t-head p{
+	color: #fff;
+	margin: 0;
+}
+.plane-t-head .plane-t-info > div:nth-of-type(1),.plane-t-head .plane-t-info > div:nth-of-type(3){
+    width: 35%;
+}
+.plane-t-head .plane-t-info > div:nth-of-type(2){
+    width: 28%;
+    text-align: center;    
+    padding: 8px 1%;
+    font-size: 12px;
+}
+.plane-t-head .plane-t-info .arrow{
+    background-image: url("../img/arrow.png");
+    height: 10px;
+    padding-bottom: 12px;
+    background-position: bottom;
+    width: 90%;
+    max-width: 70px;
+    margin: auto;
+    margin-bottom: 10px;
+}
+.plane-t-head .plane-t-info > div:nth-of-type(1){
+    text-align: right;
+}
+.plane-t-head .plane-t-info .big{
+    font-size: 22px;
+}
+.plane-t-head .plane-t-tails{
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+.plane-t-head .plane-t-tails .logo-img{
+    width: 15px;
+    height: 15px;
+    vertical-align: middle;
+}
+.plane-book-ul li{
+    padding: 12px 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #E1E2E7;
+    color: #808080;
+    font-size: 16px;
+}
+.plane-book-ul li .pink{
+    font-size: 20px;
+    color: #F95C79;
+    margin-bottom: 5px;
+}
+.plane-book-ul li .small{
+    font-size: 14px;
+}
+.plane-book-ul .book .b-btn{
+    background-color: #F95C79;
+    color: #fff;
+    border-radius: 5px;
+    width: 64px;
+    height: 48px;
+    border: 2px solid #F95C79;
+}
+.plane-book-ul .num{
+    border-radius: 5px;
+    width: 64px;
+    height: 48px;
+    border: 2px solid #F95C79;
+    background-color: #F95C79;
+}
+.plane-book-ul .num > div{
+    height: 24px;
+}
+.plane-book-ul .num .num-btn{
+    background-color: #F95C79;
+    color: #fff;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.plane-book-ul .num .surplus{
+    background-color: #fff;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.plane-book-ul .cost{
+    margin-bottom: 8px;
+}
+.plane-book-ul .explain{
+    margin-top: 8px;
+}

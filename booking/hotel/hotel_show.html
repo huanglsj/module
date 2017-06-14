@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title>酒店订单填写</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" href="css/hotel_show.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body class="um-vp" ontouchstart>
+		<div id="main" v-cloak>
+			<header class="mui-bar mui-bar-nav deep-bg">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">订单填写</h1>
+				<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
+			</header>
+			<div id="footer" class="mui-bar mui-bar-tab footer ub">
+				<div class="ub ub-ac ub-f1 ub-left">
+					<div class="ub-f1 ub-ac ub-pc umar-l1">
+						<span>总额</span>
+						<span>￥<span class="totalPrice">{{totalPrice | fixed}}</span></span>
+					</div>
+				</div>
+				<div class=" uinn_submit  user-blue ub ub-ac ub-pc shallow-bg" id="order" @click="submitOrder">
+					提交订单
+				</div>
+			</div>
+			<div id="content" class="mui-content">
+				<div class="hotel-detail section">
+					<div id="hotelName" class="hd-hotel">{{hotel.hotelName}}</div>
+					<div id="roomType" class="message">
+						<span>{{roomRates.roomTypeName}}</span>
+						<span class="red">￥{{roomRates.price | fixed}}</span>
+					</div>
+					<div class="message hd-date">
+						入住：
+						<span id="beginDate">{{roomRates.startDate}}</span>
+						<span>~</span>
+						<span id="endDate">{{roomRates.endDate}}</span> 共
+						<span class="duration">{{roomRates.rateDetail.length}}</span>晚
+					</div>
+					<div class="message hd-date">地址：{{hotel.address}}</div>
+					<div class="message red">规则：<span id="rule">{{roomRates.cancelRuleDesc}}</span></div>
+				</div>
+
+				<div class="section guest-detail">
+					<div class="red">*一个房间只需一个入住人的信息</div>
+					<div class="ub ub-ac gd-numbox">
+						<div class="name">房间数量</div>
+						<div class="mui-numbox-gd">
+							<button class="mui-btn mui-btn-minus" type="button" @click="delGuest">-</button>
+							<input id="test" readonly="readonly" class="mui-input-numbox" type="number" v-model="quantity" />
+							<button class="mui-btn mui-btn-plus" type="button" @click="addGuest">+</button>
+						</div>
+					</div>
+					<div class="gd-guestslist">
+						<div id="guests" class="ub ub-f1">
+							<div class="guest">
+								<div class="tr ub ub-ac" v-for="(guest,index) in guests">
+									<div class="no ub ub-ac ub-pc shallow-bg">{{index+1}}</div>
+									<div class="ub-f1">
+										<input type="text" placeholder="姓名" v-model="guest.name" />
+										<input type="text" placeholder="身份证" v-model="guest.idCard" />
+										<input type="number" placeholder="手机号码" v-model="guest.telephone" />
+									</div>
+									<!--<div class="guest-del" @click="delGuest(index)">
+										<i class="mui-icon mui-icon-minus"></i>
+									</div>-->
+								</div>
+								<!--<div class="add-guests ub ub-f1 ub-pc shallow-bg" @click="addGuest">添加入住人</div>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="/module/js/mui/mui.min.js"></script>
+		<script src="/module/js/vue.min.js"></script>
+		<script src="/module/js/layer/layer.js"></script>
+		<script>
+			var hotelDetail = localGetItem("hotelDetail");
+			var hotelRoomRates = localGetItem("hotelRoomRates");
+			var hotelRoomRatesIndex = localGetItem("hotelRoomRatesIndex");
+			var hotelSubmitFlag = true;
+			if(!hotelRoomRates || !hotelRoomRatesIndex || !hotelDetail) {
+				mui.alert('参数有误，请重新查询', function() {
+					mui.back();
+				});
+			} else {
+				hotelRoomRates = JSON.parse(hotelRoomRates);
+				console.log(hotelRoomRates);
+				hotelDetail = JSON.parse(hotelDetail);
+				vueDrawing();
+			}
+
+			function vueDrawing() {
+
+				Vue.filter("fixed", function(value) {
+					value = value * 1;
+					var price = value.toFixed(3);
+					price = price.substring(0, price.lastIndexOf('.') + 3);
+					return price;
+				});
+
+				var app = new Vue({
+					el: '#main',
+					data: {
+						hotel: hotelDetail,
+						roomRates: hotelRoomRates,
+						guests: [{
+							name: '张轶',
+							idCard: '440106198212171816',
+							telephone: '13922331217'
+						}],
+						totalPrice: hotelRoomRates.price,
+						quantity: 1
+					},
+					methods: {
+						delGuest: function() {
+							if(this.quantity > 1) {
+								this.quantity--;
+								this.guests.splice(this.quantity, 1);
+								this.totalPrice = this.roomRates.price * this.quantity;
+							}
+						},
+						addGuest: function() {
+							if(this.quantity < 10) {
+								this.guests.push({
+									name: '',
+									idCard: '',
+									telephone: ''
+								});
+								this.quantity++;
+								this.totalPrice = this.roomRates.price * this.quantity;
+							}
+						},
+						submitOrder: function() {
+							var _this = this;
+							var guestsNameFlag = false;
+							var guestsIdFlag = false;
+							var guestsIdVerifyFlag = false;
+							var guestsPhoneFlag = false;
+							var guestsPhoneVerifyFlag = false;
+							for(var i = 0; i < _this.guests.length; i++) {
+
+								if(!_this.guests[i].name) {
+									guestsNameFlag = false;
+									break;
+								} else {
+									guestsNameFlag = true;
+								}
+
+								if(!_this.guests[i].idCard) {
+									guestsIdFlag = false;
+									break;
+								} else {
+									guestsIdFlag = true;
+								}
+
+								if(!isIDCard(_this.guests[i].idCard)) {
+									guestsIdVerifyFlag = false;
+									break;
+								} else {
+									guestsIdVerifyFlag = true;
+								}
+
+								if(!_this.guests[i].telephone) {
+									guestsPhoneFlag = false;
+									break;
+								} else {
+									guestsPhoneFlag = true;
+								}
+
+								if(!isPhoneNumber(_this.guests[i].telephone)) {
+									guestsPhoneVerifyFlag = false;
+									break;
+								} else {
+									guestsPhoneVerifyFlag = true;
+								}
+
+							}
+							if(!guestsNameFlag) {
+								layer.open({
+									content: '请填写姓名',
+									skin: 'msg',
+									time: 2
+								});
+								return;
+							}
+
+							if(!guestsIdFlag) {
+								layer.open({
+									content: '请填写身份证',
+									skin: 'msg',
+									time: 2
+								});
+								return;
+							}
+
+							if(!guestsIdVerifyFlag) {
+								layer.open({
+									content: '填写的身份证不正确',
+									skin: 'msg',
+									time: 2
+								});
+								return;
+							}
+
+							if(!guestsPhoneFlag) {
+								layer.open({
+									content: '请填写手机号码',
+									skin: 'msg',
+									time: 2
+								});
+								return;
+							}
+
+							if(!guestsPhoneVerifyFlag) {
+								layer.open({
+									content: '填写的手机号码不正确',
+									skin: 'msg',
+									time: 2
+								});
+								return;
+							}
+
+							var orderData = {
+								quantity: _this.quantity,
+								hotelName: _this.hotel.hotelName,
+								hotelCode: _this.roomRates.hotelCode,
+								hotelAddress: _this.hotel.address,
+								hotelTel: _this.hotel.tel,
+								roomTypeCode: _this.roomRates.roomTypeCode,
+								ratePlanCode: _this.roomRates.ratePlanCode,
+								vendorCode: _this.roomRates.vendorCode,
+								cancelRuleDesc: _this.roomRates.cancelRuleDesc,
+								roomTypeName: _this.roomRates.roomTypeName,
+								bgnDate: _this.roomRates.startDate,
+								endDate: _this.roomRates.endDate,
+								arriveEarlyTime: '1800', //最早入住时间
+								arriveLateTime: '2100', //最晚入住时间
+								resGuests: JSON.stringify(_this.guests),
+								totalPrice: _this.totalPrice
+							}
+							console.log(orderData);
+							if(hotelSubmitFlag) {
+								hotelSubmitFlag = false;
+								layer.open({
+									type: 2,
+									content: '正在提交订单',
+									shadeClose: false
+								});
+								mui.ajax({
+									url: httpHost + 'hotelController.do?createOrderModular',
+									data: orderData,
+									type: 'post',
+									dataType: 'json',
+									timeout:1000*30,
+									success: function(data) {
+										layer.closeAll();
+										console.log(data);
+										if(data.success) {
+											var arr = [];
+											arr.push(data.obj);
+											localSetItem("orderList", JSON.stringify(arr));
+											localSetItem("orderListType", 2);
+											mui.openWindow({
+												url: '/module/booking/order/order_hint.html',
+												id: 'order_hint'
+											})
+										} else {
+											hotelSubmitFlag = true;
+											mui.alert("订单提交失败");
+										}
+									},
+									error: function(err) {
+										layer.closeAll();
+										console.log(err);
+										hotelSubmitFlag = true;
+										mui.confirm('网络请求异常，是否重新提交', '提示', ['是', '否'], function(e) {
+											if(e.index == 0) {
+												_this.submitOrder();
+											}
+										});
+									}
+								})
+							} else {
+								mui.alert("您已经提交订单了，请前往订单列表查看");
+							}
+
+						}
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

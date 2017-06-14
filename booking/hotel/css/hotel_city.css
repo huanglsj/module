@@ -1,0 +1,69 @@
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+}
+
+.mui-bar {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.hot-city {
+	margin-right: 23px;
+	margin-bottom: 10px;
+	padding-top: 10px;
+}
+
+.hot-city .li {
+	width: 22%;
+	text-align: center;
+	margin: 1.5%;
+	float: left;
+}
+
+.hot-city .li a {
+	border: 1px solid #ddd;
+	display: block;
+	padding: 6px;
+	border-radius: 6px;
+	color: #000;
+}
+
+.hot-city .current {
+	display: none;
+	width: auto;
+	min-width: 22%;
+}
+
+.hot-city .gps{
+	width: auto;
+}
+
+.hot-city .current a,
+.hot-city .gps a {
+	color: red;
+}
+
+.hot-city .title {
+	margin-left: 1.5%;
+}
+
+.mui-indexed-history {
+	margin-bottom: 0;
+}
+
+.map {
+	display: none;
+}
+
+.remove {
+	float: right;
+	margin-right: 5.5%;
+}
+.remove i{
+	font-size: 18px;
+}
+.mui-content{
+	font-size: 16px;
+}

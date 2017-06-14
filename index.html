@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/fonts/iconfont.css">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" href="css/index.css">
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<script src="/module/js/global.js"></script>
+		<script>
+			if(!localGetItem("changeSkin")) {
+				var skin = getQueryString("skin");
+				if(skin) {
+					localSetItem("changeSkin", skin);
+					changeLink(skin);
+				} else {
+					localSetItem("changeSkin", 'blue');
+					changeLink('blue');
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="main">
+			<ul class="ub ul">
+				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/plane/plane_search.html" data-name="plane_search" id="plane">
+					<i class="iconfont icon-feiji1"></i>
+					<div class="name">机票</div>
+				</li>
+				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/hotel/hotel_search.html" data-name="hotel_search" id="hotel">
+					<i class="iconfont icon-jiudian-copy"></i>
+					<div class="name">酒店</div>
+				</li>
+			</ul>
+			<ul class="ub ul">
+				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,0)" id="train">
+					<i class="iconfont icon-huoche"></i>
+					<div class="name">火车</div>
+				</li>
+				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/order/order_search.html" data-name="order_search" id="order">
+					<i class="iconfont icon-dingdan"></i>
+					<div class="name">订单</div>
+				</li>
+			</ul>
+			<ul class="ub ul">
+				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/me/set.html" data-name="set" id="set">
+					<i class="mui-icon mui-icon-gear"></i>
+					<div class="name">设置</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script>
+		function jump(obj, type) {
+			var url = obj.getAttribute("data-href");
+			var name = obj.getAttribute("data-name");
+			if(type == 1 && url && name) {
+				mui.openWindow({
+					url: url,
+					id: name
+				});
+			} else {
+				mui.alert("该模块还没开放")
+			}
+		}
+	</script>
+
+</html>

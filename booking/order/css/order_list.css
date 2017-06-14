@@ -1,0 +1,92 @@
+.list{
+	margin: 12px 0;
+	background-color: #fff;
+	padding: 0 12px;
+	font-size: 16px;
+	color: #999;
+}
+.list .head{
+	padding: 12px 0;
+	border-bottom: 1px solid #ddd;
+	color: #000;
+}
+.list .head .type{
+	font-weight: bold;
+}
+.list .foot{
+	padding: 12px 0;
+	border-top: 1px dashed #ddd;
+}
+.list .foot .status{
+	color: #FE3C0F;
+	font-weight: bold;
+}
+.list .foot i{
+	margin-right: -9px;
+}
+.list .body{
+	position: relative;
+}
+.list .body .price{
+	font-size: 12px;
+	width: 25%;
+	text-align: right;
+}
+.list .body .price span{
+	font-size: 20px;
+}
+.list .body .tr{
+	margin: 10px 0;
+}
+.flight .td{
+	width: 20%;
+}
+.flight .first{
+	margin-right: 5%;
+}
+.flight .last{
+	margin-left: 5%;
+}
+.flight .center{
+	margin-right: 5%;
+}
+.flight .arrow{
+	height: 1px;
+	background-color: #ccc;
+	position: relative;
+	margin-left: 5%;	
+}
+.flight .arrow:before{
+	content: "";
+	position: absolute;
+	left: -10px;
+	width: 8px;
+	height: 8px;
+	border: 1px solid #ddd;
+	border-radius: 50%;
+	top: -5px;
+	background-color: #ddd;
+}
+.flight .arrow:after{
+	content: "";
+	position: absolute;
+	right: -10px;
+	width: 8px;
+	height: 8px;
+	border: 1px solid #ddd;
+	border-radius: 50%;
+	top: -5px;
+	background-color: #ddd;
+}
+.flight .address .td:first-child{
+	width: 40%;
+	margin-right: 10%;
+}
+.list .bold{
+	color: #000;
+}
+.list .logo{
+	width: 15px;
+	height: 15px;
+	vertical-align: middle;
+}

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title>提交订单</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/plane_bookdetails.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<div id="vue" v-cloak>
+			<header class="mui-bar mui-bar-nav deep-bg">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+				<div class="mui-title">
+					<div class="ub ub-ac ub-pc ub-f1 ulev-3 ut-s tx-c">
+						<div id="isBack"></div>
+						<div id="depPlane"></div>
+						<div class="head-icon ub-img"></div>
+						<div id="arrPlane"></div>
+					</div>
+				</div>
+				<a href="tel:02086132777" class="mui-icon mui-icon-phone mui-pull-right"></a>
+			</header>
+			<div id="footer" class="mui-bar mui-bar-tab footer ub">
+				<div class="ub ub-ac ub-f1 ub-left">
+					<div class="ub-f1 ub-ac ub-pc umar-l1">
+						<span>总额</span>
+						<span class="red">￥<span class="totalPrice">{{totalPrice}}</span></span>
+					</div>
+				</div>
+				<div class="footer-btn ub ub-ac ub-pc shallow-bg" @click="submitOrder">
+					提交订单
+				</div>
+			</div>
+			<div class="mui-content">
+				<div class="conten ub-f1 longlist">
+					<div class="Order_data deep-bg">
+						<div class="Order_curdata">
+							<span v-if="flightDetail[1]">往：</span><span id="f0_Date"></span>
+						</div>
+						<div class="Order_data_noe cl">
+							<div class="Order_time">
+								<div class="Order_StarTime">
+									<div id="departTime"></div>
+								</div>
+								<div class="Order_EndTime">
+									<div id="arriveTime"></div>
+								</div>
+							</div>
+							<div class="progress_quan">
+								<div class="progress_quan_noe"></div>
+								<div class="progress_quan_three"></div>
+							</div>
+							<div class="Order_address">
+								<div class="Star_address" id="fromAirport"></div>
+								<div class="End_address" id="arriveAirport"></div>
+							</div>
+							<div class="provenance ub ub-pe">
+								<img id="flightLogo" />
+								<div class="airCode"></div>
+							</div>
+						</div>
+						<div v-if="flightDetail[1]" class="Order_databg"></div>
+						<div class="Order_curdata" v-if="flightDetail[1]">
+							<span>返：</span><span>{{backAirDate}}</span>
+						</div>
+						<div class="Order_data_noe cl" v-if="flightDetail[1]">
+							<div class="Order_time">
+								<div class="Order_StarTime">
+									<div>{{flightDetail[1].myDepDate}}</div>
+								</div>
+								<div class="Order_EndTime">
+									<div>{{flightDetail[1].myArrDate}}</div>
+								</div>
+							</div>
+							<div class="progress_quan">
+								<div class="progress_quan_noe"></div>
+								<div class="progress_quan_three"></div>
+							</div>
+							<div class="Order_address">
+								<div class="Star_address">{{flightDetail[1].fromName}}</div>
+								<div class="End_address">{{flightDetail[1].toName}}</div>
+							</div>
+							<div class="provenance ub ub-pe">
+								<img v-bind:src="flightDetail[1].logo" />
+								<div>{{flightDetail[1].carrier}}{{flightDetail[1].flightNo}}</div>								
+							</div>
+						</div>
+					</div>
+
+					<div class="Order_type_list">
+						<div class="Order_type ub">
+							<div class="ub ub-ver">
+								<div class="ub-f1">成人票价</div>
+								<div class="ub-f1">
+									<span v-if="flightDetail[1]">往：</span>
+									<span>￥</span>
+									<span id="price">---</span>
+								</div>
+								<div class="ub-f1" v-cloak v-if="flightDetail[1]">
+									<span v-if="flightDetail[1]">返：</span>
+									<span>￥</span>
+									<span>{{backSeatDetail.price}}</span>
+								</div>
+							</div>
+							<div class="ub ub-ver">
+								<div class="ub-f1">儿童票价</div>
+								<div class="ub-f1">
+									<span>￥</span>
+									<span id="cprice">---</span>
+								</div>
+							</div>
+							<div class="ub ub-ver">
+								<div class="ub-f1">机建+燃油</div>
+								<div class="ub-f1">
+									<span v-if="flightDetail[1]">往：</span>
+									<span>￥</span>
+									<span id="tax">---</span>
+								</div>
+								<div class="ub-f1" v-cloak v-if="flightDetail[1]">
+									<span v-if="flightDetail[1]">返：</span>
+									<span>￥</span>
+									<span>{{backSeatDetail.tax}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="Refund_instructions">
+							<div @click="refund">
+								<span>票价及退改签说明</span>
+								<span>></span>
+							</div>
+						</div>
+					</div>
+					<div class="Order_type_list">
+						<div class="add_associate">
+							<ul id="contact_li">
+								<li class="associate_li ub ub-ac" v-for="(p,index) in passengers">
+									<div class="associate_li_index shallow-bg ub ub-ac ub-pc">{{index+1}}</div>
+									<div class="associate_data ub-f1">
+										<input type="text" placeholder="姓名" v-model="p.name" />
+										<input type="text" placeholder="身份证" v-model="p.cardNo" />
+										<input type="number" placeholder="手机号码" v-model="p.telephone" />
+									</div>
+									<i class="mui-icon mui-icon-minus" @click="deletePassenger(index)"></i>
+								</li>
+							</ul>
+							<div class="add_people shallow-bg" @click="addPassenger">添加乘客</div>
+						</div>
+					</div>
+					<div class="Order_type_list">
+						<div class="us_info">
+							<div class="us_name ub ub-ac">
+								<div class="name">联系人</div>
+								<div class="ub-f1"><input id="contact" type="text" v-model="contact.name" placeholder="请输入联系人姓名"></div>
+							</div>
+							<div class="us_name ub ub-ac">
+								<div class="name">手机号</div>
+								<div class="ub-f1"><input id="mobile" type="tel" v-model="contact.mobile" placeholder="请输入联系人号码"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="/module/js/mui/mui.min.js"></script>
+		<script src="/module/js/jquery.min.js"></script>
+		<script src="/module/js/vue.min.js"></script>
+		<script src="/module/js/layer/layer.js"></script>
+		<script src="js/plane_bookdetails.js"></script>
+	</body>
+
+</html>

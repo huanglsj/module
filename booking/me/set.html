@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>设置</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/module/css/ui-box.css" />
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/module/css/mobiscroll.min.css" />
+		<link rel="stylesheet" href="css/set.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+		<script src="/module/js/global.js"></script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+			<div class="mui-title">设置</div>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="clear">
+					<a class="mui-navigate-right">
+						<i class="mui-icon mui-icon-trash"></i>清除缓存
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="skin">
+					<a class="mui-navigate-right">
+						<i class="mui-icon mui-icon-loop"></i>更改主题
+					</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script>
+		mui(".mui-table-view").on("tap","#clear",function(){
+			var skin = localGetItem("changeSkin");
+			localRemoveAll();
+			mui.toast("清除成功");
+			localSetItem("changeSkin",skin);
+		});
+		
+		mui(".mui-table-view").on("tap","#skin",function(){
+			mui.openWindow({
+				url:'/module/booking/me/theme.html',
+				name:'theme'
+			})
+		});
+	</script>
+</html>

@@ -1,7 +1,5 @@
-var httpHost = 'http://192.168.8.124:8081/';
-localSetItem("changeSkin", 'green');
+var httpHost = 'http://192.168.8.54:8081/';
 var changeSkin = localGetItem("changeSkin");
-
 if(!changeSkin) {
 	changeLink('blue');
 } else {
@@ -122,10 +120,11 @@ function NYR(date, flag) {
 		return da.getFullYear() + "年" + ((da.getMonth() + 1) < 10 ? "0" + (da.getMonth() + 1) : (da.getMonth() + 1)) + "月" + (da.getDate() < 10 ? "0" + da.getDate() : da.getDate()) + "日";
 	}
 }
-function getDayInWeek(myDate){
-    var weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-    var day = weekday[myDate.getDay()];
-    return day;
+
+function getDayInWeek(myDate) {
+	var weekday = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+	var day = weekday[myDate.getDay()];
+	return day;
 }
 //加减天数
 //date 传来的日期2016-12-12
@@ -275,6 +274,35 @@ function isPhoneNumber(str) {
 	}
 }
 
+//验证邮箱
+function isEmail(str) {
+	var isEmail = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+	if(!isEmail.test(str)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+//验证名字
+function isName(str) {
+	var isName = /^[a-z0-9_-]{3,16}$/;
+	if(!isName.test(str)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+//验证固定电话
+function isFixedPhone(str) {
+	var isFixedPhone = /^0[\d]{2,3}-[\d]{7,8}$/;
+	if(!isFixedPhone.test(str)) {
+		return false;
+	} else {
+		return true;
+	}
+}
 
 //获取链接参数
 function getQueryString(name) {
@@ -282,4 +310,58 @@ function getQueryString(name) {
 	var r = window.location.search.substr(1).match(reg);
 	if(r != null) return unescape(r[2]);
 	return null;
+}
+
+//获取id
+function getId(id) {
+	return document.getElementById(id);
+}
+
+//订单状态
+function statusText(status) {
+	switch(status) {
+		case 1:
+			return '订单已提交';
+			break;
+		case 2:
+			return '订单已确认';
+			break;
+		case 3:
+			return '订单已完成';
+			break;
+		case 4:
+			return '订单已取消';
+			break;
+		case 5:
+			return '订单已退订';
+			break;
+		case 6:
+			return '订单已作废';
+			break;
+		default:
+			break;
+	}
+}
+
+//类型
+function bookType(type){
+	switch(type) {
+		case 1:  //飞机
+			return type;
+			break;
+		case 2:  //酒店
+			return type;
+			break;
+		case 3: //火车
+			return type;
+			break;
+		case 4:
+			return type;
+			break;
+		case 5:
+			return type;
+			break;
+		default:
+			break;
+	}
 }

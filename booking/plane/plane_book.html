@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title>飞机预订</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/plane_book.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<div id="planeBookList" v-cloak>
+			<header class="mui-bar mui-bar-nav deep-bg">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+				<div class="mui-title">
+					<div class="ub ub-ac ub-pc ub-f1 ulev-3 ut-s tx-c">
+						<div id="isBack"></div>
+						<div id="depPlane">北京</div>
+						<div class="head-icon ub-img"></div>
+						<div id="arrPlane">上海</div>
+					</div>
+					<p class="cur-day ub ub-pc" id="curDay"></p>
+				</div>
+				<a href="tel:02086132777" class="mui-icon mui-icon-phone mui-pull-right"></a>
+			</header>
+			<div class="mui-content">
+
+				<div class="plane-t-head deep-bg">
+					<div class="plane-t-info ub">
+						<div>
+							<p class="big" id="fromTime">{{flight.myDepDate}}</p>
+							<p id="fromName">{{flight.fromName}}</p>
+						</div>
+						<div class="ub ub-ac ub-ver">
+							<div class="arrow ub-img" id="duration">{{parseInt(flight.duration/60)+ 'h' + parseInt(flight.duration % 60) + 'm'}}</div>
+							<p id="stop" class="stop">{{flight.stopNum > 0 ? '经停' : ''}}</p>
+						</div>
+						<div>
+							<p class="big" id="toTime">{{flight.myArrDate}}</p>
+							<p id="toName">{{flight.toName}}</p>
+						</div>
+					</div>
+					<div class="plane-t-tails">
+						<img :src="flight.logo" class="logo-img" onerror="this.src='/module/img/logo/logo.png'" id="logoImg" />
+						<span class="name" id="aircode">{{flight.companyName}} {{flight.carrier}}</span>
+						<span>|</span>
+						<span class="num" id="flightnum">{{flight.flightNo}}</span>
+						<span>|</span>
+						<span id="fool">{{flight.fool ? '有餐' : '无餐'}}</span>
+					</div>
+				</div>
+				<div class="ub-f1 longlist">
+					<ul class="plane-book-ul">
+						<li class="ub ub-ac" v-for='item in items'>
+							<div class="ub-f1">
+								<p class="pink">
+									<span v-if="item.price==''">暂无价格</span>
+									<span v-else>￥{{item.price}} <span class="small">{{flight.tax>0?'+ ￥'+flight.tax:''}} {{flight.yq>0?'+ ￥'+flight.yq:''}}</span></span>
+								</p>
+								<p class="cost" v-if="flight.tax">
+									<span class="small">机场建设费：￥{{item.tax}}</span>
+								</p>
+								<p class="cost" v-if="flight.yq">
+									<span class="small">燃油费：￥{{item.yq}}</span>
+								</p>
+								<p>
+									<span>{{item.shipping}} {{item.myDiscount}}</span>
+								</p>
+							</div>
+							<div v-if="item.price != ''">
+								<div class="book" v-if="item.seatsRemain=='A'">
+									<div class="b-btn ub ub-ac ub-pc" v-on:click="book(item)">预订</div>
+								</div>
+								<div class="book num" v-else v-on:click="book(item)">
+									<div class="num-btn ub ub-ac ub-pc">预订</div>
+									<div class="surplus ub ub-ac ub-pc">剩{{item.seatsRemain}}张</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/module/js/vue.min.js"></script>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script src="/module/js/layer/layer.js"></script>
+	<script src="/module/js/shipping.js"></script>
+	<script>
+		if(localGetItem("return") == "true") {
+			if(localGetItem("returnFlight") == 0) {
+				getId("isBack").innerText = '往：';
+				getId("depPlane").innerText = localGetItem("flightFromCity");
+				getId("arrPlane").innerText = localGetItem("flightToCity");
+			} else if(localGetItem("returnFlight") == 1) {
+				getId("isBack").innerText = '返：';
+				getId("depPlane").innerText = localGetItem("flightToCity");
+				getId("arrPlane").innerText = localGetItem("flightFromCity");
+			}
+		} else {
+			getId("depPlane").innerText = localGetItem("flightFromCity");
+			getId("arrPlane").innerText = localGetItem("flightToCity");
+		}
+
+		var getDay = localGetItem("returnFlight") == 0 ? localGetItem("airDate") : localGetItem("backAirDate");
+		getId("curDay").innerText = NYR(getDay, 2) + ' ' + NYR(getDay, 3);
+		mui(".mui-bar").on("tap", "#back", function() {
+			localSetItem("returnFlight", 0);
+		});
+		getId("depPlane").innerText = localGetItem("flightFromCity");
+		getId("arrPlane").innerText = localGetItem("flightToCity");
+
+		var flightDetail;
+		if(localGetItem("return") == "true" && localGetItem("returnFlight") == 1) {
+			flightDetail = localGetItem('backFlightDetail');
+		} else {
+			flightDetail = localGetItem("flightDetail");
+		}
+		flightDetail = eval('(' + flightDetail + ')');
+		if(flightDetail) {
+			var seats = flightDetail.seats;
+			for(var i = 0; i < seats.length; i++) {
+				if(myShipping[seats[i].code]) {
+					seats[i].shipping = myShipping[seats[i].code];
+				} else {
+					seats[i].shipping = '其他舱位';
+				}
+				var discount = (seats[i].sale * 1 / 10).toFixed(1);
+				if(discount > 0 && discount < 10) {
+					seats[i].myDiscount = discount + '折';
+				} else {
+					seats[i].myDiscount = '';
+				}
+				seats[i].tax = flightDetail.tax > 0 ? flightDetail.tax : '';
+				seats[i].yq = flightDetail.yq > 0 ? flightDetail.yq : '';
+			}
+
+			var app = new Vue({
+				el: '#planeBookList',
+				data: {
+					items: seats,
+					flight: flightDetail
+				},
+				methods: {
+					book: function(item) {
+						if(item.seatsRemain < 1) {
+							return;
+						}
+						var beginDate = new Date(localGetItem("begin")),
+							endDate = new Date(localGetItem("end")),
+							airDate = new Date(localGetItem("airDate")),
+							applyId = localGetItem("itineraryId"),
+							backFlightDetail = null,
+							flightDetail = null;
+
+						if(localGetItem("returnFlight") == 0) {
+							localSetItem("seatDetail", JSON.stringify(item));
+							checkPrice(localGetItem("flightDetail"), localGetItem("seatDetail"), localGetItem("airDate"));
+						} else if(localGetItem("return") == "true" && localGetItem("returnFlight") == 1) {
+							backFlightDetail = JSON.parse(localGetItem("backFlightDetail"));
+							flightDetail = JSON.parse(localGetItem("flightDetail"));
+							if(backFlightDetail.depDate.time < flightDetail.arrDate.time) {
+								layer.open({
+									content: '返程航班出发时间不能早于去程航班时间',
+									skin: 'msg',
+									time: 2
+								});
+								return;
+							}
+							localSetItem("backSeatDetail", JSON.stringify(item));
+							checkPrice(localGetItem("backFlightDetail"), localGetItem("backSeatDetail"), localGetItem("backAirDate"));
+						}
+
+					}
+				}
+			});
+		} else {
+			mui.alert('参数有误，请重新查询', function() {
+				mui.back();
+			});
+		}
+
+		function checkPrice(fd, sd, airDate) {
+			layer.open({
+				type: 2,
+				content: '正在验价',
+				shadeClose: false
+			});
+			var flightDetail = JSON.parse(fd),
+				seatDetail = JSON.parse(sd);
+			mui.ajax({
+				url: httpHost + "flightController.do?checkPriceWithoutPNRModular",
+				data: {
+					"carrier": flightDetail.carrier,
+					"flightNo": flightDetail.flightNo,
+					"classCode": seatDetail.code,
+					"depart": flightDetail.depart,
+					"arrival": flightDetail.arrival,
+					"departDate": airDate,
+					"F_price": Number(seatDetail.price),
+					"T_price": Number(flightDetail.tax) + Number(flightDetail.yq),
+					"A_price": Number(seatDetail.price) + Number(flightDetail.tax) + Number(flightDetail.yq),
+				},
+				dataType: "json",
+				type: "POST",
+				success: function(dataJson) {
+					layer.closeAll();
+					if(dataJson.obj !== null) {
+						for(var i = 0; i < dataJson.obj.items.length; i++) {
+							switch(dataJson.obj.items[i].type) {
+								case "F":
+									seatDetail.price = Number(dataJson.obj.items[i].value);
+									break;
+								case "X":
+									flightDetail.tax = Number(dataJson.obj.items[i].value);
+									break;
+								default:
+									break;
+							}
+						}
+						seatDetail.priceObj = dataJson.obj;
+						if(localGetItem("returnFlight") == 1 && localGetItem("return") == "true") {
+							localSetItem("backFlightDetail", JSON.stringify(flightDetail));
+							localSetItem("backSeatDetail", JSON.stringify(seatDetail));
+							window.location.href = "plane_bookdetails.html";
+						} else if(localGetItem("return") == "true" && localGetItem("returnFlight") == 0) {
+							localSetItem("flightDetail", JSON.stringify(flightDetail));
+							localSetItem("seatDetail", JSON.stringify(seatDetail));
+							localSetItem("returnFlight", 1);
+							window.location.href = "plane_searchresult.html";
+						} else if(localGetItem("return") === "false") {
+							localSetItem("flightDetail", JSON.stringify(flightDetail));
+							localSetItem('seatDetail', JSON.stringify(seatDetail));
+							window.location.href = "plane_bookdetails.html";
+						} else {
+							mui.alert('网络请求异常，请重新查询');
+						}
+					} else if(!dataJson.obj) {
+						mui.alert("航班" + flightDetail.carrier + flightDetail.flightNo + "暂时无法预订，请选择其他航班");
+						window.history.back();
+					}
+				},
+				error: function(e, errMsg, error, err, ea) {
+					layer.closeAll();
+					console.log(e);
+					mui.alert('网络请求异常，请重新查询');
+				}
+			});
+		}
+	</script>
+
+</html>

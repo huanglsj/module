@@ -1,0 +1,99 @@
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+}
+.mui-title{
+	top: 0;
+	bottom: 0;
+	line-height: 16px;
+}
+.mui-indexed-list{
+	height: 100%;
+}
+
+.mui-bar-nav {
+	box-shadow: none;
+}
+
+.mui-indexed-list-search input {
+	background-color: #fff;
+	color: #000;
+}
+
+.mui-segmented-control {
+	top: 0;
+	border: 0;
+	border-radius: 0;
+	left: 0;
+	right: 0;
+	width: auto;
+	border: 1px solid #fff;
+	border-radius: 3px;
+}
+
+.mui-segmented-control .mui-control-item {
+	width: 50%;
+	display: block;
+	color: #fff;
+	border: 0;
+	line-height: 28px;
+}
+
+.mui-segmented-control .mui-control-item.mui-active {
+	background-color: #fff;
+	color: #000;
+}
+.hot-city {
+	margin-right: 23px;
+	margin-bottom: 10px;
+	padding-top: 10px;
+}
+
+.hot-city .li {
+	width: 22%;
+	text-align: center;
+	margin: 1.5%;
+	float: left;
+}
+
+.hot-city .li a {
+	border: 1px solid #ddd;
+	display: block;
+	padding: 6px;
+	border-radius: 6px;
+	color: #000;
+}
+
+.hot-city .current {
+	display: none;
+	width: auto;
+	min-width: 22%;
+}
+
+.hot-city .gps{
+	width: auto;
+}
+
+.hot-city .current a,
+.hot-city .gps a {
+	color: red;
+}
+
+.hot-city .title {
+	margin-left: 1.5%;
+}
+
+.mui-indexed-history {
+	margin-bottom: 0;
+}
+.remove {
+	float: right;
+	margin-right: 5.5%;
+}
+.remove i{
+	font-size: 18px;
+}
+.mui-content{
+	font-size: 16px;
+}

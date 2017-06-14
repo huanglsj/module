@@ -1,0 +1,298 @@
+ul,
+ol,
+ol {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+
+.mui-bar {
+	box-shadow: none;
+}
+
+.mui-title .head-icon {
+	background-image: url("../img/head_plane.png");
+	width: 60px;
+	height: 16px;
+	margin: -5px 5px 0;
+}
+
+.Order_data {
+	background-color: #3B5999;
+	color: #FFFFFF;
+	padding: 10px 12px;
+	font-size: 15px;
+}
+
+.Order_curdata {
+	margin-bottom: 5px;
+}
+
+.Order_databg {
+	height: 2px;
+	background-color: #fff;
+	margin: 8px 0;
+}
+
+.Order_time {
+	width: 20%;
+	float: left;
+}
+
+.Order_StarTime>div {
+	width: 100%;
+	float: left;
+}
+
+.Order_EndTime>div:nth-child(1) {
+	width: 50%;
+	float: left;
+}
+
+.Order_EndTime>div:nth-child(2) {
+	width: 50%;
+	height: 0.6rem;
+	line-height: 0.8rem;
+	float: left;
+	font-size: 0.6rem;
+	color: #000000;
+	text-align: center;
+	background-color: #FFFFFF;
+	margin-top: 0.15rem;
+}
+
+.provenance {
+	width: 22%;
+	float: right;
+}
+
+.provenance>img {
+	width: 15px;
+	height: 15px;
+	vertical-align: text-top;
+	margin-right: 5px;
+}
+
+.provenance>div:nth-child(1) {
+	max-width: 80%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.provenance>div:nth-child(3) {
+	width: 80%;
+}
+
+.provenance>div {
+	text-align: right;
+	max-width: 80%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 12px;
+}
+
+.progress_quan {
+	width: 8%;
+	float: left;
+}
+
+.progress_quan_noe {
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	border: 1px solid #FFFFFF;
+	margin: auto;
+	margin-top: 4px;
+	position: relative;
+	margin-bottom: 20px;
+}
+.progress_quan_noe:before{
+	content: '';
+	position: absolute;
+	width: 1px;
+	height: 20px;
+	background-color: #fff;
+	top: 6px;
+	left: 2px;
+}
+.progress_quan_noes {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	border: 1px solid #FFFFFF;
+	margin: auto;
+}
+
+.progress_quan_two {
+	width: 1px;
+	height: 20px;
+	border-left: 1px solid #FFFFFF;
+	margin: auto;
+}
+
+.progress_quan_three {
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	border: 1px solid #FFFFFF;
+	margin: auto;
+}
+
+.progress_quan_four {
+	width: 1px;
+	height: 0.7rem;
+	border-left: 1px solid #FFFFFF;
+	margin: auto;
+}
+
+.progress_quan_five {
+	width: 1px;
+	height: 0.4rem;
+	border-left: 1px solid #FFFFFF;
+	margin: auto;
+	margin-top: -1px;
+}
+
+.Order_address {
+	width: 50%;
+	float: left;
+}
+
+.Order_address>div {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.Order_type {
+	text-align: center;
+	color: #89888B;
+	border-bottom: 1px solid #EBEBEB;
+}
+
+.Order_type>div {
+	width: 33%;
+	padding: 12px 0;
+	float: left;
+	border-right: 1px solid #EBEBEB;
+}
+
+.Order_type>div:nth-child(3) {
+	border-right: none;
+}
+
+.Order_type_list {
+	background-color: #fff;
+	font-size: 16px;
+	border-bottom: 10px solid #efeff4;
+}
+
+.Refund_instructions {
+	text-align: right;
+	padding: 12px;
+}
+
+
+.add_associate>ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 15px;
+}
+
+.associate_li {
+	border-bottom: 1px solid #EBEBEB;
+	padding: 0 12px;
+}
+
+.associate_li_index {
+	width: 25px;
+	height: 25px;
+	background-color: #4679ff;
+	color: #fff;
+	border-radius: 50%;
+	margin-right: 15px;
+	font-size: 12px;
+}
+
+.associate_data input {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	height: 45px;
+	border-bottom: 1px dashed #ddd;
+}
+
+.associate_data input:last-child {
+	border: 0;
+}
+
+.associate_li .mui-icon-minus {
+	font-size: 30px;
+	color: red;
+	margin-left: 15px;
+}
+
+.associate_data {
+	width: 80%;
+	float: left
+}
+
+.associate_data>p {
+	height: 1.25rem;
+	line-height: 1.25rem;
+	margin: 0;
+	color: #000000;
+}
+
+.associate_data>p:nth-child(1) {
+	line-height: 1.4rem;
+}
+
+.associate_data>p:nth-child(2) {
+	line-height: 1rem;
+}
+
+.add_people {
+	width: 70%;
+	margin: auto;
+	text-align: center;
+	background-color: rgb(71, 168, 3);
+	color: #FFFFFF;
+	border-radius: 8px;
+	padding: 5px 0;
+	margin-bottom: 15px;
+}
+.us_info{
+	padding: 0 12px 12px;
+}
+.us_info .us_name {
+	border-bottom: 1px solid #EBEBEB;
+}
+.us_info .us_name .name{
+	width: 70px;
+}
+.us_info .us_name input{
+	padding: 0;
+	margin: 0;
+	border: 0;
+	font-size: 16px;
+	color: #444;
+}
+.footer{
+	font-size: 16px;
+}
+.footer .ub-left{
+	padding: 0 10px;
+    border-top: 1px solid #ddd;
+}
+.footer-btn{
+	color: #fff;
+    height: 100%;
+    width: 30%;
+}
+.footer .red{
+	color: red;
+}

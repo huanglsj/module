@@ -60,7 +60,7 @@
 			var barItemHeight = ((self.el.bar.offsetHeight - 40) / self.el.barItems.length) + 'px';
 			self.el.barItems.forEach(function(item) {
 				item.style.height = barItemHeight;
-				item.style.lineHeight = barItemHeight;
+//				item.style.lineHeight = barItemHeight;
 			});
 		},
 		scrollTo: function(group) {

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title>订单详情</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" href="/module/css/mui/mui.min.css">
+		<link rel="stylesheet" href="css/order_plane.css">
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<div id="main" v-cloak>
+			<header class="mui-bar mui-bar-nav deep-bg">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+				<h1 class="mui-title">订单详情</h1>
+				<a href="tel:02086132777" class="mui-icon mui-icon-phone mui-pull-right"></a>
+			</header>
+			<footer class="mui-bar mui-bar-tab ub" v-if="details.status==1 || details.status==2">
+				<div class="ub ub-f1 ub-ac ub-pc btn shallow-bg" @click="cancel">取消订单</div>
+			</footer>
+			<div class="mui-content order" id="mainOrder">
+				<div class="list list-head">
+					<div class="tr ub">
+						<div class="status ub-f1">{{details.statusText}}</div>
+						<div class="total-price">
+							<span>总额:</span>
+							<span class="price">￥{{details.totalPrice ? details.totalPrice:0}}</span>
+						</div>
+					</div>
+					<div class="tr order-number">订单号：<span>{{details.orderNo}}</span></div>
+					<div class="tr">{{details.departDate}}~{{details.arrivalDate}}</div>
+				</div>
+				<div class="list list-hotel">
+					<div class="list-table">
+						<div class="tr ub ub-ac">
+							<div class="td bold">{{details.departCity}}</div>
+							<div class="td center"><img :src="details.logo" onerror="this.src='/module/img/logo/logo.png'" class="logo"></div>
+							<div class="td bold">{{details.arrivalCity}}</div>
+						</div>
+						<div class="tr ub">
+							<div class="td bold">{{details.departTime}}</div>
+							<div class="td center"><img src="/module/img/planeIcon.png" class="arrow"></div>
+							<div class="td bold">{{details.arrivalTime}}</div>
+						</div>
+						<div class="tr ub">
+							<div class="td">{{details.departAirport}}</div>
+							<div class="td center bold">{{details.airNo}}</div>
+							<div class="td">{{details.arrivalAirport}}</div>
+						</div>
+						<div class="tr tr-line ub ub-ac">
+							<div class="td ub ub-pe"><img src="/module/img/green.png" class="green ub ub-ac"></div>
+							<div class="td center bold"></div>
+							<div class="td"><img src="/module/img/end.png" class="end ub ub-ac"></div>
+						</div>
+					</div>
+				</div>
+				<div class="list list-people">
+					<div class="ub ub-ac">
+						<div class="name">乘机人</div>
+						<div class="con ub-f1">
+							<div class="tr ub ub-ac" v-for="p in details.passangers">
+								<div class="nonius ub ub-ac ub-pc shallow-bg">1</div>
+								<div class="people-list ub-f1">
+									<div>{{p.name}}</div>
+									<div>{{p.certificateNo}}</div>
+									<div v-if="p.mobile">{{p.mobile}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="list list-contact">
+					<div class="tr ub">
+						<div class="name">联系人</div>
+						<div class="ub-f1">{{details.contactName}}</div>
+					</div>
+					<div class="tr ub">
+						<div class="name">联系电话</div>
+						<div class="ub-f1">{{details.contactPhone}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/module/js/mui/mui.min.js"></script>
+	<script src="/module/js/vue.min.js"></script>
+	<script src="/module/js/layer/layer.js"></script>
+	<script src="/module/js/newairport.js"></script>
+	<script>
+		var orderNo = localGetItem("orderNo");
+		if(!orderNo) {
+			mui.alert('系统异常，请重新查询', function() {
+				mui.back();
+			});
+		} else {
+			layer.open({
+				type: 2,
+				content: '正在查询',
+				shadeClose: false
+			});
+			queryDetails();
+		}
+
+		function queryDetails() {
+			mui.ajax({
+				url: httpHost + 'flightController.do?queryFlightOrdersDetail',
+				data: {
+					orderNo: orderNo
+				},
+				type: 'post',
+				dataType: 'json',
+				timeout:1000*30,
+				success: function(data) {
+					layer.closeAll();
+					console.log(data);
+					if(data.success) {
+						getId("mainOrder").style.display = 'block';
+						if(data.obj) {
+							var obj = data.obj;
+							if(obj.status) {
+								obj.statusText = statusText(obj.status * 1);
+							}
+							obj.arrivalCity = airPortInfos[obj.airlines[0].arrivalCode].Name;
+							obj.departCity = airPortInfos[obj.airlines[0].departCode].Name;
+							obj.arrivalAirport = airPortInfos[obj.airlines[0].arrivalCode].airPortName;
+							obj.departAirport = airPortInfos[obj.airlines[0].departCode].airPortName;
+							obj.logo = '/module/img/logo/' + obj.airlines[0].carrier + '.png';
+							obj.airNo = obj.airlines[0].carrier + obj.airlines[0].flightNo;
+							obj.arrivalTime = obj.airlines[0].arrivalTime;
+							obj.departTime = obj.airlines[0].departTime;
+							obj.arrivalDate = obj.airlines[0].arrivalDate;
+							obj.departDate = obj.airlines[0].departDate;
+							app.details = data.obj;
+							console.log(data.obj);
+						} else {
+							getId("mainOrder").style.display = 'none';
+							mui.alert('查询出错，请重新查询');
+						}
+					} else {
+						mui.alert('查询出错，请重新查询');
+					}
+				},
+				error: function(err) {
+					layer.closeAll();
+					mui.alert('网络请求异常，请重新查询');
+				}
+			});
+		}
+
+		var app = new Vue({
+			el: '#main',
+			data: {
+				details: ''
+			},
+			methods: {
+				cancel: function() {
+					var _this = this;
+					mui.confirm('您要取消订单吗？', '提示', ['是', '否'], function(e) {
+						if(e.index == 0) {
+							layer.open({
+								type: 2,
+								content: '正在取消',
+								shadeClose: false
+							});
+							mui.ajax({
+								url: httpHost + 'flightController.do?cancelOrderModular',
+								data: {
+									orderNo: _this.details.orderNo
+								},
+								type: 'post',
+								dataType: 'json',
+								success: function(data) {
+									console.log(data);
+									if(data.success) {
+										layer.open({
+											content: data.msg,
+											skin: 'msg',
+											time: 2
+										});
+										queryDetails();
+									} else {
+										layer.closeAll();
+										mui.alert(data.msg);
+									}
+								},
+								error: function(err) {
+									layer.closeAll();
+									mui.alert('取消失败');
+								}
+							})
+						}
+					});
+				},
+//				back: function() {
+//					mui.openWindow({
+//						url: '/module/index.html',
+//						id: 'index'
+//					})
+//				}
+			}
+		})
+	</script>
+
+</html>

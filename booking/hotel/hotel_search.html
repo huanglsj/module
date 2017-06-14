@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title>酒店查询</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/fonts/iconfont.css">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" href="/module/css/mobiscroll.min.css">
+		<link rel="stylesheet" href="/module/css/nouislider.min.css">
+		<link rel="stylesheet" href="css/hotel_search.css">
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+			<h1 class="mui-title">酒店查询</h1>
+			<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
+		</header>
+		<div id="order" class="mui-bar mui-bar-tab ub ub-ac ub-pc shallow-bg">
+			<i class="mui-icon mui-icon-search"></i>
+			<span class="ub ub-ac">查询</span>
+		</div>
+		<div class="mui-content">
+			<div class="Hotel_conten">
+				<div class="Stay_city">
+					<div class="ub ub-ac" id="room">
+						<div class="ub name">入住城市</div>
+						<div class="ub ub-f1 ub-ac con li_two" id="roomCity" data-code="CAN" data-city="广州">广州</div>
+						<div class="ub ub-ac ub-map" id="map">
+							<img src="img/gps.png" class="ub ub-gps">
+						</div>
+					</div>
+				</div>
+				<div class="stay-padding">
+					<div class="Stay_time">
+						<div class="Stay_time_title">
+							<span>入住时间</span>
+							<span>离店时间</span>
+						</div>
+						<div class="ub Stay_time_time">
+							<div class="ub-f2">
+								<p class="address-name" id="startDate"><span class="date"></span><span class="week"></span></p>
+								<input type="hidden" name="startDateHidden" id="startDateHidden" />
+							</div>
+							<div class="ub-f1 iconfont icon-jiantou shallow-text"></div>
+							<div class="ub-f2 ub ub-pe">
+								<p class="address-name" id="endDate"><span class="date"></span><span class="week"></span></p>
+								<input type="hidden" name="endDateHidden" id="endDateHidden" />
+							</div>
+						</div>
+					</div>
+					<div class="instructions uinput ub ub-f1">
+						<input id="keyword" placeholder="关键字/位置/酒店名称/其他" type="text" class="ub-f1">
+					</div>
+					<div class="Amount_range">
+						<div class="Amount_title">价格范围</div>
+						<div class="Amount_effect">
+							<div id="slider"></div>
+						</div>
+						<div class="Amount_price">
+							<span>￥0</span>
+							<span>￥150</span>
+							<span>￥300</span>
+							<span>￥500</span>
+							<span>￥800</span>
+							<span>￥1000</span>
+							<span class="ub-price">￥2000</span>
+							<span class="ub-price">不限</span>
+						</div>
+					</div>
+					<div class="place_choose">
+						<div>星级(可多选)</div>
+						<div class="place_choose_options ub" id="xingji">
+							<div class="shallow-bg ub-f1">不限</div>
+							<div class="place_choose_on ub-f1" data-id="2">快捷连锁</div>
+							<div class="place_choose_on ub-f1" data-id="3">三星/舒适</div>
+							<div class="place_choose_on ub-f1" data-id="4">四星/高档</div>
+							<div class="place_choose_on ub-f1" data-id="5">五星/豪华</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 价格范围-->
+		<div id="rangeMin" class="ulev-1"></div>
+		<div id="rangeMax" class="ulev-1"></div>
+	</body>
+
+    <script src="/module/js/jquery.min.js"></script>
+    <script src="/module/js/mui/mui.min.js"></script>	
+	<script src="/module/js/nouislider.min.js"></script>	
+	<script src="/module/js/mobiscroll.min.zh.js"></script>
+	<script src="js/hotel_search.js"></script>
+
+</html>

@@ -1,0 +1,26 @@
+body{
+	background-color: #fff;
+}
+.mui-content{
+	background-color: #fff;
+}
+.order-list .title{
+	font-size: 20px;
+	text-align: center;
+	margin: 30px 0 15px;
+	color: red;
+}
+.order-list .con{
+	padding: 12px;
+	text-align: center;
+}
+.order-list .con .tr{
+	margin-bottom: 10px;
+}
+.hint-btn{
+	margin: 30px 12px;
+}
+.hint-btn button{
+	border: 0;
+	padding: 8px 0;
+}

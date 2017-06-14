@@ -1,65 +1,3 @@
-.header-bg {
-    background-color: #3a5a98 !important;
-}
-.my-footer {
-	background: -ms-linear-gradient(top, #7ca9fc, #5d93ff);
-	background: -moz-linear-gradient(top,#b8c4cb,#5d93ff);
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#7ca9fc), to(#5d93ff));
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#7ca9fc), to(#5d93ff));
-	background: -webkit-linear-gradient(top, #7ca9fc, #5d93ff);
-	background: -o-linear-gradient(top, #7ca9fc, #5d93ff);
-	background: linear-gradient(top, #7ca9fc, #5d93ff);
-}
-.three-list .shipping li.active {
-	background-color: #6CBDF5;
-}
-.three-list .tr .icon {
-	background-image: url("/module/footer_book/flights/img/plane.png");
-}
-.train-t-head .date-select {
-	color: #3a5a98;
-}
-.plane-msg{
-    color: #3B5999;
-}
-.tab-indexed{
-	background-color: #3a5a98;
-}
-.sc-text-active {
-	color: #4679ff !important;
-}
-.mui-indexed-list-bar.active a.active {
-	color: #007aff;
-}
-.screen i.active {
-	color: #3a5a98;
-}
-.plane-list-result .tails .blue,
-.plane-list-result li .info > div:nth-of-type(2) {
-	color: #5890FF;
-}
-.plane-list-header .cur-day {
-	color: #A6B2CC;
-}
-.Order_data,
-.fenge{
-	background-color: #3B5999;
-}
-.Order_data_noe{
-	background-color: inherit;
-}
-.payment{
-	background-color: #3B5999;
-}
-#orderId{
-    color:#3B69A4;
-}
-.plane-ticket-con .list .bc-head {
-	background-color: #6cbdf5;
-}
-.cancelBtn{
-	background-color: #72A1FD;
-}
 .deep-bg{
 	background-color: #3a5a98 !important;
 	color: #fff;
@@ -73,4 +11,9 @@
 }
 .shallow-text{
 	color: #5890ff !important;
+}
+.mui-switch.mui-active {
+    border-color: #5890ff;
+    background-color: #5890ff;
+    background-clip: initial;
 }

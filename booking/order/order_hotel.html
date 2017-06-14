@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html class="um landscape min-width-240px min-width-320px min-width-480px min-width-768px min-width-1024px">
+
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" href="/module/css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<link rel="stylesheet" href="css/order_hotel.css" />
+		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
+		<script src="/module/js/global.js"></script>
+	</head>
+
+	<body>
+		<div id="main">
+			<header class="mui-bar mui-bar-nav deep-bg">
+				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+				<h1 class="mui-title">酒店订单</h1>
+				<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
+			</header>
+			<footer class="mui-bar mui-bar-tab ub" v-if="details.status==1 || details.status==2">
+				<div class="ub ub-f1 ub-ac ub-pc btn shallow-bg" @click="confirm" v-if="details.status==1">确认订单</div>
+				<div class="ub ub-f1 ub-ac ub-pc btn" v-bind:class="{'shallow-bg' : details.status==2,'shallow-text': details.status==1 }" v-if="details.rules" @click="cancel">取消订单</div>
+			</footer>
+			<div class="mui-content order" id="orderCon">
+				<div class="list list-head">
+					<div class="tr ub">
+						<div class="status ub-f1">{{details.statusText}}</div>
+						<div class="total-price">
+							<span>总额:</span>
+							<span class="price">￥{{details.totalPrice}}</span>
+						</div>
+					</div>
+					<div class="tr order-number">订单号：<span>{{details.orderNo}}</span></div>
+				</div>
+				<div class="list list-hotel">
+					<div class="tr name">{{details.hotelName}}</div>
+					<div class="tr type">{{details.roomType}}</div>
+					<div class="tr address">{{details.hotelAddress}}</div>
+					<div class="tr time">
+						<span>{{details.startDate}}</span>
+						<span>~</span>
+						<span>{{details.endDate}}</span>
+						<span class="all">共<b>{{details.days}}</b>晚</span>
+					</div>
+					<div class="tr red">{{details.cancelRuleDesc}}</div>
+				</div>
+				<div class="list list-people">
+					<div class="ub">
+						<div class="name">房间数</div>
+						<div class="ub-f1">{{details.number}}间</div>
+					</div>
+					<div class="ub ub-ac">
+						<div class="name">入住人</div>
+						<div class="con ub-f1">
+							<div class="tr ub ub-ac" v-for="(p,index) in details.passangers">
+								<div class="nonius ub ub-ac ub-pc shallow-bg">{{index+1}}</div>
+								<div class="people-list ub-f1">
+									<div>{{p.name}}</div>
+									<div>{{p.certificateNo}}</div>
+									<div v-if="p.mobile">{{p.mobile}}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="list list-contact">
+					<div class="tr ub">
+						<div class="name">联系人</div>
+						<div class="ub-f1">{{details.contactName}}</div>
+					</div>
+					<div class="tr ub">
+						<div class="name">联系电话</div>
+						<div class="ub-f1">{{details.contactPhone}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="/module/js/mui/mui.min.js"></script>
+		<script src="/module/js/layer/layer.js"></script>
+		<script src="/module/js/vue.min.js"></script>
+		<script>
+			var hoterOrderNo = localGetItem("orderNo");
+			if(!hoterOrderNo) {
+				mui.alert('系统异常，请重新查询', function() {
+					mui.back();
+				});
+			} else {
+				layer.open({
+					type: 2,
+					content: '正在查询',
+					shadeClose: false
+				});
+				queryDetails();
+			}
+
+			function queryDetails() {
+				mui.ajax({
+					url: httpHost + 'hotelController.do?queryHotelOrderDetail',
+					data: {
+						orderNo: hoterOrderNo
+					},
+					dataType: 'json',
+					type: 'post',
+					timeout:1000*30,
+					success: function(data) {
+						layer.closeAll();
+						console.log(data);
+						if(data.success) {
+							if(data.obj) {
+								getId("orderCon").style.display = 'block';
+								data.obj.statusText = statusText(data.obj.status * 1);
+								data.obj.startDate = NYR(data.obj.arrivalDate, 1);
+								data.obj.endDate = NYR(data.obj.departDate, 1);
+								data.obj.rules = data.obj.cancelRuleDesc.indexOf("即订即保") == -1 ? true : false;
+								app.details = data.obj;
+							} else {
+								mui.alert('查询出错');
+							}
+						} else {
+							mui.alert('查询出错');
+						}
+					},
+					error: function(err) {
+						layer.closeAll();
+						console.log(err);
+						mui.alert('网络请求异常，请重新查询');
+					}
+				});
+			}
+
+			var app = new Vue({
+				el: "#main",
+				data: {
+					details: ''
+				},
+				methods: {
+					confirm: function() {
+						var _this = this;
+						mui.confirm('您要确认订单吗？', '提示', ['是', '否'], function(e) {
+							if(e.index == 0) {
+								layer.open({
+									type: 2,
+									content: '正在确认',
+									shadeClose: false
+								});
+								mui.ajax({
+									url: httpHost + 'hotelController.do?confirmHotelOrderModular',
+									data: {
+										orderNo: _this.details.orderNo
+									},
+									type: 'post',
+									dataType: 'json',
+									success: function(data) {
+										console.log(data);
+										if(data.success) {
+											_this.details.status = 2;
+											setTimeout(function(){
+												queryDetails();
+												layer.closeAll();
+											},1000)
+										} else {
+											layer.closeAll();
+											mui.alert(data.msg);
+										}
+									},
+									error: function(err) {
+										layer.closeAll();
+										mui.alert('网络请求异常，请重新确认');
+									}
+								})
+							}
+						});
+					},
+					cancel: function() {
+						var _this = this;
+						mui.confirm('您要取消订单吗？', '提示', ['是', '否'], function(e) {
+							if(e.index == 0) {
+								layer.open({
+									type: 2,
+									content: '正在取消',
+									shadeClose: false
+								});
+								mui.ajax({
+									url: httpHost + 'hotelController.do?cancelOrderModular',
+									data: {
+										orderNo: _this.details.orderNo
+									},
+									type: 'post',
+									dataType: 'json',
+									success: function(data) {
+										console.log(data);
+										if(data.success) {
+											queryDetails();
+										} else {
+											layer.closeAll();
+											mui.alert(data.msg);
+										}
+									},
+									error: function(err) {
+										layer.closeAll();
+										mui.alert('网络请求异常，请重新取消');
+									}
+								})
+							}
+						});
+					},
+					back: function() {
+						mui.openWindow({
+							url: '/module/index.html',
+							id: 'index'
+						})
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>
