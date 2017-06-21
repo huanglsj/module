@@ -224,7 +224,7 @@ function addMarker(obj) {
 //查询酒店
 function queryHotelsList() {
 	console.log(dataList)
-	mui.ajax({
+	var abort = mui.ajax({
 		url: httpHost + 'hotelController.do?queryHotelListModular',
 		data: dataList,
 		type: "POST",
@@ -236,7 +236,11 @@ function queryHotelsList() {
 			if(data.success) {
 				if(data.obj) {
 					map.remove(markers);
-					addMarker(data.obj);
+					if(data.obj.length>0){
+						addMarker(data.obj);
+					}else{
+						mui.alert('附件查无酒店，请重新查询');
+					}
 				} else {
 					mui.alert('酒店查无数据，请重新查询', function() {
 						mui.back();
@@ -250,6 +254,7 @@ function queryHotelsList() {
 		error: function(err) {
 			layer.closeAll();
 			console.log(err);
+			abort.abort();
 			mui.alert('网络请求异常，请重新查询', function() {
 				mui.back();
 			});

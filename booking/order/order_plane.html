@@ -10,6 +10,9 @@
 		<link rel="stylesheet" href="css/order_plane.css">
 		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
 		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
 		<script src="/module/js/global.js"></script>
 	</head>
 
@@ -107,7 +110,7 @@
 		}
 
 		function queryDetails() {
-			mui.ajax({
+			var abort = mui.ajax({
 				url: httpHost + 'flightController.do?queryFlightOrdersDetail',
 				data: {
 					orderNo: orderNo
@@ -131,10 +134,10 @@
 							obj.departAirport = airPortInfos[obj.airlines[0].departCode].airPortName;
 							obj.logo = '/module/img/logo/' + obj.airlines[0].carrier + '.png';
 							obj.airNo = obj.airlines[0].carrier + obj.airlines[0].flightNo;
-							obj.arrivalTime = obj.airlines[0].arrivalTime;
-							obj.departTime = obj.airlines[0].departTime;
-							obj.arrivalDate = obj.airlines[0].arrivalDate;
-							obj.departDate = obj.airlines[0].departDate;
+							obj.arrivalTime = HM(obj.airlines[0].arrivalTime);
+							obj.departTime = HM(obj.airlines[0].departTime);
+							obj.arrivalDate = NYR(obj.airlines[0].arrivalDate,1);
+							obj.departDate = NYR(obj.airlines[0].departDate,1);
 							app.details = data.obj;
 							console.log(data.obj);
 						} else {
@@ -147,6 +150,7 @@
 				},
 				error: function(err) {
 					layer.closeAll();
+					abort.abort();
 					mui.alert('网络请求异常，请重新查询');
 				}
 			});
@@ -167,13 +171,14 @@
 								content: '正在取消',
 								shadeClose: false
 							});
-							mui.ajax({
+							var abort = mui.ajax({
 								url: httpHost + 'flightController.do?cancelOrderModular',
 								data: {
 									orderNo: _this.details.orderNo
 								},
 								type: 'post',
 								dataType: 'json',
+								timeout:30*1000,
 								success: function(data) {
 									console.log(data);
 									if(data.success) {
@@ -190,6 +195,7 @@
 								},
 								error: function(err) {
 									layer.closeAll();
+									abort.abort();
 									mui.alert('取消失败');
 								}
 							})

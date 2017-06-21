@@ -10,6 +10,9 @@
 		<link rel="stylesheet" type="text/css" href="css/plane_book.css" />
 		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
 		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
 		<script src="/module/js/global.js"></script>
 	</head>
 
@@ -193,7 +196,7 @@
 			});
 			var flightDetail = JSON.parse(fd),
 				seatDetail = JSON.parse(sd);
-			mui.ajax({
+			var abort = mui.ajax({
 				url: httpHost + "flightController.do?checkPriceWithoutPNRModular",
 				data: {
 					"carrier": flightDetail.carrier,
@@ -208,6 +211,7 @@
 				},
 				dataType: "json",
 				type: "POST",
+				timeout:40*1000,
 				success: function(dataJson) {
 					layer.closeAll();
 					if(dataJson.obj !== null) {
@@ -248,6 +252,7 @@
 				error: function(e, errMsg, error, err, ea) {
 					layer.closeAll();
 					console.log(e);
+					abort.abort();
 					mui.alert('网络请求异常，请重新查询');
 				}
 			});

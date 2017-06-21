@@ -9,6 +9,9 @@
 		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
 		<link rel="stylesheet" href="css/hotel_show.css" />
 		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
 		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
 		<script src="/module/js/global.js"></script>
 	</head>
@@ -118,7 +121,7 @@
 							idCard: '440106198212171816',
 							telephone: '13922331217'
 						}],
-						totalPrice: hotelRoomRates.price,
+						totalPrice: hotelRoomRates.totalPrice,
 						quantity: 1
 					},
 					methods: {
@@ -126,7 +129,7 @@
 							if(this.quantity > 1) {
 								this.quantity--;
 								this.guests.splice(this.quantity, 1);
-								this.totalPrice = this.roomRates.price * this.quantity;
+								this.totalPrice = this.roomRates.totalPrice * this.quantity;
 							}
 						},
 						addGuest: function() {
@@ -137,7 +140,7 @@
 									telephone: ''
 								});
 								this.quantity++;
-								this.totalPrice = this.roomRates.price * this.quantity;
+								this.totalPrice = this.roomRates.totalPrice * this.quantity;
 							}
 						},
 						submitOrder: function() {
@@ -256,12 +259,12 @@
 									content: '正在提交订单',
 									shadeClose: false
 								});
-								mui.ajax({
+								var abort = mui.ajax({
 									url: httpHost + 'hotelController.do?createOrderModular',
 									data: orderData,
 									type: 'post',
 									dataType: 'json',
-									timeout:1000*30,
+									timeout: 1000 * 30,
 									success: function(data) {
 										layer.closeAll();
 										console.log(data);
@@ -282,6 +285,7 @@
 									error: function(err) {
 										layer.closeAll();
 										console.log(err);
+										abort.abort();
 										hotelSubmitFlag = true;
 										mui.confirm('网络请求异常，是否重新提交', '提示', ['是', '否'], function(e) {
 											if(e.index == 0) {

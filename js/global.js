@@ -1,4 +1,4 @@
-var httpHost = 'http://192.168.8.54:8081/';
+var httpHost = 'http://192.168.8.124:8081/';
 var changeSkin = localGetItem("changeSkin");
 if(!changeSkin) {
 	changeLink('blue');
@@ -338,6 +338,9 @@ function statusText(status) {
 		case 6:
 			return '订单已作废';
 			break;
+		case 10:
+			return '订单正等待商家确认';
+			break;	
 		default:
 			break;
 	}

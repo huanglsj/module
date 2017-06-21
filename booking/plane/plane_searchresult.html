@@ -12,6 +12,9 @@
 		<link rel="stylesheet" href="css/plane_searchresult.css">
 		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
 		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
 		<script src="/module/js/global.js"></script>
 	</head>
 
@@ -266,11 +269,12 @@
 				content: '数据正在加载',
 				shadeClose: false
 			});
-			mui.ajax({
+			var abort = mui.ajax({
 				url: httpHost + 'flightController.do?queryFlightsListModular',
 				data: planePm,
 				type: "POST",
 				dataType: 'json',
+				timeout:30*1000,
 				success: function(data) {
 					layer.closeAll();
 					console.log(data);
@@ -331,6 +335,7 @@
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {
 					layer.closeAll();
+					abort.abort();
 					$("#planeTicketlist").hide();
 					$("#msg").show();
 					$("#msg").text("网络请求异常，请重新查询");
@@ -426,11 +431,12 @@
 
 		//获取最近三天最低价格
 		function getMinDatePrice() {
-			mui.ajax({
+			var abort = mui.ajax({
 				url: httpHost + "flightController.do?queryLowPriceByDate",
 				data: minPm,
 				type: "POST",
 				dataType: 'json',
+				timeout:30*1000,
 				success: function(data) {
 					console.log(data);
 					if(data.lowPrices) {
@@ -441,6 +447,7 @@
 					}
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					abort.abort();
 					console.log(XMLHttpRequest, textStatus);
 				}
 			})

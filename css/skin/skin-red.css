@@ -1,0 +1,19 @@
+.deep-bg{
+	background-color: #f72405 !important;
+	color: #fff;
+}
+.shallow-bg{
+	background-color: #f7482d !important;
+	color: #fff;
+}
+.deep-text{
+	color: #f72405 !important;
+}
+.shallow-text{
+	color: #f7482d !important;
+}
+.mui-switch.mui-active {
+    border-color: #f7482d;
+    background-color: #f7482d;
+    background-clip: initial;
+}

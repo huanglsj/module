@@ -277,7 +277,7 @@ if(!localGetItem("flightDetail") || !localGetItem("seatDetail")) {
 						content: '正在提交订单',
 						shadeClose: false
 					});
-					mui.ajax({
+					var abort = mui.ajax({
 						url: httpHost + 'flightController.do?planeBookModular',
 						type: 'POST',
 						data: subData,
@@ -305,6 +305,7 @@ if(!localGetItem("flightDetail") || !localGetItem("seatDetail")) {
 						error: function(err, errMsg, error) {
 							flightSubmitFlag = true;
 							layer.closeAll();
+							abort.abort();
 							mui.confirm('网络请求异常，是否重新提交', '提示', ['是', '否'], function(e) {
 								if(e.index == 0) {
 									_this.submitOrder();

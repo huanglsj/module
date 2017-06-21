@@ -10,6 +10,9 @@
 		<link rel="stylesheet" href="css/hotel_list.css">
 		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
 		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
 		<script src="/module/js/global.js"></script>
 	</head>
 
@@ -113,7 +116,7 @@
 		}
 
 		function hotelList(type) {
-			mui.ajax({
+			var abort = mui.ajax({
 				url: httpHost + 'hotelController.do?queryHotelListModular',
 				data: {
 					cityCode: hotelQueryData.cityCode,
@@ -128,6 +131,7 @@
 				},
 				type: 'post',
 				dataType: 'json',
+				timeout:30*1000,
 				success: function(data) {
 					console.log(data);
 					if(data.success) {
@@ -165,6 +169,7 @@
 				},
 				error: function(err) {
 					console.log(err);
+					abort.abort();
 					mui.alert('网络请求异常，请重新查询', function() {
 						mui.back();
 					});

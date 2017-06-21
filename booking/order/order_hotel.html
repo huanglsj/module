@@ -9,6 +9,9 @@
 		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
 		<link rel="stylesheet" href="css/order_hotel.css" />
 		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
+        <link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
 		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
 		<script src="/module/js/global.js"></script>
 	</head>
@@ -20,9 +23,9 @@
 				<h1 class="mui-title">酒店订单</h1>
 				<a href="tel:02086132900" class="mui-icon mui-icon-phone mui-pull-right"></a>
 			</header>
-			<footer class="mui-bar mui-bar-tab ub" v-if="details.status==1 || details.status==2">
+			<footer class="mui-bar mui-bar-tab ub" v-if="details.status==1 || details.status==2 || details.status==10">
 				<div class="ub ub-f1 ub-ac ub-pc btn shallow-bg" @click="confirm" v-if="details.status==1">确认订单</div>
-				<div class="ub ub-f1 ub-ac ub-pc btn" v-bind:class="{'shallow-bg' : details.status==2,'shallow-text': details.status==1 }" v-if="details.rules" @click="cancel">取消订单</div>
+				<div class="ub ub-f1 ub-ac ub-pc btn" v-bind:class="{'shallow-bg' : details.status==2 || details.status==10,'shallow-text': details.status==1 }" v-if="details.rules" @click="cancel">取消订单</div>
 			</footer>
 			<div class="mui-content order" id="orderCon">
 				<div class="list list-head">
@@ -98,7 +101,7 @@
 			}
 
 			function queryDetails() {
-				mui.ajax({
+				var abort = mui.ajax({
 					url: httpHost + 'hotelController.do?queryHotelOrderDetail',
 					data: {
 						orderNo: hoterOrderNo
@@ -127,6 +130,7 @@
 					error: function(err) {
 						layer.closeAll();
 						console.log(err);
+						abort.abort();
 						mui.alert('网络请求异常，请重新查询');
 					}
 				});
@@ -147,7 +151,7 @@
 									content: '正在确认',
 									shadeClose: false
 								});
-								mui.ajax({
+								var abort = mui.ajax({
 									url: httpHost + 'hotelController.do?confirmHotelOrderModular',
 									data: {
 										orderNo: _this.details.orderNo
@@ -169,6 +173,7 @@
 									},
 									error: function(err) {
 										layer.closeAll();
+										abort.abort();
 										mui.alert('网络请求异常，请重新确认');
 									}
 								})
@@ -184,7 +189,7 @@
 									content: '正在取消',
 									shadeClose: false
 								});
-								mui.ajax({
+								var abort = mui.ajax({
 									url: httpHost + 'hotelController.do?cancelOrderModular',
 									data: {
 										orderNo: _this.details.orderNo
@@ -202,18 +207,19 @@
 									},
 									error: function(err) {
 										layer.closeAll();
+										abort.abort();
 										mui.alert('网络请求异常，请重新取消');
 									}
 								})
 							}
 						});
 					},
-					back: function() {
-						mui.openWindow({
-							url: '/module/index.html',
-							id: 'index'
-						})
-					}
+//					back: function() {
+//						mui.openWindow({
+//							url: '/module/index.html',
+//							id: 'index'
+//						})
+//					}
 				}
 			})
 		</script>

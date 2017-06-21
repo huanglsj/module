@@ -10,6 +10,9 @@
 		<link rel="stylesheet" type="text/css" href="/module/css/mobiscroll.min.css" />
 		<link rel="stylesheet" href="css/order_list.css" />
 		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
 		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
 		<script src="/module/js/global.js"></script>
 	</head>
@@ -152,8 +155,8 @@
 		}
 
 		function orderList(type) {
-			mui.ajax({
-				url: httpHost + 'flightController.do?queryOrdersList',
+			var abort = mui.ajax({
+				url: httpHost + 'tmcOrderNController.do?queryOrdersList',
 				data: {
 					orderNos: orderSearchData.orderNos,
 					startTime: orderSearchData.startTime,
@@ -168,6 +171,7 @@
 				},
 				type: 'post',
 				dataType: 'json',
+				timeout:40*1000,
 				success: function(data) {
 					console.log(data);
 					if(data.success) {
@@ -198,10 +202,10 @@
 												departAirport: airPortInfos[arrData[i].airlines[0].departCode].airPortName,
 												logo: '/module/img/logo/' + arrData[i].airlines[0].carrier + '.png',
 												airNo: arrData[i].airlines[0].carrier + arrData[i].airlines[0].flightNo,
-												arrivalTime: arrData[i].airlines[0].arrivalTime,
-												departTime: arrData[i].airlines[0].departTime,
-												arrivalDate: arrData[i].airlines[0].arrivalDate,
-												departDate: arrData[i].airlines[0].departDate,
+												arrivalTime: HM(arrData[i].airlines[0].arrivalTime),
+												departTime: HM(arrData[i].airlines[0].departTime),
+												arrivalDate: NYR(arrData[i].airlines[0].arrivalDate,1),
+												departDate: NYR(arrData[i].airlines[0].departDate,1),
 												totalPrice: arrData[i].totalPrice,
 												orderNo: arrData[i].orderNo
 											};
@@ -240,6 +244,7 @@
 				error: function(err) {
 					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
 					mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+					abort.abort();
 					console.log(err);
 				}
 			})
