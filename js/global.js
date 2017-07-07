@@ -8,7 +8,6 @@ if(!changeSkin) {
 	changeLink(changeSkin);
 }
 
-shouldHideNavBar(true);
 
 //更改默认皮肤
 function changeLink(skin) {
