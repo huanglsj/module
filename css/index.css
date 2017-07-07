@@ -1,39 +1,97 @@
-ul,ol,li{
-	padding: 0;
-	margin: 0;
-	list-style: none;
+body,
+.mui-content {
+	background-color: #f4f8f9;
 }
-.main > .ub li{
-	padding: 25px 0;
-	background-color: #fff;
-	border-right: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-	width: 50%;
-	font-size: 16px;
+.mui-bar{
+	-webkit-box-shadow: 0 0 1px rgba(0,0,0,.3);
+    box-shadow: 0 0 1px rgba(0,0,0,.3);
+    background-color: #fff;
 }
-.main > .ub li:last-child{
-	border-right: 0;
-}
-.main > .ub:last-child li{
-	border-bottom: 0;
-}
-.main > .ub li i{
-	font-size: 45px;
-}
-.main > .ub li .name{
-	padding-top: 10px;
-	color: #666;
-}
-.icon-feiji1{
-	color: #3a5a98;
-}
-.icon-jiudian-copy{
-	color: #1edcdc;
-}
-.icon-huoche{
-	color: #D15543;
-}
-.icon-dingdan{
-	color: #f5d012;
+.mui-bar .mui-tab-label {
+	display: block;
+	font-size: 14px !important;
 }
 
+.mui-bar .icon {
+	font-size: 24px;
+}
+
+.banner{
+	width: 100%;
+	max-height: 200px;
+}
+
+.index-bg {
+	background-image: url(../img/reservation_bg.png);
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-color: #f4f8f9;
+}
+
+.c-logo {
+	position: absolute;
+	background-image: url(../img/reservation_nav.png);
+	width: 130px;
+	height: 130px;
+	left: 0;
+	background-position: left;
+	top: 50%;
+	-webkit-transform: translate(0, -50%);
+	-moz-transform: translate(0, -50%);
+	-o-transform: translate(0, -50%);
+	-ms-transform: translate(0, -50%);
+	transform: translate(0, -50%);
+	z-index: 99;
+}
+
+.list {
+	opacity: 1;
+	font-size: 14px;
+	position: absolute;
+	right: 0;
+	transition: all .4s;
+	line-height: 70px;
+	height: 70px;
+}
+
+.list img {
+	width: 70px;
+	height: 70px;
+}
+
+.list span{
+	position: absolute;
+	top: 0;
+	left: 70px;
+}
+
+.plane {
+	left: 21.4%;
+	top: 3.75%;
+}
+
+.hotel {
+	left: 40.4%;
+	top: 21.6%;
+}
+
+.train {
+	top: 50%;
+	-webkit-transform: translate3d(0, -50%, 0);
+	-moz-transform: translate3d(0, -50%, 0);
+	-o-transform: translate3d(0, -50%, 0);
+	-ms-transform: translate3d(0, -50%, 0);
+	transform: translate3d(0, -50%, 0);
+	left: 48%;
+}
+
+.taxi {
+	left: 40.4%;
+	bottom: 21.6%;
+}
+
+.catering {
+	left: 21.4%;
+	bottom: 3.75%;
+}

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的行程</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
+		<link rel="stylesheet" href="css/trip.css">
+		<link title="blue" rel="stylesheet" href="../../css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="../../css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../css/skin/skin-black.css" disabled="disabled">
+		<script src="../../js/global.js"></script>
+	</head>
+
+	<body>
+		<!--<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item" href="../../index.html" onclick="jump(this,1)" data-href="../../index.html" data-name="index">
+				<span class="icon fa fa-ticket"></span>
+				<span class="mui-tab-label">预订</span>
+			</a>
+			<a class="mui-tab-item mui-active">
+				<span class="icon fa fa-plane"></span>
+				<span class="mui-tab-label">行程</span>
+			</a>
+			<a class="mui-tab-item" href="../me/set.html" onclick="jump(this,1)" data-href="booking/me/set.html" data-name="me">
+				<span class="icon fa fa-user"></span>
+				<span class="mui-tab-label">我的</span>
+			</a>
+		</nav>-->
+		<div class="mui-content pabs">
+			<div id="slider" class="mui-slider">
+				<div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item mui-active" href="#item1mobile">
+						<i class="fa fa-history"></i>
+						<span>进行中</span>
+					</a>
+					<a class="mui-control-item" href="#item2mobile">
+						<i class="fa fa-calendar"></i>
+						<span>计划中</span>
+					</a>
+					<a class="mui-control-item" href="#item3mobile">
+						<i class="fa fa-calendar-check-o"></i>
+						<span>已完成</span>
+					</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="pullrefreshGoing" class="mui-scroll-wrapper">
+							<div class="mui-scroll" v-cloak>
+								<ul class="trip">
+									<li v-for="(item,index) in items">
+										<div v-on:tap.stop="tripOrderList(item.exp.expId)">
+											<div class="li-head ub ub-ac">
+												<div class="type ub ub-ac ub-f1">
+													<div class="type-num">{{index+1}}</div>
+													<div class="type-name big">{{item.exp.reason}}</div>
+												</div>
+												<div v-on:tap.stop="notepad(item.exp)">
+													<img src="../../img/add_yb.png" class="add-yb" />
+													<span>记一笔</span>
+												</div>
+											</div>
+											<div class="li-body ub">
+												<div class="left ub-f1">
+													<p>始发地</p>
+													<p class="big ut-s">{{item.exp.from}}</p>
+													<p>开始日期</p>
+													<div class="ub ub-ac">
+														<div class="middle ub-f1">{{item.exp.beginMonth}}</div>
+														<div class="small small-date small-date-left">
+															<p>{{item.exp.beginWeek}}</p>
+															<p>{{item.exp.beginYear}}</p>
+														</div>
+													</div>
+												</div>
+												<div class="center ub ub-ac ub-pc">
+													<div class="fa-arrow">
+														<i class="fa fa-long-arrow-right shallow-text" v-if="item.exp.tripType==0"></i>
+														<i class="fa fa-exchange shallow-text" v-if="item.exp.tripType==1"></i>
+														<i class="fa fa-ellipsis-h shallow-text" v-if="item.exp.tripType==2" v-on:tap.stop="addressList(item)"></i>
+													</div>
+												</div>
+												<div class="right ub-f1">
+													<p>目的地</p>
+													<p class="big ut-s">{{item.exp.to}}</p>
+													<p>结束日期</p>
+													<div class="ub ub-ac">
+														<div class="small small-date small-date-right">
+															<p>{{item.exp.endWeek}}</p>
+															<p>{{item.exp.endYear}}</p>
+														</div>
+														<div class="middle ub-f1">{{item.exp.endMonth}}</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="li-arrow" v-on:tap.stop="toggle" v-if="item.hasApproval && item.hasApproval.length>0">
+											<i class="mui-icon mui-icon-arrowdown"></i>
+										</div>
+										<ul class="order-ul" v-if="item.hasApproval && item.hasApproval.length>0">
+											<li v-for="p in item.hasApproval">
+												<div v-if="p.type==0">
+													<div class="order-li-head ub ub-ac">
+														<div class="ub ub-ac ub-f1">
+															<img src="../../img/pen.png" class="head-icon" />
+															<span>{{p.typeText}}</span>
+														</div>
+													</div>
+													<div class="order-li-body list-hotel">
+														<div class="tr ub">
+															<div class="name">内容摘要：</div>
+															<div class="con ub-f1">{{p.rmk}}</div>
+														</div>
+														<div class="tr ub">
+															<div class="name">费用金额：</div>
+															<div class="con ub-f1">{{p.price}}</div>
+														</div>
+														<div class="tr ub">
+															<div class="name">时间范围：</div>
+															<div class="conv ub-f1">
+																{{p.begin}}
+															</div>
+														</div>
+													</div>
+												</div>
+												<div v-if="p.type==1" v-on:tap="orderDetails(p.type,p.orderCode)">
+													<div class="order-li-head ub ub-ac">
+														<div class="ub ub-ac ub-f1">
+															<img src="../../img/plane.png" class="head-icon" />
+															<span>{{p.typeText}}</span>
+														</div>
+														<div class="status deep-text">{{p.statusText}}</div>
+													</div>
+													<div class="order-li-body list-plane">
+														<div class="tr ub ub-ac">
+															<div class="td ut-s">{{p.beginCity}}</div>
+															<div class="td center">
+																<img :src="p.logo" onerror="this.src='../../img/logo/logo.png'" class="logo">
+															</div>
+															<div class="td ut-s">{{p.arriveCity}}</div>
+														</div>
+														<div class="tr ub ub-ac">
+															<div class="td">{{p.beginPlaneTime}}</div>
+															<div class="td center"><img src="../../img/planeIcon.png" class="arrow"></div>
+															<div class="td">{{p.endPlaneTime}}</div>
+														</div>
+														<div class="tr ub">
+															<div class="td">{{p.beginPlaneDate}}</div>
+															<div class="td center">{{p.scoper}}{{p.flightNo}}</div>
+															<div class="td">{{p.endPlaneDate}}</div>
+														</div>
+														<div class="tr tr-line ub ub-ac">
+															<div class="td ub ub-pe"><img src="../../img/green.png" class="green ub ub-ac"></div>
+															<div class="td center bold"></div>
+															<div class="td"><img src="../../img/end.png" class="end ub ub-ac"></div>
+														</div>
+													</div>
+												</div>
+												<div v-if="p.type==2" v-on:tap="orderDetails(p.type,p.orderCode)">
+													<div class="order-li-head ub ub-ac">
+														<div class="ub ub-ac ub-f1">
+															<img src="../../img/hotel.png" class="head-icon" />
+															<span>{{p.typeText}}</span>
+														</div>
+														<div class="status deep-text">{{p.statusText}}</div>
+													</div>
+													<div class="order-li-body list-hotel">
+														<div class="tr ub">
+															<div class="name">酒店名称：</div>
+															<div class="con ub-f1">{{p.hotel}}</div>
+														</div>
+														<div class="tr ub">
+															<div class="name">酒店地址：</div>
+															<div class="con ub-f1">{{p.hotelAddr}}</div>
+														</div>
+														<div class="tr ub">
+															<div class="name">入住时间：</div>
+															<div class="con ub-f1">
+																{{p.beginHotelDate}}
+															</div>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<div class="msg" id="msg1">没有进行中的行程</div>
+							</div>
+						</div>
+					</div>
+					<div id="item2mobile" class="mui-slider-item mui-control-content">
+						<div id="pullrefreshPlan" class="mui-scroll-wrapper">
+							<div class="mui-scroll" v-cloak>
+								<ul class="trip">
+									<li v-for="(item,index) in items">
+										<div class="li-head ub ub-ac">
+											<div class="type ub ub-ac ub-f1">
+												<div class="type-num">{{index+1}}</div>
+												<div class="type-name big">{{item.exp.reason}}</div>
+											</div>
+										</div>
+										<div class="li-body ub">
+											<div class="left ub-f1">
+												<p>始发地</p>
+												<p class="big ut-s">{{item.exp.from}}</p>
+												<p>开始日期</p>
+												<div class="ub ub-ac">
+													<div class="middle ub-f1">{{item.exp.beginMonth}}</div>
+													<div class="small small-date small-date-left">
+														<p>{{item.exp.beginWeek}}</p>
+														<p>{{item.exp.beginYear}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="center ub ub-ac ub-pc">
+												<div class="fa-arrow">
+													<i class="fa fa-long-arrow-right shallow-text" v-if="item.exp.tripType==0"></i>
+													<i class="fa fa-exchange shallow-text" v-if="item.exp.tripType==1"></i>
+													<i class="fa fa-ellipsis-h shallow-text" v-if="item.exp.tripType==2" v-on:tap.stop="addressList(item)"></i>
+												</div>
+											</div>
+											<div class="right ub-f1">
+												<p>目的地</p>
+												<p class="big ut-s">{{item.exp.to}}</p>
+												<p>结束日期</p>
+												<div class="ub ub-ac">
+													<div class="small small-date small-date-right">
+														<p>{{item.exp.endWeek}}</p>
+														<p>{{item.exp.endYear}}</p>
+													</div>
+													<div class="middle ub-f1">{{item.exp.endMonth}}</div>
+												</div>
+											</div>
+										</div>
+										<div class="li-foot ub">
+											<div class="ub-f1 shallow-text" v-on:tap="tripOrderList(item.exp.expId)">查看订单列表</div>
+											<div class="ub-f1 shallow-text" v-on:tap="planning(item)">制定行程计划</div>
+										</div>
+									</li>
+								</ul>
+								<div class="msg" id="msg2">没有计划中的行程</div>
+							</div>
+						</div>
+					</div>
+					<div id="item3mobile" class="mui-slider-item mui-control-content">
+						<div id="pullrefreshComplete" class="mui-scroll-wrapper">
+							<div class="mui-scroll" v-cloak>
+								<ul class="trip">
+									<li v-for="(item,index) in items">
+										<div class="li-head ub ub-ac">
+											<div class="type ub ub-ac ub-f1">
+												<div class="type-num">{{index+1}}</div>
+												<div class="type-name big">{{item.exp.reason}}</div>
+											</div>
+										</div>
+										<div class="li-body ub">
+											<div class="left ub-f1">
+												<p>始发地</p>
+												<p class="big ut-s">{{item.exp.from}}</p>
+												<p>开始日期</p>
+												<div class="ub ub-ac">
+													<div class="middle ub-f1">{{item.exp.beginMonth}}</div>
+													<div class="small small-date small-date-left">
+														<p>{{item.exp.beginWeek}}</p>
+														<p>{{item.exp.beginYear}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="center ub ub-ac ub-pc">
+												<div class="fa-arrow">
+													<i class="fa fa-long-arrow-right shallow-text" v-if="item.exp.tripType==0"></i>
+													<i class="fa fa-exchange shallow-text" v-if="item.exp.tripType==1"></i>
+													<i class="fa fa-ellipsis-h shallow-text" v-if="item.exp.tripType==2" v-on:tap.stop="addressList(item)"></i>
+												</div>
+											</div>
+											<div class="right ub-f1">
+												<p>目的地</p>
+												<p class="big ut-s">{{item.exp.to}}</p>
+												<p>结束日期</p>
+												<div class="ub ub-ac">
+													<div class="small small-date small-date-right">
+														<p>{{item.exp.endWeek}}</p>
+														<p>{{item.exp.endYear}}</p>
+													</div>
+													<div class="middle ub-f1">{{item.exp.endMonth}}</div>
+												</div>
+											</div>
+										</div>
+										<div class="li-foot ub">
+											<div class="ub ub-ac ub-pc ub-f1 shallow-text" v-on:tap="tripOrderList(item.exp.expId)">查看订单列表</div>
+											<!--<div class="ub-f1 shallow-text">查看行程详情</div>-->
+										</div>
+									</li>
+								</ul>
+								<div class="msg" id="msg3">没有已完成的行程</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../js/mui/mui.min.js"></script>
+	<script src="../../js/vue.min.js"></script>
+	<script src="../../js/vue.tap.js"></script>
+	<script>
+		shouldHideNavBar(false);
+		//清除行程计划
+		localRemoveItem("planTripData");
+		
+		mui('.mui-bar').on('tap', 'a', function() {
+			document.location.href = this.href;
+		});
+
+		var loginData = {
+			userName: 'test1',
+			passWord: '123456'
+		}
+		mui.ajax({
+			url: httpHost + 'apploginController.do?applogin',
+			type: 'POST',
+			data: loginData,
+			dataType: 'json',
+			success: function(data) {
+				console.log(data);
+				if(data.success) {
+					localSetItem("uid", data.obj.uid);
+					localSetItem("uname", data.obj.uname);
+					localSetItem("userNum", data.obj.userNum);
+					localSetItem("ucode", data.obj.ucode);
+					localSetItem("sessionId", data.obj.sessionId);
+					localSetItem("ticket", data.obj.ticket);
+				} else {
+					mui.alert(data.msg);
+					location.reload();
+				}
+
+			},
+			error: function(e, err) {
+				console.log(e);
+				mui.alert('网络异常，用户未登录，请刷新页面')
+			}
+		});
+
+		mui.init({
+			swipeBack: false
+		});
+
+		//进行中
+		var appGoing = new Vue({
+			el: '#pullrefreshGoing',
+			data: {
+				items: []
+			},
+			methods: {
+				toggle: function(event) {
+					var _this = event.target;
+					if(event.target.className != 'li-arrow') {
+						_this = event.target.parentNode;
+					}
+					if(hasClass(_this.childNodes[0], 'mui-icon-arrowdown')) {
+						removeClass(_this.childNodes[0], 'mui-icon-arrowdown');
+						addClass(_this.childNodes[0], 'mui-icon-arrowup');
+						_this.nextElementSibling.style.display = 'block';
+					} else {
+						removeClass(_this.childNodes[0], 'mui-icon-arrowup');
+						addClass(_this.childNodes[0], 'mui-icon-arrowdown');
+						_this.nextElementSibling.style.display = 'none';
+					}
+				},
+				orderDetails: function(type, orderNo) {
+					if(orderNo) {
+						localSetItem("orderNo", orderNo);
+						if(type == 1) {
+							mui.openWindow({
+								url: '../order/order_plane.html',
+								id: 'order_plane'
+							});
+							return;
+						}
+
+						if(type == 2) {
+							mui.openWindow({
+								url: '../order/order_hotel.html',
+								id: 'order_hotel'
+							});
+							return;
+						}
+					} else {
+						mui.alert("订单号不存在");
+					}
+
+				},
+				tripOrderList: function(expId) {
+					tripOrderList(expId);
+				},
+				notepad: function(exp) {
+					localSetItem("notepadItinerary", JSON.stringify(exp));
+					mui.openWindow({
+						url: 'tab1/notepad.html',
+						id: 'notepad'
+					});
+				},
+				addressList: function(item) {
+					addressList(item);
+				}
+			}
+		});
+
+		//计划中
+		var appPlan = new Vue({
+			el: '#pullrefreshPlan',
+			data: {
+				items: []
+			},
+			methods: {
+				tripOrderList: function(expId) {
+					tripOrderList(expId);
+				},
+				planning: function(item) {
+					localSetItem("planCreateItem", JSON.stringify(item));
+					mui.openWindow({
+						url: 'tab2/create_plan.html',
+						id: 'create_plan'
+					});
+				},
+				addressList: function(item) {
+					addressList(item);
+				}
+			}
+		});
+
+		//已完成
+		var appComplete = new Vue({
+			el: '#pullrefreshComplete',
+			data: {
+				items: []
+			},
+			methods: {
+				tripOrderList: function(expId) {
+					tripOrderList(expId);
+				},
+				addressList: function(item) {
+					addressList(item);
+				}
+			}
+		});
+
+		//行程订单列表
+		function tripOrderList(expId) {
+			if(expId) {
+				localSetItem("itineraryId", expId);
+				mui.openWindow({
+					url: '../order/order_trip_list.html',
+					id: 'order_trip_list'
+				})
+			} else {
+				mui.alert("行程ID不存在");
+			}
+		}
+
+		//多程地点查看
+		function addressList(item) {
+			localSetItem("severalAddress", JSON.stringify(item.exp.tripData));
+			mui.openWindow({
+				url: '../comm/address_list.html',
+				id: 'address_list'
+			});
+		}
+
+		mui('#pullrefreshGoing').pullRefresh({
+			container: '#pullrefreshGoing',
+			down: {
+				auto: true,
+				callback: pullrefreshGoing
+			}
+		});
+
+		mui('#pullrefreshPlan').pullRefresh({
+			container: '#pullrefreshPlan',
+			down: {
+				auto: true,
+				callback: pullrefreshPlan
+			}
+		});
+
+		mui('#pullrefreshComplete').pullRefresh({
+			container: '#pullrefreshComplete',
+			down: {
+				auto: true,
+				callback: pullrefreshComplete
+			}
+		});
+
+		function pullrefreshGoing() {
+			ajaxTripListGoing();
+		}
+
+		function pullrefreshPlan() {
+			ajaxTripListPlan();
+		}
+
+		function pullrefreshComplete() {
+			ajaxTripListComplete();
+		}
+
+		function ajaxTripListGoing() {
+			mui.ajax({
+				url: httpHost + 'tmcTravelsController.do?getTravelDetails',
+				type: 'post',
+				dataType: 'json',
+				data: {
+					state: 0
+				},
+				success: function(data) {
+					console.log(data);
+					if(data.success) {
+						if(data.obj) {
+							if(data.obj.length > 0) {
+								getId("msg1").style.display = 'none';
+
+								for(var i = 0; i < data.obj.length; i++) {
+									data.obj[i].exp.beginWeek = NYR(data.obj[i].exp.begin, 3);
+									data.obj[i].exp.beginYear = NYR(data.obj[i].exp.begin, 4);
+									data.obj[i].exp.beginMonth = NYR(data.obj[i].exp.begin, 2);
+									data.obj[i].exp.endWeek = NYR(data.obj[i].exp.end, 3);
+									data.obj[i].exp.endYear = NYR(data.obj[i].exp.end, 4);
+									data.obj[i].exp.endMonth = NYR(data.obj[i].exp.end, 2);
+									for(var j = 0; j < data.obj[i].hasApproval.length; j++) {
+										data.obj[i].hasApproval[j].typeText = tripType(data.obj[i].hasApproval[j].type);
+										if(data.obj[i].hasApproval[j].tripState) {
+											data.obj[i].hasApproval[j].statusText = statusText(data.obj[i].hasApproval[j].tripState * 1);
+										}
+										if(data.obj[i].hasApproval[j].type == 1) {
+											data.obj[i].hasApproval[j].beginPlaneTime = HM(data.obj[i].hasApproval[j].begin);
+											data.obj[i].hasApproval[j].endPlaneTime = HM(data.obj[i].hasApproval[j].end);
+											data.obj[i].hasApproval[j].beginPlaneDate = NYR(data.obj[i].hasApproval[j].begin, 1);
+											data.obj[i].hasApproval[j].endPlaneDate = NYR(data.obj[i].hasApproval[j].end, 1);
+											data.obj[i].hasApproval[j].logo = '../../img/logo/' + data.obj[i].hasApproval[j].scoper + '.png';
+										}
+
+										if(data.obj[i].hasApproval[j].type == 2) {
+											data.obj[i].hasApproval[j].beginHotelDate = NYR(data.obj[i].hasApproval[j].begin, 1);
+										}
+									}
+
+								}
+								appGoing.items = data.obj;
+								mui('#pullrefreshGoing').pullRefresh().endPulldownToRefresh(true);
+							} else {
+								mui('#pullrefreshGoing').pullRefresh().endPulldownToRefresh(true);
+								setTimeout(function() {
+									getId("msg1").style.display = 'block';
+								}, 500);
+							}
+						} else {
+							mui('#pullrefreshGoing').pullRefresh().endPulldownToRefresh(true);
+							setTimeout(function() {
+								getId("msg1").style.display = 'block';
+							}, 500);
+						}
+					} else {
+						mui('#pullrefreshGoing').pullRefresh().endPulldownToRefresh(true);
+						setTimeout(function() {
+							getId("msg1").style.display = 'block';
+						}, 500);
+					}
+				},
+				error: function(err) {
+					console.log(err);
+					mui('#pullrefreshGoing').pullRefresh().endPulldownToRefresh(true);
+					getId("msg1").innerText = '网络异常，请重新查询';
+					setTimeout(function() {
+						getId("msg1").style.display = 'block';
+					}, 500);
+				}
+			})
+		}
+
+		function ajaxTripListPlan() {
+			mui.ajax({
+				url: httpHost + 'tmcTravelsController.do?getTravelDetails',
+				type: 'post',
+				dataType: 'json',
+				data: {
+					state: 1
+				},
+				success: function(data) {
+					console.log(data);
+					if(data.success) {
+						if(data.obj) {
+							if(data.obj.length > 0) {
+								getId("msg2").style.display = 'none';
+								for(var i = 0; i < data.obj.length; i++) {
+									data.obj[i].exp.beginWeek = NYR(data.obj[i].exp.begin, 3);
+									data.obj[i].exp.beginYear = NYR(data.obj[i].exp.begin, 4);
+									data.obj[i].exp.beginMonth = NYR(data.obj[i].exp.begin, 2);
+									data.obj[i].exp.endWeek = NYR(data.obj[i].exp.end, 3);
+									data.obj[i].exp.endYear = NYR(data.obj[i].exp.end, 4);
+									data.obj[i].exp.endMonth = NYR(data.obj[i].exp.end, 2);
+								}
+								appPlan.items = data.obj;
+								mui('#pullrefreshPlan').pullRefresh().endPulldownToRefresh(true);
+							} else {
+								mui('#pullrefreshPlan').pullRefresh().endPulldownToRefresh(true);
+								setTimeout(function() {
+									getId("msg2").style.display = 'block';
+								}, 500);
+							}
+						} else {
+							mui('#pullrefreshPlan').pullRefresh().endPulldownToRefresh(true);
+							setTimeout(function() {
+								getId("msg2").style.display = 'block';
+							}, 500);
+						}
+					} else {
+						mui('#pullrefreshPlan').pullRefresh().endPulldownToRefresh(true);
+						setTimeout(function() {
+							getId("msg2").style.display = 'block';
+						}, 500);
+					}
+				},
+				error: function(err) {
+					console.log(err);
+					mui('#pullrefreshPlan').pullRefresh().endPulldownToRefresh(true);
+					getId("msg2").innerText = '网络异常，请重新查询';
+					setTimeout(function() {
+						getId("msg2").style.display = 'block';
+					}, 500);
+				}
+			})
+		}
+
+		function ajaxTripListComplete() {
+			mui.ajax({
+				url: httpHost + 'tmcTravelsController.do?getTravelDetails',
+				type: 'post',
+				dataType: 'json',
+				data: {
+					state: 2
+				},
+				success: function(data) {
+					console.log(data);
+					if(data.success) {
+						if(data.obj) {
+							if(data.obj.length > 0) {
+								getId("msg3").style.display = 'none';
+								for(var i = 0; i < data.obj.length; i++) {
+									data.obj[i].exp.beginWeek = NYR(data.obj[i].exp.begin, 3);
+									data.obj[i].exp.beginYear = NYR(data.obj[i].exp.begin, 4);
+									data.obj[i].exp.beginMonth = NYR(data.obj[i].exp.begin, 2);
+									data.obj[i].exp.endWeek = NYR(data.obj[i].exp.end, 3);
+									data.obj[i].exp.endYear = NYR(data.obj[i].exp.end, 4);
+									data.obj[i].exp.endMonth = NYR(data.obj[i].exp.end, 2);
+								}
+								appComplete.items = data.obj;
+								mui('#pullrefreshComplete').pullRefresh().endPulldownToRefresh(true);
+							} else {
+								mui('#pullrefreshComplete').pullRefresh().endPulldownToRefresh(true);
+								setTimeout(function() {
+									getId("msg3").style.display = 'block';
+								}, 500);
+							}
+						} else {
+							mui('#pullrefreshComplete').pullRefresh().endPulldownToRefresh(true);
+							setTimeout(function() {
+								getId("msg3").style.display = 'block';
+							}, 500);
+						}
+					} else {
+						mui('#pullrefreshComplete').pullRefresh().endPulldownToRefresh(true);
+						setTimeout(function() {
+							getId("msg3").style.display = 'block';
+						}, 500);
+					}
+				},
+				error: function(err) {
+					console.log(err);
+					mui('#pullrefreshComplete').pullRefresh().endPulldownToRefresh(true);
+					getId("msg3").innerText = '网络异常，请重新查询';
+					setTimeout(function() {
+						getId("msg3").style.display = 'block';
+					}, 500);
+				}
+			})
+		}
+
+		function tripType(type) {
+			switch(type) {
+				case 0:
+					return '凭证';
+					break;
+				case 1:
+					return '机票';
+					break;
+				case 2:
+					return '酒店';
+					break;
+				default:
+					break;
+			}
+		}
+	</script>
+
+</html>

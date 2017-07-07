@@ -1,0 +1,36 @@
+.mui-bar .mui-pull-right{
+	font-size: 15px;
+	line-height: 24px;
+}
+input,select,textarea{
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	font-size: 16px;
+}
+.add-list{
+	margin-bottom: 15px;
+}
+.add-list:last-child{
+	margin-bottom: 0;
+}
+.add-list .tr{
+	padding: 5px 12px;
+	background-color: #fff;
+}
+.add-list .tr-select{
+	border-bottom: 1px solid #ddd;
+	/*padding: 12px;*/
+}
+.add-list .mui-icon-arrowright{
+	color: #666;
+}
+.add-list .tr-textarea{
+	padding: 12px;
+}
+.add-list .textarea{
+	height: 100px;
+}
+.type-other{
+	display: none;
+}

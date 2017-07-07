@@ -5,15 +5,17 @@
 		<title>酒店订单填写</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="/module/css/ui-box.css">
-		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
 		<link rel="stylesheet" href="css/hotel_show.css" />
-		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
-		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
-		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
-		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
-		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
-		<script src="/module/js/global.js"></script>
+		<link title="blue" rel="stylesheet" href="../../css/skin/skin-blue.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../css/skin/skin-black.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="../../css/skin/skin-green.css">
+		<script src="../../js/global.js"></script>
 	</head>
 
 	<body class="um-vp" ontouchstart>
@@ -83,9 +85,9 @@
 				</div>
 			</div>
 		</div>
-		<script src="/module/js/mui/mui.min.js"></script>
-		<script src="/module/js/vue.min.js"></script>
-		<script src="/module/js/layer/layer.js"></script>
+		<script src="../../js/mui/mui.min.js"></script>
+		<script src="../../js/vue.min.js"></script>
+		<script src="../../js/layer/layer.js"></script>
 		<script>
 			var hotelDetail = localGetItem("hotelDetail");
 			var hotelRoomRates = localGetItem("hotelRoomRates");
@@ -269,14 +271,19 @@
 										layer.closeAll();
 										console.log(data);
 										if(data.success) {
-											var arr = [];
-											arr.push(data.obj);
-											localSetItem("orderList", JSON.stringify(arr));
-											localSetItem("orderListType", 2);
-											mui.openWindow({
-												url: '/module/booking/order/order_hint.html',
-												id: 'order_hint'
-											})
+											if(data.obj) {
+												var arr = [];
+												arr.push(data.obj);
+												localSetItem("orderList", JSON.stringify(arr));
+												localSetItem("orderListType", 2);
+												mui.openWindow({
+													url: '../../booking/order/order_hint.html',
+													id: 'order_hint'
+												});
+											} else {
+												hotelSubmitFlag = true;
+												mui.alert("订单提交失败");
+											}
 										} else {
 											hotelSubmitFlag = true;
 											mui.alert("订单提交失败");

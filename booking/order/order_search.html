@@ -5,16 +5,18 @@
 		<meta charset="UTF-8">
 		<title>订单查询</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="/module/css/ui-box.css" />
-		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
-		<link rel="stylesheet" type="text/css" href="/module/css/mobiscroll.min.css" />
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" type="text/css" href="../../css/ui-box.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mobiscroll.min.css" />
 		<link rel="stylesheet" href="css/order_search.css" />
-		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
-		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
-		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
-		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
-		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
-		<script src="/module/js/global.js"></script>
+		<link title="blue" rel="stylesheet" href="../../css/skin/skin-blue.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../css/skin/skin-black.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="../../css/skin/skin-green.css">
+		<script src="../../js/global.js"></script>
 	</head>
 
 	<body>
@@ -88,10 +90,10 @@
 			</div>
 		</div>
 	</body>
-	<script src="/module/js/mui/mui.min.js"></script>
-	<script src="/module/js/jquery.min.js"></script>
-	<script src="/module/js/mobiscroll.min.zh.js"></script>
-	<script src="/module/js/vue.min.js"></script>
+	<script src="../../js/mui/mui.min.js"></script>
+	<script src="../../js/jquery.min.js"></script>
+	<script src="../../js/mobiscroll.min.zh.js"></script>
+	<script src="../../js/vue.min.js"></script>
 	<script>
 		$("#startDate").mobiscroll().calendar({
 			onSet: function(val, obj) {
@@ -169,7 +171,7 @@
 			localSetItem("orderSearchData", JSON.stringify(orderSearchData));
 
 			mui.openWindow({
-				url: '/module/booking/order/order_list.html',
+				url: '../../booking/order/order_list.html',
 				id: 'order_list'
 			});
 

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>记一笔</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="../../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../../css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/mui/mui.min.css" />
+		<link rel="stylesheet" href="../../../css/mobiscroll.min.css">
+		<link rel="stylesheet" href="css/notepad.css">
+		<link title="blue" rel="stylesheet" href="../../../css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="../../../css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../../css/skin/skin-black.css" disabled="disabled">
+		<script src="../../../js/global.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-pull-left">取消</a>
+			<h1 class="mui-title">记一笔</h1>
+			<a class="mui-icon mui-pull-right">提交</a>
+		</header>
+		<div class="mui-content">
+			<div class="list">
+				<div class="tr">
+					<input type="text" readonly="readonly" id="name" class="name-text" placeholder="出差人" />
+				</div>
+			</div>
+			<div class="list">
+				<div class="tr ub ub-ac">
+					<div class="name">出差时间</div>
+					<div class="con ub-f1">
+						<input type="text" readonly="readonly" id="date" />
+					</div>
+				</div>
+				<div class="tr ub ub-ac">
+					<div class="name">费用归属</div>
+					<div class="con ub-f1">
+						<input type="text" readonly="readonly" id="affiliation" />
+					</div>
+				</div>
+				<div class="tr ub ub-ac">
+					<div class="name">费用类型</div>
+					<div class="con ub-f1">
+						<select class="select" id="selectType">
+							<option value="1">机票</option>
+							<option value="2">酒店</option>
+							<option value="3">火车票</option>
+							<option value="4">汽车票</option>
+							<option value="5">船票</option>
+							<option value="0">其他</option>
+						</select>
+					</div>
+				</div>
+				<div class="tr">
+					<div>简要描述出差事由</div>
+					<div class="textarea-div">
+						<textarea class="textarea" id="reason"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="list">
+				<div class="tr ub ub-ac">
+					<div class="name">费用金额</div>
+					<div class="con ub-f1">
+						<div class="ub ub-ac">
+							<div>￥</div>
+							<div class="ub-f1">
+								<input type="text" id="money" placeholder="消费金额" class="money-text" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tr">
+					<div class="evidence">消费凭证</div>
+					<div class="con">
+						<ul class="img-ul cl" id="imgUl">
+							<li>
+								<img src="../../../img/camera.png" class="camera" />
+								<input type="file" accept="image/*" class="file" id="file" name="file" onclick="addImg(this)" />
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../../js/mui/mui.min.js"></script>
+	<script src="../../../js/mui/mui.zoom.js"></script>
+	<script src="../../../js/mui/mui.previewimage.js"></script>
+	<script src="../../../js/layer/layer.js"></script>
+	<script src="../../../js/jquery.min.js"></script>
+	<script src="../../../js/imageUpload.js"></script>
+	<script src="../../../js/mobiscroll.min.zh.js"></script>
+	<script>
+		var notepadItinerary = localGetItem("notepadItinerary");
+		if(notepadItinerary) {
+			notepadItinerary = JSON.parse(notepadItinerary);
+			$("#name").val(localGetItem("uname"));
+			$("#affiliation").val(notepadItinerary.reason);
+			$("#date").val(notepadItinerary.begin);
+			$("#date").mobiscroll().calendar({
+				min: new Date(notepadItinerary.begin),
+				max: new Date(notepadItinerary.end)
+			});
+
+			$("#selectType").mobiscroll().select();
+
+			mui(".mui-bar").on("tap", ".mui-pull-right", function() {
+				submitNotepad();
+			});
+
+			mui.previewImage();
+
+		} else {
+			mui.alert('参数有误，请重新查询', function() {
+				mui.back();
+			});
+		}
+
+		function submitNotepad() {
+
+			if(!notepadItinerary.expId) {
+				mui.alert('行程ID不能为空');
+				return;
+			}
+
+			if(!$("#reason").val().trim()) {
+				mui.alert('简要描述出差事由不能为空');
+				return;
+			}
+
+			if(!isNumber($("#money").val())) {
+				mui.alert('消费金额格式不对，最多保留两位数字');
+				return;
+			}
+			layer.open({
+				type: 2,
+				content: '正在提交',
+				shadeClose: false
+			});
+			
+			var picList = [];
+			
+			$("#imgUl li").not(":first-child").each(function(){
+				picList.push($(this).data("url"));
+			})
+			
+			var data = {
+				't': Math.random(),
+				'expDate': (new Date($("#date").val())).getTime(),
+				'expId': notepadItinerary.expId,
+				'photoPath': picList,
+				'type': $("#selectType_dummy").val(),
+				'info': $("#reason").val(),
+				'TotalAmount': $("#money").val(),
+			};
+			console.log(data);
+			mui.ajax({
+				url: httpHost + 'tmcTravelsController.do?insertTravels',
+				data: data,
+				type: 'POST',
+				dataType: 'json',
+				success: function(data) {
+					console.log(data);
+					layer.closeAll();
+					if(data.success) {
+						mui.back();
+					} else {
+						mui.alert(data.msg)
+					}
+				},
+				error: function(err, errMsg, error) {
+					layer.closeAll();
+					mui.alert('网络异常，请重新提交');
+				}
+			})
+		}
+
+		var addImg = function(obj) {
+			var imgLen = $("#imgUl li").length;
+			if(imgLen >= 4) {
+				$(obj).attr("disabled","disabled");
+				mui.alert('最多只能上传3张图片');
+				return;
+			}			
+			new imageUpload({
+				upBtn: "file", //选择文件控件ID
+				divShow: "imgUl", //展示图片的div
+				imgShow: "", //展示图片的img
+				uploadUrl: uploadHttp,
+				fileSize: 3 * 1024 * 1024,
+				init: function() {
+					layer.open({
+						type: 2,
+						content: '正在上传',
+						shadeClose: false
+					});
+				},
+				callBack: function(status, msg) {
+					console.log(status);
+					console.log(msg);
+					if(status) {
+						$("#imgUl").append("<li data-url='" + msg + "'><img src='" + httpHost + 'upload/' + msg + "' data-preview-src='' data-preview-group='1'  /><i class='fa fa-times-circle' onclick='delImg(this)'></i></li");
+					} else {
+						mui.alert(msg);
+					}
+					layer.closeAll();
+				}
+			});
+		}
+		
+		function delImg(obj){
+			$(obj).parent().remove();
+			$("#file").removeAttr("disabled");
+		}
+	</script>
+
+</html>

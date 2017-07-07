@@ -4,16 +4,18 @@
 		<meta charset="UTF-8">
 		<title>设置</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="/module/css/ui-box.css" />
-		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
-		<link rel="stylesheet" type="text/css" href="/module/css/mobiscroll.min.css" />
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" type="text/css" href="../../css/ui-box.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mobiscroll.min.css" />
 		<link rel="stylesheet" href="css/set.css" />
-		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css" disabled="disabled">
-		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
-		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
-		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
-		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css">
-		<script src="/module/js/global.js"></script>
+		<link title="blue" rel="stylesheet" href="../../css/skin/skin-blue.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../css/skin/skin-black.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="../../css/skin/skin-green.css">
+		<script src="../../js/global.js"></script>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav deep-bg">
@@ -32,10 +34,15 @@
 						<i class="mui-icon mui-icon-loop"></i>更改主题
 					</a>
 				</li>
+				<li class="mui-table-view-cell" id="order">
+					<a class="mui-navigate-right">
+						<i class="mui-icon mui-icon-search"></i>查询订单
+					</a>
+				</li>
 			</ul>
 		</div>
 	</body>
-	<script src="/module/js/mui/mui.min.js"></script>
+	<script src="../../js/mui/mui.min.js"></script>
 	<script>
 		mui(".mui-table-view").on("tap","#clear",function(){
 			var skin = localGetItem("changeSkin");
@@ -46,8 +53,15 @@
 		
 		mui(".mui-table-view").on("tap","#skin",function(){
 			mui.openWindow({
-				url:'/module/booking/me/theme.html',
+				url:'../../booking/me/theme.html',
 				name:'theme'
+			})
+		});
+		
+		mui(".mui-table-view").on("tap","#order",function(){
+			mui.openWindow({
+				url:'../../booking/order/order_search.html',
+				name:'order_search'
 			})
 		});
 	</script>

@@ -5,15 +5,17 @@
 		<title>订单详情</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="/module/css/ui-box.css">
-		<link rel="stylesheet" href="/module/css/mui/mui.min.css">
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" href="../../css/mui/mui.min.css">
 		<link rel="stylesheet" href="css/order_plane.css">
-		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
-		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
-		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
-		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
-		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
-		<script src="/module/js/global.js"></script>
+		<link title="blue" rel="stylesheet" href="../../css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="../../css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../css/skin/skin-black.css" disabled="disabled">
+		<script src="../../js/global.js"></script>
 	</head>
 
 	<body>
@@ -42,12 +44,12 @@
 					<div class="list-table">
 						<div class="tr ub ub-ac">
 							<div class="td bold">{{details.departCity}}</div>
-							<div class="td center"><img :src="details.logo" onerror="this.src='/module/img/logo/logo.png'" class="logo"></div>
+							<div class="td center"><img :src="details.logo" onerror="this.src='../../img/logo/logo.png'" class="logo"></div>
 							<div class="td bold">{{details.arrivalCity}}</div>
 						</div>
 						<div class="tr ub">
 							<div class="td bold">{{details.departTime}}</div>
-							<div class="td center"><img src="/module/img/planeIcon.png" class="arrow"></div>
+							<div class="td center"><img src="../../img/planeIcon.png" class="arrow"></div>
 							<div class="td bold">{{details.arrivalTime}}</div>
 						</div>
 						<div class="tr ub">
@@ -56,9 +58,9 @@
 							<div class="td">{{details.arrivalAirport}}</div>
 						</div>
 						<div class="tr tr-line ub ub-ac">
-							<div class="td ub ub-pe"><img src="/module/img/green.png" class="green ub ub-ac"></div>
+							<div class="td ub ub-pe"><img src="../../img/green.png" class="green ub ub-ac"></div>
 							<div class="td center bold"></div>
-							<div class="td"><img src="/module/img/end.png" class="end ub ub-ac"></div>
+							<div class="td"><img src="../../img/end.png" class="end ub ub-ac"></div>
 						</div>
 					</div>
 				</div>
@@ -90,10 +92,10 @@
 			</div>
 		</div>
 	</body>
-	<script src="/module/js/mui/mui.min.js"></script>
-	<script src="/module/js/vue.min.js"></script>
-	<script src="/module/js/layer/layer.js"></script>
-	<script src="/module/js/newairport.js"></script>
+	<script src="../../js/mui/mui.min.js"></script>
+	<script src="../../js/vue.min.js"></script>
+	<script src="../../js/layer/layer.js"></script>
+	<script src="../../js/newairport.js"></script>
 	<script>
 		var orderNo = localGetItem("orderNo");
 		if(!orderNo) {
@@ -111,9 +113,9 @@
 
 		function queryDetails() {
 			var abort = mui.ajax({
-				url: httpHost + 'flightController.do?queryFlightOrdersDetail',
+				url: httpHost + 'tmcOrderNController.do?getOrderDetailByOrderCode',
 				data: {
-					orderNo: orderNo
+					orderCode: orderNo
 				},
 				type: 'post',
 				dataType: 'json',
@@ -132,7 +134,7 @@
 							obj.departCity = airPortInfos[obj.airlines[0].departCode].Name;
 							obj.arrivalAirport = airPortInfos[obj.airlines[0].arrivalCode].airPortName;
 							obj.departAirport = airPortInfos[obj.airlines[0].departCode].airPortName;
-							obj.logo = '/module/img/logo/' + obj.airlines[0].carrier + '.png';
+							obj.logo = '../../img/logo/' + obj.airlines[0].carrier + '.png';
 							obj.airNo = obj.airlines[0].carrier + obj.airlines[0].flightNo;
 							obj.arrivalTime = HM(obj.airlines[0].arrivalTime);
 							obj.departTime = HM(obj.airlines[0].departTime);
@@ -172,9 +174,9 @@
 								shadeClose: false
 							});
 							var abort = mui.ajax({
-								url: httpHost + 'flightController.do?cancelOrderModular',
+								url: httpHost + 'flightController.do?cancelFlight',
 								data: {
-									orderNo: _this.details.orderNo
+									PNR: _this.details.pnr
 								},
 								type: 'post',
 								dataType: 'json',
@@ -201,13 +203,7 @@
 							})
 						}
 					});
-				},
-//				back: function() {
-//					mui.openWindow({
-//						url: '/module/index.html',
-//						id: 'index'
-//					})
-//				}
+				}
 			}
 		})
 	</script>

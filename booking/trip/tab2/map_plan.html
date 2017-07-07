@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择地点</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="../../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../../css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/mui/mui.min.css" />
+		<link rel="stylesheet" href="../../../css/mobiscroll.min.css">
+		<link title="blue" rel="stylesheet" href="../../../css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="../../../css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../../css/skin/skin-black.css" disabled="disabled">
+		<script src="../../../js/global.js"></script>
+		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=c9c9b2b402afe3efd3ee0134f3e2b77e"></script>
+		<style>
+			.map-close {
+				position: absolute;
+				right: 20px;
+				top: 20px;
+				font-size: 40px;
+				color: #f73b1b;
+				z-index: 999999;
+			}
+			
+			.map {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				bottom: 0;
+				top: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="map" class="map"></div>
+		<i class="fa fa-times-circle map-close mui-action-back" id="close"></i>
+		<script src="../../../js/mui/mui.min.js"></script>
+		<script>
+			//初始化地图
+			var map = new AMap.Map('map', {
+				resizeEnable: true,
+				zoom: 15
+			});
+
+			var marker;
+
+			function addMarker(i, d) {
+
+				marker = new AMap.Marker({
+					map: map,
+					position: [d.location.getLng(), d.location.getLat()]
+				});
+				map.setZoomAndCenter(15, [d.location.getLng(), d.location.getLat()]);
+
+				//	marker.on('click', function(e) {
+				//      var lnglatXY = [e.lnglat.getLng(), e.lnglat.getLat()];
+				//      regeocoder(lnglatXY);
+				//  });
+			}
+
+			map.on('click', function(e) {
+				var lnglatXY = [e.lnglat.getLng(), e.lnglat.getLat()];
+				regeocoder(lnglatXY);
+			});
+
+			var address = localGetItem("planAddressCity");
+			geocoder();
+
+			function geocoder() {
+
+				var MGeocoder;
+				//加载地理编码插件
+				map.plugin(["AMap.Geocoder"], function() {
+					MGeocoder = new AMap.Geocoder({
+						radius: 1000,
+						extensions: "all"
+					});
+
+					MGeocoder.getLocation(address, function(status, result) {
+						if(status === 'complete' && result.info === 'OK') {
+							geocoder_CallBack(result);
+						} else {
+							mui.alert('获取地址失败', function() {
+								mui.back();
+							});
+						}
+					});
+				});
+			}
+
+			//地理编码返回结果展示
+			function geocoder_CallBack(data) {
+				var resultStr = "";
+				//地理编码结果数组
+
+				var geocode = data.geocodes;
+				if(geocode.length > 0) {
+					for(var i = 0; i < geocode.length; i++) {
+						addMarker(i, geocode[i]);
+					}
+				}
+
+			}
+
+			function regeocoder(lnglatXY) { //逆地理编码
+				var geocoder = new AMap.Geocoder({
+					radius: 1000,
+					extensions: "all"
+				});
+				geocoder.getAddress(lnglatXY, function(status, result) {
+					if(status === 'complete' && result.info === 'OK') {
+						regeocoder_CallBack(result, lnglatXY);
+					} else {
+						mui.alert('获取地址失败', function() {
+							mui.back();
+						});
+					}
+				});
+				map.remove(marker);
+				marker = new AMap.Marker({ //加点
+					map: map,
+					position: lnglatXY
+				});
+				map.setZoomAndCenter(15, lnglatXY);
+
+			}
+
+			function regeocoder_CallBack(data, lnglatXY) {
+				console.log(data);
+				console.log(lnglatXY);
+				var address = data.regeocode.addressComponent.district; //返回地址描述
+				address += data.regeocode.addressComponent.township;
+				address += data.regeocode.addressComponent.street;
+				address += data.regeocode.addressComponent.streetNumber;
+				console.log(address);
+				mui.confirm(address, '您确定要以这个为详细地址？', ['是', '否'], function(e) {
+					if(e.index == 0) {
+						localSetItem("planAddressMapCity", address);
+						mui.back();
+					}
+				})
+
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>行程订单列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" type="text/css" href="../../css/ui-box.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mobiscroll.min.css" />
+		<link rel="stylesheet" href="css/order_list.css" />
+		<link title="blue" rel="stylesheet" href="../../css/skin/skin-blue.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../css/skin/skin-black.css" disabled="disabled">
+		<link title="green" rel="stylesheet" href="../../css/skin/skin-green.css">
+		<script src="../../js/global.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+			<div class="mui-title">订单列表</div>
+		</header>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<div id="orderList" v-cloak>
+					<div class="list" v-for="item in items">
+						<div class="head ub ub-ac">
+							<div class="type deep-text">{{item.typeText}}</div>
+							<div class="time ub-f1 ub ub-pe bold">{{item.dateTime}}</div>
+						</div>
+						<div class="body">
+							<div class="flight" v-if="item.type.indexOf('FLIGHT') > -1">
+								<div class="tr ub ub-ac">
+									<div class="ub-f1 ub ub-ac">
+										<div class="td t-time first bold">{{item.departTime}}</div>
+										<div class="td center arrow"></div>
+										<div class="td t-time last bold">{{item.arrivalTime}}</div>
+									</div>
+									<div class="price shallow-text">￥<span>{{item.totalPrice}}</span></div>
+								</div>
+								<div class="tr ub address">
+									<div class="ub-f1 ub ub-ac">
+										<div class="td first">{{item.departCity}}</div>
+										<div class="td last">{{item.arrivalCity}}</div>
+									</div>
+									<div class="price"></div>
+								</div>
+								<div class="tr">
+									<img :src="item.logo" onerror="this.src='../../img/logo/logo.png'" class="logo">
+									<span>{{item.airNo}}</span>
+								</div>
+							</div>
+							<div class="hotel" v-if="item.type.indexOf('HOTEL') > -1">
+								<div class="tr ub bold">
+									<div class="ub-f1">{{item.hotelName}}</div>
+									<div class="price shallow-text">￥<span>{{item.totalPrice}}</span></div>
+								</div>
+								<div class="tr ub address">{{item.hotelAddress}}</div>
+								<div class="tr">
+									<span>{{item.roomType}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="foot ub ub-ac" v-on:tap="orderDetail(item)">
+							<div class="status ub-f1">{{item.statusText}}</div>
+							<div class="look">查看详情<i class="mui-icon mui-icon-arrowright"></i></div>
+						</div>
+					</div>
+					<div class="msg" id="msg">没有查询到订单</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../js/mui/mui.min.js"></script>
+	<script src="../../js/vue.min.js"></script>
+	<script src="../../js/layer/layer.js"></script>
+	<script src="../../js/newairport.js"></script>
+	<script src="../../js/vue.tap.js"></script>
+	<script>
+		var app = new Vue({
+			el: '#pullrefresh',
+			data: {
+				items: []
+			},
+			methods: {
+				orderDetail: function(obj) {
+					if(obj.orderNo) {
+						localSetItem("orderNo", obj.orderNo);
+						if(obj.type.indexOf("FLIGHT") > -1) {
+							mui.openWindow({
+								url: '../../booking/order/order_plane.html',
+								id: 'order_plane'
+							})
+						}
+						if(obj.type.indexOf("HOTEL") > -1) {
+							mui.openWindow({
+								url: '../../booking/order/order_hotel.html',
+								id: 'order_hotel'
+							})
+						}
+					} else {
+						mui.alert('获取订单号失败');
+					}
+				}
+			}
+		});
+
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh
+				}
+			}
+		});
+
+		var page = 0; //开始页码
+		var pageSize = 10; //每页显示10条
+		var itineraryId = localGetItem("itineraryId");
+		if(!itineraryId) {
+			mui.alert('参数有误，请重新查询', function() {
+				mui.back();
+			});
+		} else {
+			if(mui.os.plus) {
+				mui.plusReady(function() {
+					setTimeout(function() {
+						mui('#pullrefresh').pullRefresh().pulldownLoading();
+					}, 1000);
+
+				});
+			} else {
+				mui.ready(function() {
+					mui('#pullrefresh').pullRefresh().pulldownLoading();
+				});
+			}
+		}
+
+		function pulldownRefresh() {
+			page = 1;
+			var type = 0;
+			getId("msg").style.display = 'none';
+			orderList();
+		}
+
+		function orderList() {
+			var abort = mui.ajax({
+				url: httpHost + 'tmcOrderNController.do?queryTmcOrdersListByItineraryId',
+				data: {
+					index: 1,
+					itineraryId: itineraryId
+				},
+				type: 'post',
+				dataType: 'json',
+				timeout: 40 * 1000,
+				success: function(data) {
+					console.log(data);
+					if(data.success) {
+						if(data.obj) {
+							var arrData = data.obj.orders;
+							if(arrData.length > 0) {
+
+								app.items = [];
+								mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+								getId("msg").style.display = 'none';
+
+								for(var i = 0; i < arrData.length; i++) {
+
+									if(arrData[i].type.indexOf("FLIGHT") > -1) {
+										var myItem = {
+											dateTime: NYR(arrData[i].createTime, 1) + ' ' + HM(arrData[i].createTime),
+											statusText: statusText(arrData[i].status * 1),
+											type: arrData[i].type,
+											typeText: '机票',
+											arrivalCity: airPortInfos[arrData[i].airlines[0].arrivalCode].Name,
+											departCity: airPortInfos[arrData[i].airlines[0].departCode].Name,
+											arrivalAirport: airPortInfos[arrData[i].airlines[0].arrivalCode].airPortName,
+											departAirport: airPortInfos[arrData[i].airlines[0].departCode].airPortName,
+											logo: '../../img/logo/' + arrData[i].airlines[0].carrier + '.png',
+											airNo: arrData[i].airlines[0].carrier + arrData[i].airlines[0].flightNo,
+											arrivalTime: HM(arrData[i].airlines[0].arrivalTime),
+											departTime: HM(arrData[i].airlines[0].departTime),
+											arrivalDate: NYR(arrData[i].airlines[0].arrivalDate, 1),
+											departDate: NYR(arrData[i].airlines[0].departDate, 1),
+											totalPrice: arrData[i].totalPrice,
+											orderNo: arrData[i].orderNo
+										};
+										app.items.push(myItem);
+									}
+
+									if(arrData[i].type.indexOf("HOTEL") > -1) {
+										var myItem = {
+											dateTime: NYR(arrData[i].createTime, 1) + ' ' + HM(arrData[i].createTime),
+											statusText: statusText(arrData[i].status * 1),
+											type: arrData[i].type,
+											typeText: '酒店',
+											hotelName: arrData[i].hotelName,
+											hotelAddress: arrData[i].hotelAddress,
+											totalPrice: arrData[i].totalPrice,
+											orderNo: arrData[i].orderNo
+										};
+										app.items.push(myItem);
+									}
+								}
+							} else {
+								mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+								setTimeout(function() {
+									getId("msg").style.display = 'block';
+								}, 500);
+							}
+						} else {
+							mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+							setTimeout(function() {
+								getId("msg").style.display = 'block';
+							}, 500);
+						}
+					} else {
+						mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+						setTimeout(function() {
+							getId("msg").style.display = 'block';
+						}, 500);
+					}
+				},
+				error: function(err) {
+					mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+					abort.abort();
+					console.log(err);
+					getId("msg").innerText = '网络异常，请重新查询';
+					setTimeout(function() {
+						getId("msg").style.display = 'block';
+					}, 500);
+				}
+			})
+		}
+	</script>
+
+</html>

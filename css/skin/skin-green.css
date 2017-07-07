@@ -17,3 +17,24 @@
     background-color: #38B87F;
     background-clip: initial;
 }
+.mui-bar-tab .mui-tab-item.mui-active{
+	color: #287C57;
+}
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+	color: #287C57;
+}
+.mui-segmented-control.mui-segmented-control-inverted~.mui-slider-progress-bar{
+	background-color: #287C57;
+}
+.li-body .fa-arrow .fa{
+	border: 1px solid #38B87F;
+}
+.list-body .tr:before{
+	border: 2px solid #38B87F;
+}
+.list:first-child .list-body .tr:first-child:before{
+	background-color: #38B87F;
+}
+.list:last-child .list-body .tr:last-child:before{
+	background-color: #38B87F;
+}

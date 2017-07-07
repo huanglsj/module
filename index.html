@@ -3,73 +3,100 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>首页</title>
+		<title>预订</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="/module/css/fonts/iconfont.css">
-		<link rel="stylesheet" href="/module/css/ui-box.css">
-		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="css/mui/mui.min.css" />
 		<link rel="stylesheet" href="css/index.css">
-		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
-		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
-		<script src="/module/js/global.js"></script>
-		<script>
-			if(!localGetItem("changeSkin")) {
-				var skin = getQueryString("skin");
-				if(skin) {
-					localSetItem("changeSkin", skin);
-					changeLink(skin);
-				} else {
-					localSetItem("changeSkin", 'blue');
-					changeLink('blue');
-				}
-			}
-		</script>
+		<link title="blue" rel="stylesheet" href="css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="css/skin/skin-black.css" disabled="disabled">
+		<script src="js/global.js"></script>
 	</head>
 
 	<body>
-		<div class="main">
-			<ul class="ub ul">
-				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/plane/plane_search.html" data-name="plane_search" id="plane">
-					<i class="iconfont icon-feiji1"></i>
-					<div class="name">机票</div>
-				</li>
-				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/hotel/hotel_search.html" data-name="hotel_search" id="hotel">
-					<i class="iconfont icon-jiudian-copy"></i>
-					<div class="name">酒店</div>
-				</li>
-			</ul>
-			<ul class="ub ul">
-				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,0)" id="train">
-					<i class="iconfont icon-huoche"></i>
-					<div class="name">火车</div>
-				</li>
-				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/order/order_search.html" data-name="order_search" id="order">
-					<i class="iconfont icon-dingdan"></i>
-					<div class="name">订单</div>
-				</li>
-			</ul>
-			<ul class="ub ul">
-				<li class="ub ub-ac ub-pc ub-ver ub-f1" onclick="jump(this,1)" data-href="/module/booking/me/set.html" data-name="set" id="set">
-					<i class="mui-icon mui-icon-gear"></i>
-					<div class="name">设置</div>
-				</li>
-			</ul>
+		<!--<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="index.html" onclick="jump(this,1)" data-href="index.html" data-name="index">
+				<span class="icon fa fa-ticket"></span>
+				<span class="mui-tab-label">预订</span>
+			</a>
+			<a class="mui-tab-item" href="booking/trip/trip.html" onclick="jump(this,1)" data-href="booking/trip/trip.html" data-name="trip">
+				<span class="icon fa fa-plane"></span>
+				<span class="mui-tab-label">行程</span>
+			</a>
+			<a class="mui-tab-item" href="booking/me/set.html" onclick="jump(this,1)" data-href="booking/me/set.html" data-name="me">
+				<span class="icon fa fa-user"></span>
+				<span class="mui-tab-label">我的</span>
+			</a>
+		</nav>-->
+		<div class="mui-content pabs ub ub-ver">
+			<img src="img/banner.png" class="banner" />
+			<div class="ub-f1 index-bg ub-img">
+				<div id="logo" class="c-logo ub-img"></div>
+				<div class="up dh">
+					<div id="plane" class="list plane" onclick="jump(this,1)" data-href="booking/plane/plane_search.html" data-name="plane_search">
+						<img src="img/reservation_plane.png">
+						<span>机票预订</span>
+					</div>
+					<div id="hotel" class="list hotel" onclick="jump(this,1)" data-href="booking/hotel/hotel_search.html" data-name="hotel_search">
+						<img src="img/reservation_hotel.png">
+						<span>酒店预订</span>
+					</div>
+					<div id="train" class="list train" onclick="jump(this,0)">
+						<img src="img/reservation_ticket.png" class="grayImg">
+						<span>火车票预订</span>
+					</div>
+					<div id="taxi" class="list taxi" onclick="jump(this,0)">
+						<img src="img/reservation_rental.png" class="grayImg">
+						<span>租车服务</span>
+					</div>
+					<div id="catering" class="list catering" onclick="jump(this,0)">
+						<img src="img/reservation_VIP.png" class="grayImg">
+						<span>贵宾服务</span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
-	<script src="/module/js/mui/mui.min.js"></script>
+	<script src="js/mui/mui.min.js"></script>
 	<script>
-		function jump(obj, type) {
-			var url = obj.getAttribute("data-href");
-			var name = obj.getAttribute("data-name");
-			if(type == 1 && url && name) {
-				mui.openWindow({
-					url: url,
-					id: name
-				});
-			} else {
-				mui.alert("该模块还没开放")
-			}
+		shouldHideNavBar(false);
+		mui('.mui-bar').on('tap', 'a', function() {
+			document.location.href = this.href;
+		});
+
+		var loginData = {
+			userName: 'test1',
+			passWord: '123456'
 		}
+		mui.ajax({
+			url: httpHost + 'apploginController.do?applogin',
+			type: 'POST',
+			data: loginData,
+			dataType: 'json',
+			success: function(data) {
+				console.log(data);
+				if(data.success) {
+					localSetItem("uid", data.obj.uid);
+					localSetItem("uname", data.obj.uname);
+					localSetItem("userNum", data.obj.userNum);
+					localSetItem("ucode", data.obj.ucode);
+					localSetItem("sessionId", data.obj.sessionId);
+					localSetItem("ticket", data.obj.ticket);
+				} else {
+
+				}
+
+			},
+			error: function(e, err) {
+				console.log(e);
+			}
+		});
 	</script>
 
 </html>

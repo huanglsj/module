@@ -33,7 +33,7 @@ if(!localGetItem("flightDetail") || !localGetItem("seatDetail")) {
 	console.log(flightDetail, seatDetail, backFlightDetail, backSeatDetail);
 
 	$(".airCode").text(flightDetail.carrier + flightDetail.flightNo); //航班号
-	$("#flightLogo").attr("src", "/module/img/logo/" + flightDetail.carrier + ".png"); //航空公司logo
+	$("#flightLogo").attr("src", "../../img/logo/" + flightDetail.carrier + ".png"); //航空公司logo
 	$("#shipping").text(seatDetail.shipping); //舱位
 	$("#fromAirport").text(flightDetail.fromName + flightDetail.depAirport); //出发机场
 	$("#arriveAirport").text(flightDetail.toName + flightDetail.arrAirport); //到达机场
@@ -290,7 +290,7 @@ if(!localGetItem("flightDetail") || !localGetItem("seatDetail")) {
 								localSetItem("orderList", JSON.stringify(data.obj));
 								localSetItem("orderListType", 1);
 								mui.openWindow({
-									url: '/module/booking/order/order_hint.html',
+									url: '../../booking/order/order_hint.html',
 									id: 'order_hint'
 								})
 							} else {

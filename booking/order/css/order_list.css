@@ -90,3 +90,10 @@
 	height: 15px;
 	vertical-align: middle;
 }
+.msg{
+	text-align: center;
+	font-size: 18px;
+	margin-top: 15px;
+	color: #999;
+	display: none;
+}

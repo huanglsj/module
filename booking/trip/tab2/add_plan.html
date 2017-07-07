@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加计划</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="../../../css/fonts/font-awesome.min.css">
+		<link rel="stylesheet" href="../../../css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="../../../css/mui/mui.min.css" />
+		<link rel="stylesheet" href="../../../css/mobiscroll.min.css">
+		<link rel="stylesheet" href="css/add_plan.css">
+		<link title="blue" rel="stylesheet" href="../../../css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="../../../css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../../css/skin/skin-black.css" disabled="disabled">
+		<script src="../../../js/global.js"></script>
+		<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=c9c9b2b402afe3efd3ee0134f3e2b77e"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav deep-bg">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" id="back"></a>
+			<div class="mui-title">添加计划</div>
+			<a class="mui-pull-right mui-icon" id="submitPlan">提交</a>
+		</header>
+		<div class="mui-content">
+			<div class="add-list">
+				<div class="tr tr-select ub ub-ac">
+					<div class="ub-f1">
+						<select class="select" id="type">
+							<option value="1">行程</option>
+							<option value="2">住宿</option>
+							<option value="3">会议</option>
+							<option value="4">用餐</option>
+						</select>
+					</div>
+					<i class="mui-icon mui-icon-arrowright"></i>
+				</div>
+				<div class="type-trip">
+					<div class="tr ub ub-ac">
+						<div class="ub-f1">
+							<input type="hidden" id="departCityCode" />
+							<input type="text" readonly="readonly" placeholder="出发城市" id="departCity" />
+						</div>
+						<i class="mui-icon mui-icon-arrowright"></i>
+					</div>
+					<div class="tr ub ub-ac">
+						<div class="ub-f1">
+							<input type="hidden" id="arrivalCityCode" />
+							<input type="text" readonly="readonly" placeholder="到达城市" id="arrivalCity" />
+						</div>
+						<i class="mui-icon mui-icon-arrowright"></i>
+					</div>
+				</div>
+				<div class="type-other">
+					<div class="tr ub ub-ac">
+						<div class="ub-f1">
+							<input type="hidden" id="selectCityCode" />
+							<input type="text" readonly="readonly" placeholder="选择城市" id="selectCity" />
+						</div>
+						<i class="mui-icon mui-icon-arrowright"></i>
+					</div>
+					<div class="tr ub ub-ac">
+						<div class="ub-f1">
+							<input type="text" placeholder="详细地址" id="address" />
+						</div>
+						<i class="mui-icon mui-icon-location shallow-text" id="addressGps"></i>
+					</div>
+				</div>
+				<div class="tr ub ub-ac">
+					<div class="ub-f1">
+						<input type="text" readonly="readonly" placeholder="行程日期" id="tripDate" />
+					</div>
+					<i class="mui-icon mui-icon-arrowright"></i>
+				</div>
+			</div>
+			<div class="add-list">
+				<div class="tr tr-textarea">
+					<textarea placeholder="备注" class="textarea" id="info"></textarea>
+				</div>
+			</div>
+			<div id="map"></div>
+		</div>
+	</body>
+	<script src="../../../js/mui/mui.min.js"></script>
+	<script src="../../../js/jquery.min.js"></script>
+	<script src="../../../js/mobiscroll.min.zh.js"></script>
+	<script src="../../../js/layer/layer.js"></script>
+	<script>
+		layer.open({
+			type: 2,
+			content: '正在加载',
+			shadeClose: false
+		});
+
+		//初始化地图
+		var map = new AMap.Map('map', {
+			resizeEnable: true,
+		});
+
+		var startMarker = new AMap.Marker({ //添加自定义点标记
+			position: map.getCenter(), //基点位置
+		});
+
+		var planDepartCityFlag = localGetItem("planDepartCityFlag");
+		var planArrivalCityFlag = localGetItem("planArrivalCityFlag");
+		var planselectCityFlag = localGetItem("planselectCityFlag");
+
+		var planDepartCity = localGetItem("planDepartCity");
+		var planArrivalCity = localGetItem("planArrivalCity");
+		var planselectCity = localGetItem("planselectCity");
+
+		var planDepartCityCode = localGetItem("planDepartCityCode");
+		var planArrivalCityCode = localGetItem("planArrivalCityCode");
+		var planselectCityCode = localGetItem("planselectCityCode");
+
+		var planEditItem = localGetItem("planEditItem");
+
+		var planTypeIndex = 1;
+
+		if(planEditItem) {
+			planEditItem = JSON.parse(planEditItem);
+			planTypeIndex = planEditItem.planType;
+			$("#type").val(planTypeIndex);
+			if(planEditItem.planType == 1) {
+				$("#departCity").val(planEditItem.planWhere[0]);
+				$("#departCityCode").val(planEditItem.whereCode[0] + ',' + planEditItem.hotelCityCode[0]);
+				$("#arrivalCity").val(planEditItem.planWhere[1]);
+				$("#arrivalCityCode").val(planEditItem.whereCode[1] + ',' + planEditItem.hotelCityCode[1]);
+				$(".type-trip").show();
+				$(".type-other").hide();
+			} else {
+				$("#selectCity").val(planEditItem.planWhere[0]);
+				$("#address").val(planEditItem.address);
+				$("#selectCityCode").val(planEditItem.whereCode[0] + ',' + planEditItem.hotelCityCode[0]);
+				$(".type-trip").hide();
+				$(".type-other").show();
+			}
+
+			$("#tripDate").val(NYR(planEditItem.planTime, 1) + ' ' + HM(planEditItem.planTime));
+			$("#info").val(planEditItem.planRemark);
+		}
+
+		if(planDepartCityFlag == 'true') {
+			$("#departCity").val(planDepartCity);
+			$("#departCityCode").val(planDepartCityCode);
+			localSetItem("planDepartCityFlag", false);
+			$(".type-trip").show();
+			$(".type-other").hide();
+		}
+
+		if(planArrivalCityFlag == 'true') {
+			$("#arrivalCity").val(planArrivalCity);
+			$("#arrivalCityCode").val(planArrivalCityCode);
+			localSetItem("planArrivalCityFlag", false);
+			$(".type-trip").show();
+			$(".type-other").hide();
+		}
+
+		if(planselectCityFlag == 'true') {
+			$("#selectCity").val(planselectCity);
+			$("#selectCityCode").val(planselectCityCode);
+			localSetItem("planselectCityFlag", false);
+			$(".type-trip").hide();
+			$(".type-other").show();
+		}
+
+		$("#departCity").on("tap", function() {
+			localSetItem("planDepartCityFlag", true);
+			mui.openWindow({
+				url: 'city_plan.html',
+				id: 'city_plan'
+			});
+		});
+
+		$("#arrivalCity").on("tap", function() {
+			localSetItem("planArrivalCityFlag", true);
+			mui.openWindow({
+				url: 'city_plan.html',
+				id: 'city_plan'
+			})
+		});
+
+		$("#selectCity").on("tap", function() {
+			localSetItem("planselectCityFlag", true);
+			mui.openWindow({
+				url: 'city_plan.html',
+				id: 'city_plan'
+			})
+		});
+
+		if(localGetItem("planTypeIndex")) {
+			$("#type").val(localGetItem("planTypeIndex"));
+		}
+
+		$("#type").mobiscroll().select({
+			onSet: function(val) {
+				val = val.valueText;
+				if(val == "行程") {
+					planTypeIndex = 1;
+					localSetItem("planTypeIndex", planTypeIndex);
+					$(".type-trip").show();
+					$(".type-other").hide();
+				} else {
+					switch(val) {
+						case '住宿':
+							planTypeIndex = 2;
+							break;
+						case '会议':
+							planTypeIndex = 3;
+							break;
+						case '用餐':
+							planTypeIndex = 4;
+							break;
+						default:
+							break;
+					}
+					$(".type-trip").hide();
+					$(".type-other").show();
+					localSetItem("planTypeIndex", planTypeIndex);
+				}
+			}
+		});
+
+		$("#tripDate").mobiscroll().calendar({
+			controls: ['calendar', 'time'],
+			min: new Date(localGetItem("planTripMinDate") * 1)
+		});
+
+		var planAddressMapCity = localGetItem("planAddressMapCity");
+		if(planAddressMapCity) {
+			$("#address").val(planAddressMapCity);
+			localRemoveItem("planAddressMapCity");
+			$(".type-trip").hide();
+			$(".type-other").show();
+		}
+
+		$("#addressGps").on("tap", function() {
+			var selectCity = $("#selectCity").val();
+			var address = $("#address").val();
+			if(!selectCity) {
+				mui.alert("请先选择城市");
+				return;
+			}
+
+			if(!address) {
+				mui.alert("请先填写详细地址");
+				return;
+			}
+			localSetItem("planAddressCity", selectCity + address);
+			mui.openWindow({
+				url: 'map_plan.html',
+				id: 'map_plan'
+			});
+		});
+
+		$("#submitPlan").on("tap", function() {
+			subminPlan();
+		});
+
+		function subminPlan() {
+			var type = $("#type").val() * 1;
+			var departCity = $("#departCity").val();
+			var departCityCode = $("#departCityCode").val();
+			var arrivalCity = $("#arrivalCity").val();
+			var arrivalCityCode = $("#arrivalCityCode").val();
+			var selectCity = $("#selectCity").val();
+			var selectCityCode = $("#selectCityCode").val();
+			var address = $("#address").val();
+			var tripDate = $("#tripDate").val();
+			var info = $("#info").val();
+
+			var city, hotelCityCode, cityCode, myCity;
+
+			if(type == 1) {
+				if(!departCity.trim()) {
+					mui.alert("出发城市不能为空");
+					return;
+				}
+
+				if(!arrivalCity.trim()) {
+					mui.alert("到达城市不能为空");
+					return;
+				}
+
+				if(!departCityCode) {
+					mui.alert("出发城市三字码不能为空");
+					return;
+				}
+
+				if(!arrivalCityCode) {
+					mui.alert("到达城市三字码不能为空");
+					return;
+				}
+
+				city = [departCity, arrivalCity];
+				hotelCityCode = [departCityCode.split(",")[1], arrivalCityCode.split(",")[1]];
+				cityCode = [departCityCode.split(",")[0], arrivalCityCode.split(",")[0]];
+				myCity = arrivalCity;
+
+			} else {
+				if(!selectCity.trim()) {
+					mui.alert("选择城市不能为空");
+					return;
+				}
+
+				if(!address) {
+					mui.alert("详细地址不能为空");
+					return;
+				}
+
+				if(!selectCityCode) {
+					mui.alert("选择城市三字码不能为空");
+					return;
+				}
+
+				city = [selectCity];
+				cityCode = [selectCityCode.split(",")[0]];
+				hotelCityCode = [selectCityCode.split(",")[1]];
+				myCity = selectCity;
+			}
+
+			if(!tripDate) {
+				mui.alert("行程日期不能为空");
+				return;
+			}
+
+			getXY(myCity, address, cityCode, type, tripDate, info, city, hotelCityCode);
+
+		}
+
+		function getXY(myCity, address, cityCode, type, tripDate, info, city, hotelCityCode) {
+			var MGeocoder;
+			//加载地理编码插件
+			map.plugin(["AMap.Geocoder"], function() {
+				MGeocoder = new AMap.Geocoder({
+					radius: 1000,
+					extensions: "all"
+				});
+				MGeocoder.getLocation(myCity + address, function(status, result) {
+					if(status === 'complete' && result.info === 'OK') {
+						geocoder_CallBack(result, address, cityCode, type, tripDate, info, city, hotelCityCode);
+					} else {
+						mui.alert("地址解析失败");
+						return false;
+					}
+				});
+			});
+		}
+
+		function geocoder_CallBack(data, address, cityCode, type, tripDate, info, city, hotelCityCode) {
+			var resultStr = "";
+			var geocode = data.geocodes;
+			if(geocode.length > 0) {
+				var xy;
+				for(var i = 0; i < geocode.length; i++) {
+					xy = [geocode[i].location.getLng(), geocode[i].location.getLat()];
+				}
+				console.log(xy);
+				layer.open({
+					type: 2,
+					content: '正在提交',
+					shadeClose: false
+				});
+
+				var planTripData = localGetItem("planTripData");
+				planTripData = JSON.parse(planTripData);
+				planTripData = sortData(planTripData, 'planId', 2, 2); //排序拿到行程最大的ID
+				var data = {
+					whereCode: cityCode,
+					planType: type,
+					planWhere: city,
+					planTime: new Date(tripDate).getTime(),
+					planRemark: info || "",
+					cityCode: cityCode[0],
+					hotelCityCode: hotelCityCode,
+					location: xy,
+					address: address,
+					typeText: typePlanText(type),
+					month: NYR(new Date(tripDate), 2),
+					week: NYR(new Date(tripDate), 3),
+					time: HM(new Date(tripDate)),
+					planId: planTripData[0].planId
+				}
+
+				var m = -1,
+					prePlan, nextPlan;
+
+				if(m === -1) {
+					m = planTripData.length - 1;
+				}
+				j = planTripData[m];
+				prePlan = planTripData[m - 1];
+				nextPlan = planTripData[m + 1];
+				console.log(j);
+				if(!prePlan || !nextPlan) {
+					var p = prePlan || nextPlan;
+					console.log(p);
+					if(!p) {
+						dataAdd(data,planTripData);
+						return;
+					}
+					if(calDistance(j.location, p.location) > Math.abs(new Date(j.planTime) - new Date(p.planTime)) / 3.6 - 1000000) {
+						mui.confirm('提交的行程与已有行程可能冲突，确认提交？', '提示', ['是', '否'], function(e) {
+							if(e.index == 0) {
+								dataAdd(data,planTripData);
+							}
+						});
+						return;
+					}
+					dataAdd(data,planTripData);
+					return;
+				}
+				if(calDistance(j.location, prePlan.location) > (new Date(j.planTime) - new Date(prePlan.planTime)) / 3.6 - 1000000) {
+					mui.confirm('提交的行程与已有行程可能冲突，确认提交？', '提示', ['是', '否'], function(e) {
+						if(e.index == 0) {
+							dataAdd(data,planTripData);
+						}
+					});
+					return;
+				}
+				if(calDistance(j.location, nextPlan.location) > Math.abs(new Date(j.planTime) - new Date(nextPlan.planTime)) / 3.6 - 1000000) {
+					mui.confirm('提交的行程与已有行程可能冲突，确认提交？', '提示', ['是', '否'], function(e) {
+						if(e.index == 0) {
+							dataAdd(data,planTripData);
+						}
+					});
+					return;
+				}
+
+			}
+		}
+
+		//经纬度计算2点距离，参数为两个数组
+		function calDistance(lnglat1, lnglat2) {
+			var lnglat = new AMap.LngLat(lnglat1[0], lnglat1[1]);
+			return lnglat.distance(lnglat2);
+		}
+
+		function dataAdd(data,planTripData) {
+			if(planEditItem) {
+				for(var i = 0; i < planTripData.length; i++) {
+					if(planTripData[i].planId == planEditItem.planId) {
+						planTripData[i] = data;
+						break;
+					}
+				}
+			} else {
+				planTripData.push(data);
+			}
+			localSetItem("planTripData", JSON.stringify(planTripData));
+			layer.closeAll();
+			mui.back();
+		}
+
+		layer.closeAll();
+	</script>
+
+</html>

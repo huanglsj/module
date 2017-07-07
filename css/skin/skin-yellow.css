@@ -17,3 +17,24 @@
     background-color: #e6d359;
     background-clip: initial;
 }
+.mui-bar-tab .mui-tab-item.mui-active{
+	color: #e6ca15;
+}
+.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{
+	color: #e6ca15;
+}
+.mui-segmented-control.mui-segmented-control-inverted~.mui-slider-progress-bar{
+	background-color: #e6ca15;
+}
+.li-body .fa-arrow .fa{
+	border: 1px solid #e6d359;
+}
+.list-body .tr:before{
+	border: 2px solid #e6d359;
+}
+.list:first-child .list-body .tr:first-child:before{
+	background-color: #e6d359;
+}
+.list:last-child .list-body .tr:last-child:before{
+	background-color: #e6d359;
+}

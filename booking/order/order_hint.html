@@ -5,15 +5,17 @@
 		<meta charset="UTF-8">
 		<title>订单提示</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" href="/module/css/ui-box.css">
-		<link rel="stylesheet" type="text/css" href="/module/css/mui/mui.min.css" />
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<link rel="stylesheet" href="../../css/ui-box.css">
+		<link rel="stylesheet" type="text/css" href="../../css/mui/mui.min.css" />
 		<link rel="stylesheet" type="text/css" href="css/order_hint.css" />
-		<link title="blue" rel="stylesheet" href="/module/css/skin/skin-blue.css">
-		<link title="green" rel="stylesheet" href="/module/css/skin/skin-green.css" disabled="disabled">
-		<link title="red" rel="stylesheet" href="/module/css/skin/skin-red.css" disabled="disabled">
-		<link title="yellow" rel="stylesheet" href="/module/css/skin/skin-yellow.css" disabled="disabled">
-		<link title="black" rel="stylesheet" href="/module/css/skin/skin-black.css" disabled="disabled">
-		<script src="/module/js/global.js"></script>
+		<link title="blue" rel="stylesheet" href="../../css/skin/skin-blue.css">
+		<link title="green" rel="stylesheet" href="../../css/skin/skin-green.css" disabled="disabled">
+		<link title="red" rel="stylesheet" href="../../css/skin/skin-red.css" disabled="disabled">
+		<link title="yellow" rel="stylesheet" href="../../css/skin/skin-yellow.css" disabled="disabled">
+		<link title="black" rel="stylesheet" href="../../css/skin/skin-black.css" disabled="disabled">
+		<script src="../../js/global.js"></script>
 	</head>
 
 	<body>
@@ -39,8 +41,8 @@
 			</div>
 		</div>
 	</body>
-	<script src="/module/js/mui/mui.min.js"></script>
-	<script src="/module/js/vue.min.js"></script>
+	<script src="../../js/mui/mui.min.js"></script>
+	<script src="../../js/vue.min.js"></script>
 	<script>
 		var orderList = localGetItem("orderList");
 		var orderListType = localGetItem("orderListType");
@@ -58,13 +60,13 @@
 							localSetItem("orderNo", code);
 							if(orderListType == 1) {
 								mui.openWindow({
-									url: '/module/booking/order/order_plane.html',
-									id: 'order_plane'
+									url: '../../booking/order/order_module_plane.html',
+									id: 'order_module_plane'
 								})
 							} else if(orderListType == 2) {
 								mui.openWindow({
-									url: '/module/booking/order/order_hotel.html',
-									id: 'order_hotel'
+									url: '../../booking/order/order_module_hotel.html',
+									id: 'order_module_hotel'
 								})
 							}
 
@@ -74,7 +76,7 @@
 					},
 					back: function() {
 						mui.openWindow({
-							url: '/module/index.html',
+							url: '../../index.html',
 							id: 'index'
 						})
 					}

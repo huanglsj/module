@@ -1,10 +1,14 @@
-var httpHost = 'http://192.168.8.124:8081/';
+var httpHost = 'http://120.77.4.10:8081/';
+//var httpHost = 'http://192.168.8.54:8081/';
+var uploadHttp = httpHost + 'tmcExpenseController.do?upload';
 var changeSkin = localGetItem("changeSkin");
 if(!changeSkin) {
 	changeLink('blue');
 } else {
 	changeLink(changeSkin);
 }
+
+shouldHideNavBar(true);
 
 //更改默认皮肤
 function changeLink(skin) {
@@ -20,6 +24,25 @@ function changeLink(skin) {
 		}
 
 	}
+}
+
+function addHeader(xhr) {
+	var sessionId = '',
+		nowTime = (new Date()).getTime(),
+		ticket = '';
+	xhr.setRequestHeader('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
+	xhr.setRequestHeader('Accept-Encoding', 'gzip, deflate, sdch');
+	xhr.setRequestHeader('Accept-Language', 'zh-CN,zh;q=0.8');
+	xhr.setRequestHeader('Connection', 'keep-alive');
+	sessionId = localGetItem('sessionId');
+	ticket = localGetItem('ticket');
+	if(sessionId != "") {
+		sessionId = "JSESSIONID=" + sessionId + ";ticket=" + ticket + ";type=app";
+		sessionId = sessionId.replace(/\|[0-9]{10}\|/, '|' + parseInt(nowTime / 1000) + '|');
+		xhr.setRequestHeader('Cookie', sessionId);
+	}
+	xhr.setRequestHeader('Upgrade-Insecure-Requests', '1');
+	xhr.setRequestHeader('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36');
 }
 
 //获取对象属性值 
@@ -304,6 +327,16 @@ function isFixedPhone(str) {
 	}
 }
 
+//验证数字
+function isNumber(str) {
+	var isNumber = /^[0-9]+(.[0-9]{2})?$/;
+	if(!isNumber.test(str)) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
 //获取链接参数
 function getQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -340,19 +373,19 @@ function statusText(status) {
 			break;
 		case 10:
 			return '订单正等待商家确认';
-			break;	
+			break;
 		default:
 			break;
 	}
 }
 
 //类型
-function bookType(type){
+function bookType(type) {
 	switch(type) {
-		case 1:  //飞机
+		case 1: //飞机
 			return type;
 			break;
-		case 2:  //酒店
+		case 2: //酒店
 			return type;
 			break;
 		case 3: //火车
@@ -366,5 +399,105 @@ function bookType(type){
 			break;
 		default:
 			break;
+	}
+}
+
+//行程计划类型
+function typePlanText(type) {
+	switch(type) {
+		case 1:
+			return "行程";
+			break;
+		case 2:
+			return "住宿";
+			break;
+		case 3:
+			return "会议";
+			break;
+		case 4:
+			return "用餐";
+			break;
+		default:
+			break;
+	}
+}
+
+//页面跳转
+function jump(obj, type) {
+	var url = obj.getAttribute("data-href");
+	var name = obj.getAttribute("data-name");
+	if(type == 1 && url && name) {
+		mui.openWindow({
+			url: url,
+			id: name
+		});
+	} else {
+		mui.alert("该模块还没开放")
+	}
+}
+
+function hasClass(elem, cls) {
+	cls = cls || '';
+	if(cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+	return new RegExp(' ' + cls + ' ').test(' ' + elem.className + ' ');
+}
+
+function addClass(ele, cls) {
+	if(!hasClass(ele, cls)) {
+		ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+	}
+}
+
+function removeClass(elem, cls) {
+	if(hasClass(elem, cls)) {
+		var newClass = ' ' + elem.className.replace(/[\t\r\n]/g, '') + ' ';
+		while(newClass.indexOf(' ' + cls + ' ') >= 0) {
+			newClass = newClass.replace(' ' + cls + ' ', ' ');
+		}
+		elem.className = newClass.replace(/^\s+|\s+$/g, '');
+	}
+}
+
+function toggleClass(obj, cls) {
+	hasClass(obj, cls) ? removeClass(obj, cls) : addClass(obj, cls);
+}
+
+//排序
+//data 数组数据;
+//key要排序的键名;
+//type类型 1 时间  2 ID;
+//dir 1 正序 2 倒叙;
+function sortData(data, key, type, dir) {
+	var temp;
+	if(data.length > 0) {
+		for(var i = 0; i < data.length - 1; i++) {
+			for(var j = i + 1; j < data.length; j++) {
+
+				if(type == 1) {
+					var value1 = new Date(data[i][key]).getTime();
+					var value2 = new Date(data[j][key]).getTime();
+				} else if(type == 2) {
+					var value1 = new Date(data[i][key])*1;
+					var value2 = new Date(data[j][key])*1;
+				}
+
+				if(dir == 1) {
+					if(value1 > value2) {
+						temp = data[i];
+						data[i] = data[j];
+						data[j] = temp;
+					}
+				} else { 
+					if(value1 < value2) {
+						temp = data[i];
+						data[i] = data[j];
+						data[j] = temp;
+					}
+				}
+			}
+		}		
+		return data;
+	} else {
+		return false;
 	}
 }
