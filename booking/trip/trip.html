@@ -207,6 +207,7 @@
 												<div class="type-num">{{index+1}}</div>
 												<div class="type-name big">{{item.exp.reason}}</div>
 											</div>
+											<div v-if="item.exp.surplus">距离行程还有<span class="red">{{item.exp.surplus}}</span>天</div>
 										</div>
 										<div class="li-body ub">
 											<div class="left ub-f1">
@@ -243,7 +244,7 @@
 										</div>
 										<div class="li-foot ub">
 											<div class="ub-f1 shallow-text" v-on:tap="tripOrderList(item.exp.expId)">查看订单列表</div>
-											<div class="ub-f1 shallow-text" v-on:tap="planning(item)">制定行程计划</div>
+											<div class="ub-f1 shallow-text" v-on:tap="planning(item)">{{item.exp.status==0 ? '制定行程计划' : '我的智能行程'}}</div>
 										</div>
 									</li>
 								</ul>
@@ -599,6 +600,7 @@
 						if(data.obj) {
 							if(data.obj.length > 0) {
 								getId("msg2").style.display = 'none';
+								var newDate = new Date(NYR(new Date(),1)).getTime();
 								for(var i = 0; i < data.obj.length; i++) {
 									data.obj[i].exp.beginWeek = NYR(data.obj[i].exp.begin, 3);
 									data.obj[i].exp.beginYear = NYR(data.obj[i].exp.begin, 4);
@@ -606,6 +608,14 @@
 									data.obj[i].exp.endWeek = NYR(data.obj[i].exp.end, 3);
 									data.obj[i].exp.endYear = NYR(data.obj[i].exp.end, 4);
 									data.obj[i].exp.endMonth = NYR(data.obj[i].exp.end, 2);
+									
+									var days = new Date(NYR(data.obj[i].exp.begin, 1)).getTime() - newDate;
+									if(days > 0){
+										data.obj[i].exp.surplus = parseInt(days / (1000 * 60 * 60 * 24))*1 + 1;
+									}else{
+										data.obj[i].exp.surplus = '';
+									}
+									
 								}
 								appPlan.items = data.obj;
 								mui('#pullrefreshPlan').pullRefresh().endPulldownToRefresh(true);

@@ -27,10 +27,10 @@
 		</header>
 		<div class="mui-content" v-cloak>
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell" v-for="item in items">
+				<li class="mui-table-view-cell" v-for="(item,index) in items">
 					<div class="mui-slider-right mui-disabled">
 						<div class="mui-btn mui-btn-grey" v-on:tap="edit(item)">修改</div>
-						<div class="mui-btn mui-btn-red">删除</div>
+						<div class="mui-btn mui-btn-red" v-on:tap="del(item,index)">删除</div>
 					</div>
 					<div class="mui-slider-handle">
 						<div class="p-head ub">
@@ -64,10 +64,10 @@
 
 			<div class="p-btn">
 				<div class="tr">
-					<button type="button" data-loading-text="提交中" class="mui-btn shallow-bg">一键智能行程</button>
+					<button type="button" data-loading-text="提交中" id="submit" class="mui-btn shallow-bg">一键智能行程</button>
 				</div>
 				<div class="tr">
-					<button type="button" data-loading-text="保存中" class="mui-btn deep-bg">保存行程计划</button>
+					<button type="button" data-loading-text="保存中" id="save" class="mui-btn deep-bg">保存行程计划</button>
 				</div>
 			</div>
 		</div>
@@ -91,6 +91,7 @@
 			localRemoveItem("planselectCityCode");
 			localRemoveItem("planEditItem");
 			localRemoveItem("planTypeIndex");
+			localRemoveItem("planEditTitle");
 		}
 
 		removePlanCache();
@@ -100,7 +101,7 @@
 		if(planCreateItem) {
 			planCreateItem = JSON.parse(planCreateItem);
 			tripData = planCreateItem.exp.tripData;
-
+			localSetItem("planTripMinDate", planCreateItem.exp.begin);
 			console.log(planCreateItem);
 			app = new Vue({
 				el: '.mui-content',
@@ -117,12 +118,23 @@
 						console.log(event);
 						var li = event.target.parentNode.parentNode;
 						localSetItem("planEditItem", JSON.stringify(item));
+						localSetItem("planEditTitle", 2);
 						mui.openWindow({
 							url: 'add_plan.html',
 							id: 'add_plan'
 						});
 						mui.swipeoutClose(li);
 						layer.closeAll();
+					},
+					del: function(item, index) {
+						var _this = this;
+						var li = event.target.parentNode.parentNode;
+						mui.confirm('您确定要删除？', '提示', ['是', '否'], function(e) {
+							if(e.index == 0) {
+								_this.items.splice(index, 1);
+								mui.swipeoutClose(li);
+							}
+						});
 					}
 				}
 			})
@@ -141,9 +153,26 @@
 					layer.closeAll();
 					console.log(data);
 					if(data.length > 0) {
-
+						var planTripData = localGetItem("planTripData");
+						if(planTripData) {
+							planTripData = JSON.parse(planTripData);
+						} else {
+							for(var i = 0; i < data.length; i++) {
+								data[i].typeText = typePlanText(data[i].planType);
+								data[i].month = NYR(data[i].planTime, 2);
+								data[i].week = NYR(data[i].planTime, 3);
+								data[i].time = HM(data[i].planTime);
+								data[i].whereCode = data[i].cityCode.split(",");
+								data[i].planWhere = data[i].planWhere.split(",");
+								data[i].location = data[i].xy.split(",");
+								data[i].xy = data[i].xy.split(",");
+								data[i].planId = data[i].planId * 1;
+							}
+							localSetItem("planTripData", JSON.stringify(data));
+							planTripData = data;
+						}
+						app.items = sortData(planTripData, "planTime", 1, 1);
 					} else {
-
 						var planTripData = localGetItem("planTripData");
 						if(planTripData) {
 							planTripData = JSON.parse(planTripData);
@@ -162,7 +191,8 @@
 								tripData[i].planTime = tripData[i].itiner_begin;
 								tripData[i].cityCode = [cityCode][0];
 								tripData[i].hotelCityCode = hotelCityCode;
-								tripData[i].location = '0,0',
+								tripData[i].location = [0, 0];
+								tripData[i].xy = [0, 0];
 								tripData[i].address = '';
 								tripData[i].planId = i;
 							}
@@ -186,11 +216,76 @@
 		}
 
 		mui(".mui-bar").on("tap", ".mui-icon-plus", function() {
+			localSetItem("planEditTitle", 1);
 			localSetItem("planTripMinDate", app.items[0].planTime);
 			mui.openWindow({
 				url: 'add_plan.html',
 				id: 'add_plan'
 			});
+		});
+
+		mui(".tr").on("tap", "#submit", function() {
+			submintPlans();
+		});
+
+		//一键智能行程
+		function submintPlans() {
+			
+			if(app.items.length<=0){
+				mui.alert("请先制定行程计划");
+				return;
+			}
+			
+			layer.open({
+				type: 2,
+				content: '<p>正在智能行程</p><p>过程可能会有点久</p>',
+				shadeClose: false
+			});
+			var travelData = [];
+			for(var i=0;i < app.items.length; i++) {
+				travelData.push({
+					whereCode: app.items[i].whereCode.join(","),
+					planType: app.items[i].planType,
+					planWhere: app.items[i].planWhere.join(","),
+					planTime: app.items[i].planTime.dateTime,
+					planRemark: app.items[i].notes || "",
+					cityCode: app.items[i].whereCode[0],
+					hotelCityCode: app.items[i].hotelCityCode,
+					location: app.items[i].xy.join(","),
+					address: app.items[i].address
+				})
+			}
+			console.log(JSON.stringify(travelData).replace(/"/g, "'"));
+//			return;
+			mui.ajax({
+				url: httpHost + "travelIntelligenceController.do?priceFirstList",
+				type: "POST",
+				data: {
+					json: JSON.stringify(travelData).replace(/"/g, "'"),
+					itineraryId: planCreateItem.exp.expId
+				},
+				timeout: 1000 * 60 * 10,
+				dataType: "json",
+				success: function(data) {
+					layer.closeAll();
+					console.log(data);
+					if(data.success) {
+						localSetItem("planSmartTravelData",JSON.stringify(data));
+						appcan.window.open("smartTravel", "smart_travel.html", 2);
+					} else {
+						mui.alert('智能行程失败，请重新提交');
+					}
+				},
+				error: function(err, errMsg, error) {
+					layer.closeAll();
+					mui.alert("网络异常，请重新提交");
+				}
+			})
+
+		}
+
+		mui(".tr").on("tap", "#save", function() {
+			savePlans();
 		});
 
 		//保存行程计划
@@ -201,34 +296,37 @@
 				shadeClose: false
 			});
 			var planList = [];
-			for(var i = 0; i < app.plans.length; i++) {
-				planList[i] = deeplyCopy(app.plans[i]);
+			for(var i = 0; i < app.items.length; i++) {
+				var newJson = {
+					planWhere: app.items[i].planWhere.join(),
+					cityCode: app.items[i].cityCode,
+					xy: app.items[i].xy[0] + "," + app.items[i].xy[1],
+					planTime: NYR(app.items[i].planTime, 1) + ' ' + HM(app.items[i].planTime) + ':00',
+					hotelCityCode: app.items[i].hotelCityCode.toString(),
+					address: app.items[i].address,
+					planRemark: app.items[i].planRemark,
+					planId: app.items[i].planId,
+					planType: app.items[i].planType
+				}
+				planList.push(newJson);
 			}
-			planList.forEach(function(currentValue, index, array) {
-				var i = currentValue.planWhere.join(","),
-					j = currentValue.cityCode.join(",");
-				array[index].planWhere = i;
-				array[index].cityCode = j;
-				array[index].xy = array[index].xy[0] + "," + array[index].xy[1];
-				array[index].planTime = NYR(array[index].planTime.dateTime, 1) + ' ' + HM(array[index].planTime.dateTime) + ':00';
-				array[index].hotelCityCode = array[index].hotelCityCode.toString();
-			});
-			appcan.request.ajax({
-				url: httpHost + "planlist/" + tripId + ".do",
+			console.log(planList);
+			mui.ajax({
+				url: httpHost + "planlist/" + planCreateItem.exp.expId + ".do",
 				type: "POST",
-				beforeSend: addHeader,
+				timeout: 40 * 1000,
 				data: {
 					planLists: JSON.stringify(planList)
 				},
 				dataType: "json",
 				success: function(data) {
-					removeMask();
-					appcan.window.openToast("保存成功", 2000);
-
+					console.log(data);
+					layer.closeAll();
+					mui.toast("保存成功");
 				},
 				error: function(err, errMsg, error) {
-					removeMask();
-					console.log(err, errMsg, error);
+					layer.closeAll();
+					mui.alert("网络异常，请重新保存");
 				}
 			})
 		}

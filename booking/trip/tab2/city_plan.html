@@ -361,21 +361,21 @@
 										break;
 									}
 								}
-							}						
+							}
 
 							if(planDepartCityFlag == 'true') {
 								localSetItem('planDepartCity', name);
-								localSetItem("planDepartCityCode",flightCityCode+','+code);
+								localSetItem("planDepartCityCode", flightCityCode + ',' + code);
 							}
 
 							if(planArrivalCityFlag == 'true') {
 								localSetItem('planArrivalCity', name);
-								localSetItem("planArrivalCityCode",flightCityCode+','+code);
+								localSetItem("planArrivalCityCode", flightCityCode + ',' + code);
 							}
 
 							if(planselectCityFlag == 'true') {
 								localSetItem('planselectCity', name);
-								localSetItem("planselectCityCode",flightCityCode+','+code);
+								localSetItem("planselectCityCode", flightCityCode + ',' + code);
 							}
 
 							if(appplanHistory.length > 0) {
@@ -404,7 +404,11 @@
 								});
 								localSetItem('planHistoryCity', JSON.stringify(appplanHistory));
 							}
-							mui.back();
+//							mui.openWindow({
+//								url: 'add_plan.html',
+//								id: 'add_plan'
+//							});
+                            mui.back(); 
 
 						} else {
 							mui.toast('选择城市失败');

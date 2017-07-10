@@ -99,6 +99,10 @@ ul,ol,li{
 	height: 18px;
 	vertical-align: text-bottom;
 }
+.li-head .red{
+	color: red;
+	font-weight: bold;
+}
 .li-body{
 	padding: 12px 0;
 }

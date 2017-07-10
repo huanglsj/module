@@ -120,6 +120,16 @@
 
 		var planEditItem = localGetItem("planEditItem");
 
+		var planEditTitle = localGetItem("planEditTitle");
+
+		if(planEditTitle == 1) {
+			$(".mui-title").text("添加计划");
+			document.title = '添加计划';
+		} else {
+			$(".mui-title").text("修改计划");
+			document.title = '修改计划';
+		}
+
 		var planTypeIndex = 1;
 
 		if(planEditItem) {
@@ -145,7 +155,7 @@
 			$("#info").val(planEditItem.planRemark);
 		}
 
-		if(planDepartCityFlag == 'true') {
+		if(planDepartCityFlag == 'true' && planDepartCity) {
 			$("#departCity").val(planDepartCity);
 			$("#departCityCode").val(planDepartCityCode);
 			localSetItem("planDepartCityFlag", false);
@@ -153,7 +163,7 @@
 			$(".type-other").hide();
 		}
 
-		if(planArrivalCityFlag == 'true') {
+		if(planArrivalCityFlag == 'true' && planArrivalCity) {
 			$("#arrivalCity").val(planArrivalCity);
 			$("#arrivalCityCode").val(planArrivalCityCode);
 			localSetItem("planArrivalCityFlag", false);
@@ -161,7 +171,7 @@
 			$(".type-other").hide();
 		}
 
-		if(planselectCityFlag == 'true') {
+		if(planselectCityFlag == 'true' && planselectCity) {
 			$("#selectCity").val(planselectCity);
 			$("#selectCityCode").val(planselectCityCode);
 			localSetItem("planselectCityFlag", false);
@@ -379,6 +389,7 @@
 					cityCode: cityCode[0],
 					hotelCityCode: hotelCityCode,
 					location: xy,
+					xy:xy,
 					address: address,
 					typeText: typePlanText(type),
 					month: NYR(new Date(tripDate), 2),
@@ -401,38 +412,36 @@
 					var p = prePlan || nextPlan;
 					console.log(p);
 					if(!p) {
-						dataAdd(data,planTripData);
+						dataAdd(data, planTripData);
 						return;
 					}
 					if(calDistance(j.location, p.location) > Math.abs(new Date(j.planTime) - new Date(p.planTime)) / 3.6 - 1000000) {
-						mui.confirm('提交的行程与已有行程可能冲突，确认提交？', '提示', ['是', '否'], function(e) {
-							if(e.index == 0) {
-								dataAdd(data,planTripData);
-							}
-						});
+						conflictData(data, planTripData);
 						return;
 					}
-					dataAdd(data,planTripData);
+					dataAdd(data, planTripData);
 					return;
 				}
 				if(calDistance(j.location, prePlan.location) > (new Date(j.planTime) - new Date(prePlan.planTime)) / 3.6 - 1000000) {
-					mui.confirm('提交的行程与已有行程可能冲突，确认提交？', '提示', ['是', '否'], function(e) {
-						if(e.index == 0) {
-							dataAdd(data,planTripData);
-						}
-					});
+					conflictData(data, planTripData);
 					return;
 				}
 				if(calDistance(j.location, nextPlan.location) > Math.abs(new Date(j.planTime) - new Date(nextPlan.planTime)) / 3.6 - 1000000) {
-					mui.confirm('提交的行程与已有行程可能冲突，确认提交？', '提示', ['是', '否'], function(e) {
-						if(e.index == 0) {
-							dataAdd(data,planTripData);
-						}
-					});
+					conflictData(data, planTripData);
 					return;
 				}
 
 			}
+		}
+
+		//行程冲突提示
+		function conflictData(data, planTripData) {
+			mui.confirm('提交的行程与已有行程可能冲突，确认提交？', '提示', ['是', '否'], function(e) {
+				if(e.index == 0) {
+					dataAdd(data, planTripData);
+				}
+			});
+			layer.closeAll();
 		}
 
 		//经纬度计算2点距离，参数为两个数组
@@ -441,19 +450,25 @@
 			return lnglat.distance(lnglat2);
 		}
 
-		function dataAdd(data,planTripData) {
-			if(planEditItem) {
+		//数据提交
+		function dataAdd(data, planTripData) {
+			if(planEditItem) { //修改的
 				for(var i = 0; i < planTripData.length; i++) {
 					if(planTripData[i].planId == planEditItem.planId) {
 						planTripData[i] = data;
 						break;
 					}
 				}
-			} else {
+			} else { //新增的
+				data.planId = data.planId*1+1;
 				planTripData.push(data);
 			}
 			localSetItem("planTripData", JSON.stringify(planTripData));
 			layer.closeAll();
+			//			mui.openWindow({
+			//				url: 'create_plan.html',
+			//				id: 'create_plan'
+			//			});
 			mui.back();
 		}
 
