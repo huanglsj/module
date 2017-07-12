@@ -1,5 +1,4 @@
-var httpHost = 'http://120.77.4.10:8081/';
-//var httpHost = 'http://192.168.8.54:8081/';
+
 var uploadHttp = httpHost + 'tmcExpenseController.do?upload';
 var changeSkin = localGetItem("changeSkin");
 if(!changeSkin) {
