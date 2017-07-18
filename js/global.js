@@ -7,7 +7,6 @@ if(!changeSkin) {
 	changeLink(changeSkin);
 }
 
-
 //更改默认皮肤
 function changeLink(skin) {
 	var link = document.getElementsByTagName("link");
@@ -335,13 +334,20 @@ function isNumber(str) {
 	}
 }
 
-//获取链接参数
+//获取链接参数1
 function getQueryString(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 	var r = window.location.search.substr(1).match(reg);
 	if(r != null) return unescape(r[2]);
 	return null;
 }
+
+//获取url中的参数2
+function GetQueryStringRegExp(name, url) {
+	var reg = new RegExp("(^|\?|&)" + name + "=([^&]*)(\s|&|$)", "i");
+	if(reg.test(url)) return decodeURIComponent(RegExp.$2.replace(/+/g, " "));
+	return "";
+}　
 
 //获取id
 function getId(id) {
@@ -475,8 +481,8 @@ function sortData(data, key, type, dir) {
 					var value1 = new Date(data[i][key]).getTime();
 					var value2 = new Date(data[j][key]).getTime();
 				} else if(type == 2) {
-					var value1 = new Date(data[i][key])*1;
-					var value2 = new Date(data[j][key])*1;
+					var value1 = new Date(data[i][key]) * 1;
+					var value2 = new Date(data[j][key]) * 1;
 				}
 
 				if(dir == 1) {
@@ -485,7 +491,7 @@ function sortData(data, key, type, dir) {
 						data[i] = data[j];
 						data[j] = temp;
 					}
-				} else { 
+				} else {
 					if(value1 < value2) {
 						temp = data[i];
 						data[i] = data[j];
@@ -493,9 +499,144 @@ function sortData(data, key, type, dir) {
 					}
 				}
 			}
-		}		
+		}
 		return data;
 	} else {
 		return false;
 	}
+}
+
+//判断是否是pc端还是移动端 true是pc端 false是移动端
+function IsBrowser() {
+	var userAgentInfo = navigator.userAgent;
+	var Agents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+	var flagBrowser = true;
+	for(var v = 0; v < Agents.length; v++) {
+		if(userAgentInfo.indexOf(Agents[v]) > 0) {
+			flagBrowser = false;
+			break;
+		}
+	}
+	return flagBrowser;
+}
+
+// 将HTML特殊字符转换成等值的实体
+// console.log( escapeHTML('<div>Blah blah blah</div>') );
+// => "&lt;div&gt;Blah blah blah&lt;/div&gt";
+function escapeHTML(str) {
+	var escapeChars = {
+		'¢': 'cent',
+		'£': 'pound',
+		'¥': 'yen',
+		'€': 'euro',
+		'©': 'copy',
+		'®': 'reg',
+		'<': 'lt',
+		'>': 'gt',
+		'"': 'quot',
+		'&': 'amp',
+		'\'': '#39'
+	};
+	return str.replace(new RegExp('[' + Object.keys(escapeChars).join('') + ']', 'g'), function(match) {
+		return '&' + escapeChars[match] + ';';
+	});
+}
+
+// 实体字符转换为等值的HTML。
+// console.log( unescapeHTML('&lt;div&gt;Blah blah blah&lt;/div&gt;') );
+// => "<div>Blah blah blah</div>"
+function unescapeHTML(str) {
+	var htmlEntities = {
+		nbsp: ' ',
+		cent: '¢',
+		pound: '£',
+		yen: '¥',
+		euro: '€',
+		copy: '©',
+		reg: '®',
+		lt: '<',
+		gt: '>',
+		quot: '"',
+		amp: '&',
+		apos: '\''
+	};
+	return str.replace(/\&([^;]+);/g, function(match, key) {
+		if(key in htmlEntities) {
+			return htmlEntities[key];
+		}
+		return match;
+	});
+}
+
+//返回字符串长度，汉子计数为2
+function strLength(str) {
+	var a = 0;
+	for(var i = 0; i < str.length; i++) {
+		if(str.charCodeAt(i) > 255)
+			a += 2; //按照预期计数增加2
+		else
+			a++;
+	}
+	return a;
+}
+
+//字符串截取方法  charStr 字符串内容   cutCount 截取多少 数字
+function getCharactersLen(charStr, cutCount) {
+	if(charStr == null || charStr == '') return '';
+	var totalCount = 0;
+	var newStr = '';
+	for(var i = 0; i < charStr.length; i++) {
+		var c = charStr.charCodeAt(i);
+		if(c < 255 && c > 0) {
+			totalCount++;
+		} else {
+			totalCount += 2;
+		}
+		if(totalCount >= cutCount) {
+			newStr += charStr.charAt(i);
+			break;
+		} else {
+			newStr += charStr.charAt(i);
+		}
+	}
+	return newStr;
+}　
+
+//JS 写Cookie
+function setCookie(name, value, expires, path, domain) {
+	if(!expires) expires = -1;
+	if(!path) path = "/";
+	var d = "" + name + "=" + value;
+	var e;
+	if(expires < 0) {
+		e = "";
+	} else if(expires == 0) {
+		var f = new Date(1970, 1, 1);
+		e = ";expires=" + f.toUTCString();
+	} else {
+		var now = new Date();
+		var f = new Date(now.getTime() + expires * 1000);
+		e = ";expires=" + f.toUTCString();
+	}
+	var dm;
+	if(!domain) {
+		dm = "";
+	} else {
+		dm = ";domain=" + domain;
+	}
+	document.cookie = name + "=" + value + ";path=" + path + e + dm;
+};
+
+//JS读Cookie
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while(c.charAt(0) == ' ') c = c.substring(1, c.length);
+		if(c.indexOf(nameEQ) == 0) {
+			return decodeURIComponent(c.substring(nameEQ.length, c.length))
+		}
+	}
+	return null
 }
